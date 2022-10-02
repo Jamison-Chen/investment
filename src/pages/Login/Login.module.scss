@@ -1,0 +1,29 @@
+@use "../../global_variables" as _;
+
+.main {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    place-content: center;
+    place-items: center;
+    gap: 30px;
+    & > .title {
+        color: _.$gray;
+    }
+    & > .app_options {
+        margin-bottom: 100px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        & > .option {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.9 * _.$base-font-size;
+            color: _.$deep-gray;
+            border: 1px solid _.$light-gray;
+            border-radius: 5px;
+            padding: 20px;
+        }
+    }
+}
