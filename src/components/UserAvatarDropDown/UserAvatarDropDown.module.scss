@@ -1,0 +1,62 @@
+@use "../../global_variables" as _;
+
+.full_screen_background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: none;
+    width: 100vw;
+    height: 100vh;
+    z-index: 3;
+    &.active {
+        display: block;
+    }
+    & > .dropdown {
+        position: absolute;
+        top: _.$header-height;
+        right: 15px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 150px;
+        height: fit-content;
+        padding: 5px 0;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px 0 _.$light-gray;
+        color: _.$black;
+        background-color: _.$white;
+        & > .dropdown_option {
+            font-size: 0.9 * _.$base-font-size;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 5px 10px;
+            transition-duration: 200ms;
+            color: _.$deep-gray;
+            &.user_info {
+                gap: 10px;
+                height: 40px;
+                & > img {
+                    height: 100%;
+                    border-radius: 100px;
+                }
+                & > .username {
+                    margin: auto;
+                    font-size: 0.8 * _.$base-font-size;
+                    white-space: nowrap;
+                    width: fit-content;
+                    max-width: 100px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+            @media (hover: hover) {
+                &:not(.user_info):hover {
+                    background-color: _.$noisy-white;
+                    color: _.$black;
+                }
+            }
+        }
+    }
+}

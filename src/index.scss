@@ -2,11 +2,17 @@
 
 body {
     margin: 0;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
         "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
         "Helvetica Neue", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-size: _.$base-font-size;
+    color: _.$deep-gray;
+    letter-spacing: _.$base-letter-spacing;
 }
 
 code {
@@ -18,4 +24,42 @@ code {
 *:before,
 *:after {
     box-sizing: border-box;
+}
+
+img {
+    -webkit-user-drag: none;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+#root {
+    height: 100%;
+    width: 100%;
+}
+
+#loading_screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: _.$white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.7;
+    z-index: 2;
+    user-select: none;
+    #loading_img_outer {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 5%;
+        min-width: 40px;
+    }
 }

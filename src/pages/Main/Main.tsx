@@ -11,8 +11,8 @@ import {
     useParams,
 } from "react-router-dom";
 
-// import Header from "../../components/Header/Header";
-// import Utils from "../../Utils";
+import Header from "../../components/Header/Header";
+import Utils from "../../util";
 
 interface PropsInterface {
     router: {
@@ -39,20 +39,19 @@ class Main extends React.Component<PropsInterface, StateInterface> {
         };
     }
     public async componentDidMount(): Promise<void> {
-        // let response: any = await Utils.check_login();
-        // this.setState({
-        //     username: response.data.me.username,
-        //     avatar_url: response.data.me.avatar_url,
-        // });
+        let response: any = await Utils.check_login();
+        this.setState({
+            username: response["user-info"].username,
+            avatar_url: response["user-info"].avatar_url,
+        });
     }
     public render(): React.ReactNode {
         return (
             <div className={styles.main}>
-                {/* <Header
+                <Header
                     avatar_url={this.state.avatar_url}
                     username={this.state.username}
-                    handle_click_list_button={this.toggle_main_function_bar}
-                /> */}
+                />
                 <main className={styles.body}>
                     <Outlet />
                 </main>

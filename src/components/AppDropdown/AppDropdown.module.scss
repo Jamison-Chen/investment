@@ -1,0 +1,67 @@
+@use "../../global_variables" as _;
+
+.full_screen_background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: none;
+    width: 100vw;
+    height: 100vh;
+    z-index: 3;
+    &.active {
+        display: block;
+    }
+    & > .dropdown {
+        $side-length: 70px;
+        position: absolute;
+        top: _.$header-height;
+        right: 15px;
+        display: grid;
+        gap: 5px;
+        grid-template-columns: repeat(3, $side-length);
+        grid-template-rows: repeat(auto-fit, $side-length);
+        width: fit-content;
+        max-width: 245px;
+        height: fit-content;
+        max-height: 320px;
+        overflow: auto;
+        padding: 5px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px 0 _.$light-gray;
+        color: _.$black;
+        background-color: _.$white;
+        & > .dropdown_option {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            height: $side-length;
+            width: $side-length;
+            overflow: hidden;
+            border-radius: 5px;
+            transition-duration: 200ms;
+            color: _.$deep-gray;
+            &.active {
+                font-weight: bold;
+            }
+            @media (hover: hover) {
+                &:not(.active):hover {
+                    background-color: _.$noisy-white;
+                    color: _.$black;
+                }
+            }
+            & > img {
+                width: 50%;
+            }
+            & > .app_name {
+                display: flex;
+                align-items: center;
+                font-size: 0.7 * _.$base-font-size;
+                word-break: break-all;
+                height: 30px;
+                padding: 0 3px;
+                text-align: center;
+            }
+        }
+    }
+}
