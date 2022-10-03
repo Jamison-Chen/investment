@@ -1,0 +1,20 @@
+@use "../../global_variables" as _;
+
+.block {
+    display: flex;
+    flex-direction: column;
+    width: min(95%, 720px);
+    height: fit-content;
+    border: 1px solid _.$light-gray;
+    border-radius: 8px;
+    overflow-x: hidden;
+    & > .title {
+        font-size: 1.2 * _.$base-font-size;
+        font-weight: normal;
+        padding: 0 15px;
+    }
+    & > .description {
+        font-size: 0.9 * _.$base-font-size;
+        color: _.$gray;
+    }
+}

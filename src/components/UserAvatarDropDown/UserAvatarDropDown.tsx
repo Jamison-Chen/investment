@@ -4,6 +4,7 @@ import React, { MouseEvent } from "react";
 
 import Utils from "../../util";
 import IconPersonCircle from "../Icons/IconPersonCircle";
+import { Link, NavLink } from "react-router-dom";
 
 interface PropsInterface {
     is_dropdown_expanded: boolean;
@@ -31,21 +32,24 @@ export default class UserAvatarDropDown extends React.Component<
                 }
             >
                 <div className={styles.dropdown}>
-                    <div
-                        className={
-                            styles.dropdown_option + " " + styles.user_info
-                        }
-                        onClick={this.handle_click_user_info}
-                    >
-                        {this.props.user_avatar_url ? (
-                            <img src={this.props.user_avatar_url} alt="" />
-                        ) : (
-                            <IconPersonCircle side_length="22" />
-                        )}
-                        <span className={styles.username}>
-                            {this.props.username}
-                        </span>
-                    </div>
+                    <NavLink to="/investment/account">
+                        <div
+                            className={
+                                styles.dropdown_option + " " + styles.user_info
+                            }
+                            onClick={this.handle_click_user_info}
+                        >
+                            {this.props.user_avatar_url ? (
+                                <img src={this.props.user_avatar_url} alt="" />
+                            ) : (
+                                <IconPersonCircle side_length="24" />
+                            )}
+                            <span className={styles.username}>
+                                {this.props.username}
+                            </span>
+                        </div>
+                    </NavLink>
+
                     <div
                         className={styles.dropdown_option}
                         onClick={this.handle_click_sign_out}
@@ -59,7 +63,13 @@ export default class UserAvatarDropDown extends React.Component<
     private handle_click_user_info = (e: MouseEvent): void => {
         e.stopPropagation();
     };
-    private handle_click_sign_out = (): void => {
-        Utils.sign_out();
+    private handle_click_sign_out = async (): Promise<void> => {
+        let response: any = await Utils.send_request(
+            "account/logout",
+            "post",
+            new URLSearchParams()
+        );
+        if (response && response.success) Utils.go_to_login_page();
+        else throw Error("Failed to sign out.");
     };
 }

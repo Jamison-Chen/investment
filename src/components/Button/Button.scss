@@ -1,0 +1,95 @@
+@use "../../global_variables" as _;
+
+.button {
+    border: none;
+    border-radius: 5px;
+    padding: 5px 15px;
+    width: max-content;
+    min-width: max-content;
+    opacity: 0.8;
+    transition-duration: 200ms;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    user-select: none;
+    cursor: pointer;
+    &:hover:not(:disabled) {
+        opacity: 1;
+    }
+    &:disabled {
+        cursor: not-allowed;
+        color: _.$light-gray !important;
+        background-color: _.$noisy-white !important;
+    }
+    &.clean {
+        background-color: _.$white;
+        color: _.$deep-gray;
+        &:hover:not(:disabled) {
+            background-color: _.$noisy-white;
+        }
+    }
+    &.light {
+        background-color: _.$noisy-white;
+        color: _.$deep-gray;
+        &:hover:not(:disabled) {
+            background-color: _.$light-gray;
+        }
+    }
+    &.primary_fill {
+        background-color: _.$blue;
+        color: _.$white;
+    }
+    &.primary {
+        background-color: _.$white;
+        border: 1px solid _.$light-gray;
+        color: _.$blue;
+        &:hover:not(:disabled) {
+            background-color: _.$noisy-white;
+        }
+    }
+    &.success_fill {
+        background-color: _.$green;
+        color: _.$white;
+    }
+    &.success {
+        background-color: _.$white;
+        border: 1px solid _.$light-gray;
+        color: _.$green;
+        &:hover:not(:disabled) {
+            background-color: _.$noisy-white;
+        }
+    }
+    &.dangerous_fill {
+        background-color: _.$red;
+        color: _.$white;
+    }
+    &.dangerous {
+        background-color: _.$white;
+        border: 1px solid _.$light-gray;
+        color: _.$red;
+        &:hover:not(:disabled) {
+            background-color: _.$noisy-white;
+        }
+    }
+    &.p8-15 {
+        padding: 8px 15px;
+    }
+    &.large {
+        font-size: 1.2 * _.$base-font-size;
+        padding: 10px 20px;
+    }
+    &.small {
+        font-size: 0.8 * _.$base-font-size;
+        padding: 5px 12px;
+    }
+    &.tiny {
+        font-size: 0.7 * _.$base-font-size;
+        padding: 4px 10px;
+    }
+    &.border {
+        border: 1px solid _.$light-gray;
+    }
+    &.bold {
+        font-weight: bold;
+    }
+}

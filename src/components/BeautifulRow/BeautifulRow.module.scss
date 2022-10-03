@@ -1,0 +1,47 @@
+@use "../../global_variables" as _;
+
+.row {
+    $padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    line-height: 1.2 * _.$base-font-size;
+    transition-duration: 150ms;
+    &:not(:last-child) {
+        border-bottom: 1px solid _.$noisy-white;
+    }
+    @media (hover: hover) {
+        &.reactive:hover {
+            cursor: pointer;
+            background-color: _.$noisy-white;
+        }
+    }
+    & > .label {
+        min-width: 95px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        padding: $padding;
+        font-size: 0.75 * _.$base-font-size;
+        white-space: nowrap;
+    }
+    & > .value {
+        flex-grow: 1;
+        padding: $padding 0;
+        word-break: break-all;
+        font-size: 0.9 * _.$base-font-size;
+        color: _.$gray;
+        overflow: hidden;
+        & > .string {
+            min-height: _.$base-font-size;
+            word-wrap: break-word;
+        }
+    }
+    & > .tail_mark {
+        display: flex;
+        min-width: 50px;
+        align-items: center;
+        justify-content: center;
+        color: _.$gray;
+    }
+}

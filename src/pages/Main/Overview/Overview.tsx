@@ -1,8 +1,7 @@
-import styles from "./Recorder.module.scss";
+import styles from "./Overview.module.scss";
 
 import React from "react";
 import {
-    Outlet,
     Location,
     NavigateFunction,
     Params,
@@ -21,7 +20,7 @@ interface PropsInterface {
 
 interface StateInterface {}
 
-class Main extends React.Component<PropsInterface, StateInterface> {
+class Overview extends React.Component<PropsInterface, StateInterface> {
     public state: StateInterface;
     public constructor(props: PropsInterface) {
         super(props);
@@ -29,7 +28,7 @@ class Main extends React.Component<PropsInterface, StateInterface> {
     }
     public async componentDidMount(): Promise<void> {}
     public render(): React.ReactNode {
-        return <div className={styles.App}></div>;
+        return <div className={styles.main}></div>;
     }
 }
 
@@ -39,5 +38,5 @@ export default function ComponentWithRouterProp(
     let location = useLocation();
     let navigate = useNavigate();
     let params = useParams();
-    return <Main {...props} router={{ location, navigate, params }} />;
+    return <Overview {...props} router={{ location, navigate, params }} />;
 }

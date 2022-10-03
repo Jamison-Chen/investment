@@ -1,7 +1,9 @@
 import styles from "./Login.module.scss";
+import recorder_icon from "../../assets/recorder_icon.png";
 
 import React from "react";
 import {
+    Link,
     Location,
     NavigateFunction,
     Params,
@@ -12,7 +14,10 @@ import {
     useSearchParams,
 } from "react-router-dom";
 
-// import Button from "../../components/Button/Button";
+import Form from "../../components/Form/Form";
+import Utils from "../../util";
+import Button from "../../components/Button/Button";
+import LabeledInput from "../../components/LabeledInput/LabeledInput";
 
 interface PropsInterface {
     router: {
@@ -34,55 +39,77 @@ interface PropsInterface {
 
 interface StateInterface {
     email: string;
-    username: string;
-    avatar_url: string;
-    fb_access_token: string;
+    password: string;
 }
 
 class Login extends React.Component<PropsInterface, StateInterface> {
     public state: StateInterface;
     public constructor(props: PropsInterface) {
         super(props);
-        this.state = {
-            email: "",
-            username: "",
-            avatar_url: "",
-            fb_access_token: "",
-        };
+        this.state = { email: "", password: "" };
     }
-    public componentDidMount(): void {
-        // this.go_home_if_already_login();
+    public async componentDidMount(): Promise<void> {
+        // Go home if already login
+        let response: any = await Utils.check_login();
+        if (response && response.success) {
+            this.props.router.navigate("/investment");
+        }
     }
     public render(): React.ReactNode {
-        return <main className={styles.main}></main>;
+        return (
+            <main className={styles.main}>
+                <Form
+                    header_img={<img src={recorder_icon} alt="logo" />}
+                    footer_buttons={
+                        <>
+                            <Button
+                                onClick={this.handle_click_login_button}
+                                className="primary_fill"
+                            >
+                                登入
+                            </Button>
+                        </>
+                    }
+                >
+                    <LabeledInput
+                        title="電子信箱"
+                        name="email"
+                        type="email"
+                        value={this.state.email}
+                        onChange={this.hadle_input_change}
+                    />
+                    <LabeledInput
+                        title="密碼"
+                        name="password"
+                        type="password"
+                        value={this.state.password}
+                        onChange={this.hadle_input_change}
+                    />
+                </Form>
+                <div className={styles.switch}>
+                    還沒有帳號嗎？請 <Link to="/investment/signup">點此</Link>{" "}
+                    註冊
+                </div>
+            </main>
+        );
     }
-    // private login = async () => {
-    //     let request_body = new URLSearchParams();
-    //     request_body.append("fb_id", this.state.fb_id);
-    //     request_body.append("email", this.state.email);
-    //     request_body.append("username", this.state.username);
-    //     request_body.append("avatar_url", this.state.avatar_url);
-    //     request_body.append("fb_access_token", this.state.fb_access_token);
-
-    //     let response = await Utils.send_request(
-    //         "account/login_or_register/",
-    //         "post",
-    //         request_body,
-    //         Env.tenant_id,
-    //         false
-    //     );
-    //     if (response.success) {
-    //         let from = this.props.router.search_params.get("from");
-    //         this.props.router.navigate(from || `/${Env.tenant_id}/`);
-    //     }
-    // };
-    // private async go_home_if_already_login(): Promise<void> {
-    //     let response: any = await Utils.check_login();
-    //     try {
-    //         if (response.data.me) window.location.href = `/${Env.tenant_id}/`;
-    //         else throw Error("Got `data` but no `me`");
-    //     } catch {}
-    // }
+    private hadle_input_change = (name: string, value: string): void => {
+        if (name in this.state) this.setState({ [name]: value } as any);
+    };
+    private handle_click_login_button = async (): Promise<void> => {
+        let request_body = new URLSearchParams();
+        request_body.append("email", this.state.email);
+        request_body.append("password", this.state.password);
+        let response = await Utils.send_request(
+            "account/login",
+            "post",
+            request_body
+        );
+        if (response.success) {
+            let from = this.props.router.search_params.get("from");
+            this.props.router.navigate(from || `/investment`);
+        }
+    };
 }
 
 export default function ComponentWithRouterProp(

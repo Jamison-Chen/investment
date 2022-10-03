@@ -1,0 +1,49 @@
+@use "../../global_variables" as _;
+
+.main {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100px;
+    width: min-content;
+    height: min-content;
+    padding: 6px;
+    margin: 0;
+    color: _.$gray;
+    transition-duration: 150ms;
+    user-select: none;
+    cursor: pointer;
+    &.disabled {
+        color: _.$light-gray;
+        cursor: default;
+    }
+    @media (hover: hover) {
+        &:hover {
+            &:not(.disabled) {
+                background-color: _.$transparent-black;
+            }
+            & > .hint_text {
+                display: block;
+                padding: 3px 10px;
+                width: max-content;
+                z-index: 1;
+            }
+        }
+    }
+    & > .hint_text {
+        position: absolute;
+        bottom: -2px;
+        left: 50%;
+        display: none;
+        width: 0;
+        transform: translate(-50%, 100%);
+        opacity: 0.7;
+        padding: 0;
+        background-color: _.$black;
+        color: _.$white;
+        font-size: 0.8 * _.$base-font-size;
+        border-radius: 3px;
+        user-select: none;
+    }
+}

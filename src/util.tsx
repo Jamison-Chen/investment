@@ -2,13 +2,6 @@ import loading from "./assets/recorder_icon.png";
 import Env from "./env";
 
 export default class Utils {
-    private static async handle_response(r: Response): Promise<void> {
-        Utils.remove_loading_screen();
-        if (r.status === 404) Utils.go_to_404_page();
-        else if (r.status === 401 || r.status === 403) Utils.sign_out();
-        else return r.json();
-    }
-    public static sign_out(): void {}
     public static get_cookie(key: string): string | null {
         let divider = key + "=";
         let decodedCookie = decodeURIComponent(document.cookie);
@@ -27,28 +20,64 @@ export default class Utils {
             let d = new Date();
             d.setTime(d.getTime() - 10);
             document.cookie = `${key}=;expires=${d.toUTCString()};path=/investment`;
+            document.cookie = `${key}=;expires=${d.toUTCString()};path=/`;
         }
     }
     public static is_at_404_page(): boolean {
-        return window.location.href.includes("/404");
+        return window.location.href.includes("/investment/404");
     }
     public static go_to_404_page(): void {
-        if (!Utils.is_at_404_page()) window.location.href = "/404";
+        if (!Utils.is_at_404_page()) {
+            window.location.pathname = "/investment/404";
+        }
     }
     public static go_to_login_page(from?: string): void {
         if (!Utils.is_at_login_page()) {
-            window.location.href = `/login${from ? `?from=${from}` : ""}`;
+            window.location.pathname = `/investment/login${
+                from ? `?from=${from}` : ""
+            }`;
         }
     }
     public static is_at_login_page(): boolean {
-        return window.location.href.includes(`/login`);
+        return window.location.href.includes(`/investment/login`);
+    }
+    public static async send_request(
+        endpoint: string,
+        method: "get" | "post",
+        request_body?: URLSearchParams | string
+    ): Promise<any> {
+        Utils.render_loading_screen();
+        if (method === "post" && request_body === undefined) {
+            throw Error("POST methods need request_body");
+        }
+
+        let header = new Headers();
+
+        let options: RequestInit = {
+            method: method,
+            headers: header,
+            body: request_body,
+            credentials: "include",
+        };
+
+        return await fetch(`${Env.backend_url}${endpoint}`, options).then(
+            Utils.handle_response
+        );
+    }
+    private static async handle_response(r: Response): Promise<void> {
+        Utils.remove_loading_screen();
+        if (r.status === 404) Utils.go_to_404_page();
+        else if (r.status === 401) {
+            Utils.delete_cookie("token");
+            Utils.go_to_login_page();
+        } else return r.json();
     }
     public static async check_login(): Promise<any> {
-        return await fetch(`${Env.backend_url}account/check-login`, {
-            method: "post",
-            body: new URLSearchParams(),
-            credentials: "include",
-        }).then(Utils.handle_response);
+        return await Utils.send_request(
+            "account/check-login",
+            "post",
+            new URLSearchParams()
+        );
     }
     public static render_loading_screen(): void {
         if (!document.getElementById("loading_screen")) {

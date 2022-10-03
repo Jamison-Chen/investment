@@ -1,0 +1,38 @@
+@use "../../global_variables" as _;
+
+.main {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin: 15px 0;
+    border-radius: 5px;
+    border: 1px solid _.$light-gray;
+    padding: 0;
+    legend {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translateY(-50%);
+        border-radius: 10px;
+        height: fit-content;
+        min-width: max-content;
+        padding: 0 3px;
+        margin-left: 5px;
+        font-size: 0.8 * _.$base-font-size;
+        background-color: _.$white;
+        color: _.$gray;
+    }
+    input {
+        min-width: 100px;
+        width: 100%;
+        line-height: 2.5 * _.$base-font-size;
+        border: none;
+        padding: 0 10px;
+        letter-spacing: inherit;
+        background-color: transparent;
+        &:disabled {
+            cursor: not-allowed;
+        }
+    }
+}

@@ -40,10 +40,12 @@ class Main extends React.Component<PropsInterface, StateInterface> {
     }
     public async componentDidMount(): Promise<void> {
         let response: any = await Utils.check_login();
-        this.setState({
-            username: response["user-info"].username,
-            avatar_url: response["user-info"].avatar_url,
-        });
+        if (response && response.success) {
+            this.setState({
+                username: response.data.username,
+                avatar_url: response.data.avatar_url,
+            });
+        }
     }
     public render(): React.ReactNode {
         return (
@@ -52,9 +54,9 @@ class Main extends React.Component<PropsInterface, StateInterface> {
                     avatar_url={this.state.avatar_url}
                     username={this.state.username}
                 />
-                <main className={styles.body}>
+                <div className={styles.body}>
                     <Outlet />
-                </main>
+                </div>
             </div>
         );
     }
