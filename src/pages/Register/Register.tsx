@@ -1,4 +1,4 @@
-import styles from "./Login.module.scss";
+import styles from "./Register.module.scss";
 import recorder_icon from "../../assets/recorder_icon.png";
 
 import React from "react";
@@ -39,22 +39,17 @@ interface PropsInterface {
 
 interface StateInterface {
     email: string;
+    username: string;
     password: string;
 }
 
-class Login extends React.Component<PropsInterface, StateInterface> {
+class Register extends React.Component<PropsInterface, StateInterface> {
     public state: StateInterface;
     public constructor(props: PropsInterface) {
         super(props);
-        this.state = { email: "", password: "" };
+        this.state = { email: "", username: "", password: "" };
     }
-    public async componentDidMount(): Promise<void> {
-        // Go home if already login
-        let response: any = await Utils.check_login();
-        if (response && response.success) {
-            this.props.router.navigate("/investment");
-        }
-    }
+    public async componentDidMount(): Promise<void> {}
     public render(): React.ReactNode {
         return (
             <div className={styles.main}>
@@ -63,10 +58,10 @@ class Login extends React.Component<PropsInterface, StateInterface> {
                     footer_buttons={
                         <>
                             <Button
-                                onClick={this.handle_click_login_button}
+                                onClick={this.handle_click_register_button}
                                 className="primary_fill"
                             >
-                                登入
+                                註冊
                             </Button>
                         </>
                     }
@@ -79,6 +74,13 @@ class Login extends React.Component<PropsInterface, StateInterface> {
                         onChange={this.hadle_input_change}
                     />
                     <LabeledInput
+                        title="姓名"
+                        name="username"
+                        type="text"
+                        value={this.state.username}
+                        onChange={this.hadle_input_change}
+                    />
+                    <LabeledInput
                         title="密碼"
                         name="password"
                         type="password"
@@ -87,8 +89,8 @@ class Login extends React.Component<PropsInterface, StateInterface> {
                     />
                 </Form>
                 <div className={styles.switch}>
-                    還沒有帳號嗎？請 <Link to="/investment/register">點此</Link>{" "}
-                    註冊
+                    已經有帳號了嗎？請 <Link to="/investment/login">點此</Link>{" "}
+                    登入
                 </div>
             </div>
         );
@@ -96,18 +98,18 @@ class Login extends React.Component<PropsInterface, StateInterface> {
     private hadle_input_change = (name: string, value: string): void => {
         if (name in this.state) this.setState({ [name]: value } as any);
     };
-    private handle_click_login_button = async (): Promise<void> => {
+    private handle_click_register_button = async (): Promise<void> => {
         let request_body = new URLSearchParams();
         request_body.append("email", this.state.email);
+        request_body.append("username", this.state.username);
         request_body.append("password", this.state.password);
         let response = await Utils.send_request(
-            "account/login",
+            "account/register",
             "post",
             request_body
         );
-        if (response.success) {
-            let from = this.props.router.search_params.get("from");
-            this.props.router.navigate(from || `/investment`);
+        if (response && response.success) {
+            this.props.router.navigate("/investment/login");
         }
     };
 }
@@ -120,7 +122,7 @@ export default function ComponentWithRouterProp(
     let params = useParams();
     let [search_params, set_search_params] = useSearchParams();
     return (
-        <Login
+        <Register
             {...props}
             router={{
                 location,

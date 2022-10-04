@@ -1,9 +1,7 @@
-import styles from "./Login.module.scss";
-import recorder_icon from "../../assets/recorder_icon.png";
+import styles from "./Email.module.scss";
 
 import React from "react";
 import {
-    Link,
     Location,
     NavigateFunction,
     Params,
@@ -14,10 +12,12 @@ import {
     useSearchParams,
 } from "react-router-dom";
 
-import Form from "../../components/Form/Form";
-import Utils from "../../util";
-import Button from "../../components/Button/Button";
-import LabeledInput from "../../components/LabeledInput/LabeledInput";
+import Utils from "../../../../util";
+import Form from "../../../../components/Form/Form";
+import RoundButton from "../../../../components/RoundButton/RoundButton";
+import IconArrowLeft from "../../../../components/Icons/IconArrowLeft";
+import Button from "../../../../components/Button/Button";
+import LabeledInput from "../../../../components/LabeledInput/LabeledInput";
 
 interface PropsInterface {
     router: {
@@ -38,76 +38,90 @@ interface PropsInterface {
 }
 
 interface StateInterface {
+    id: string;
     email: string;
-    password: string;
 }
 
-class Login extends React.Component<PropsInterface, StateInterface> {
+class Email extends React.Component<PropsInterface, StateInterface> {
     public state: StateInterface;
     public constructor(props: PropsInterface) {
         super(props);
-        this.state = { email: "", password: "" };
+        this.state = { id: "", email: "" };
     }
     public async componentDidMount(): Promise<void> {
-        // Go home if already login
         let response: any = await Utils.check_login();
         if (response && response.success) {
-            this.props.router.navigate("/investment");
+            this.setState({
+                id: response.data.id,
+                email: response.data.email,
+            });
         }
     }
     public render(): React.ReactNode {
         return (
             <div className={styles.main}>
                 <Form
-                    header_img={<img src={recorder_icon} alt="logo" />}
+                    header_content={
+                        <div className={styles.header}>
+                            <RoundButton
+                                className="p-8"
+                                onClick={() =>
+                                    this.props.router.navigate(
+                                        "/investment/account"
+                                    )
+                                }
+                            >
+                                <IconArrowLeft side_length="20" />
+                            </RoundButton>
+                            <h1>Email</h1>
+                        </div>
+                    }
                     footer_buttons={
                         <>
                             <Button
-                                onClick={this.handle_click_login_button}
+                                onClick={() =>
+                                    this.props.router.navigate(
+                                        "/investment/account"
+                                    )
+                                }
+                                className="light border"
+                            >
+                                捨棄
+                            </Button>
+                            <Button
+                                onClick={this.handle_click_save_button}
                                 className="primary_fill"
                             >
-                                登入
+                                儲存
                             </Button>
                         </>
                     }
                 >
                     <LabeledInput
-                        title="Email"
+                        title="姓名"
                         name="email"
                         type="email"
                         value={this.state.email}
                         onChange={this.hadle_input_change}
                     />
-                    <LabeledInput
-                        title="密碼"
-                        name="password"
-                        type="password"
-                        value={this.state.password}
-                        onChange={this.hadle_input_change}
-                    />
                 </Form>
-                <div className={styles.switch}>
-                    還沒有帳號嗎？請 <Link to="/investment/register">點此</Link>{" "}
-                    註冊
-                </div>
             </div>
         );
     }
     private hadle_input_change = (name: string, value: string): void => {
         if (name in this.state) this.setState({ [name]: value } as any);
     };
-    private handle_click_login_button = async (): Promise<void> => {
+    private handle_click_save_button = async (): Promise<void> => {
         let request_body = new URLSearchParams();
+        request_body.append("id", this.state.id);
         request_body.append("email", this.state.email);
-        request_body.append("password", this.state.password);
         let response = await Utils.send_request(
-            "account/login",
+            "account/update",
             "post",
             request_body
         );
-        if (response.success) {
-            let from = this.props.router.search_params.get("from");
-            this.props.router.navigate(from || `/investment`);
+        if (response && response.success) {
+            this.props.router.navigate("/investment/account");
         }
     };
 }
@@ -120,7 +134,7 @@ export default function ComponentWithRouterProp(
     let params = useParams();
     let [search_params, set_search_params] = useSearchParams();
     return (
-        <Login
+        <Email
             {...props}
             router={{
                 location,

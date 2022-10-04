@@ -4,7 +4,7 @@ import React, { MouseEvent } from "react";
 
 import Utils from "../../util";
 import IconPersonCircle from "../Icons/IconPersonCircle";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 interface PropsInterface {
     is_dropdown_expanded: boolean;

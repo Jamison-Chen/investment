@@ -2,7 +2,6 @@ import styles from "./Account.module.scss";
 
 import React from "react";
 import {
-    Link,
     Location,
     NavigateFunction,
     Params,
@@ -63,9 +62,10 @@ class Account extends React.Component<PropsInterface, StateInterface> {
     }
     public render(): React.ReactNode {
         return (
-            <main className={styles.main}>
+            <div className={styles.main}>
                 <div className={styles.header}>
                     <RoundButton
+                        className="p-8"
                         onClick={() =>
                             this.props.router.navigate("/investment/overview")
                         }
@@ -76,34 +76,54 @@ class Account extends React.Component<PropsInterface, StateInterface> {
                 </div>
                 <BeautifulBlock>
                     <BeautifulRow
-                        label="暱稱"
-                        value={this.state.username}
+                        label="相片"
+                        onClick={() =>
+                            this.props.router.navigate(
+                                "/investment/account/avatar"
+                            )
+                        }
+                    >
+                        {this.state.avatar_url ? (
+                            <img src={this.state.avatar_url} alt="" />
+                        ) : null}
+                    </BeautifulRow>
+                    <BeautifulRow
+                        label="姓名"
                         onClick={() =>
                             this.props.router.navigate(
                                 "/investment/account/username"
                             )
                         }
-                    />
+                    >
+                        {this.state.username}
+                    </BeautifulRow>
                     <BeautifulRow
                         label="Email"
-                        value={this.state.email}
                         onClick={() =>
                             this.props.router.navigate(
                                 "/investment/account/email"
                             )
                         }
-                    />
+                    >
+                        {this.state.email}
+                    </BeautifulRow>
+                </BeautifulBlock>
+                <div className={styles.header}>
+                    <h1>安全性</h1>
+                </div>
+                <BeautifulBlock>
                     <BeautifulRow
                         label="密碼"
-                        value="********"
                         onClick={() =>
                             this.props.router.navigate(
                                 "/investment/account/password"
                             )
                         }
-                    />
+                    >
+                        ********
+                    </BeautifulRow>
                 </BeautifulBlock>
-            </main>
+            </div>
         );
     }
 }

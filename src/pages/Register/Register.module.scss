@@ -1,0 +1,17 @@
+@use "../../global_variables" as _;
+
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    .switch {
+        margin-top: 20px;
+        font-size: 0.8 * _.$base-font-size;
+        & > a {
+            color: _.$blue;
+        }
+    }
+}

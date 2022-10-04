@@ -6,7 +6,7 @@ import IconChevronRight from "../Icons/IconChevronRight";
 
 interface PropsInterface {
     label: string;
-    value: any;
+    children: any;
     onClick?: MouseEventHandler;
 }
 
@@ -28,11 +28,7 @@ export default class BeautifulRow extends React.Component<
                 onClick={this.props.onClick || (() => {})}
             >
                 <div className={styles.label}>{this.props.label}</div>
-                <div className={styles.value}>
-                    {typeof this.props.value === "string"
-                        ? this.string_to_jsx(this.props.value)
-                        : this.props.value}
-                </div>
+                <div className={styles.value}>{this.props.children}</div>
                 {this.props.onClick ? (
                     <div className={styles.tail_mark}>
                         <IconChevronRight side_length="16" />
@@ -43,15 +39,5 @@ export default class BeautifulRow extends React.Component<
     }
     private get block_class_name(): string {
         return styles.row + (this.props.onClick ? " " + styles.reactive : "");
-    }
-    private string_to_jsx(s: string): React.ReactNode {
-        let string_list: string[] = s.split("\n");
-        return string_list.map((each, idx) => {
-            return (
-                <React.Fragment key={idx}>
-                    <div className={styles.s}>{each || " "}</div>
-                </React.Fragment>
-            );
-        });
     }
 }

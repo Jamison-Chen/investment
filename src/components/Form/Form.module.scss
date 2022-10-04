@@ -8,11 +8,11 @@
     user-select: none;
     & > .header {
         position: relative;
+        display: flex;
+        justify-content: center;
         min-height: 70px;
         height: fit-content;
         padding: 10px 0;
-        display: flex;
-        justify-content: center;
         & > img {
             position: absolute;
             top: 0;
