@@ -6,13 +6,16 @@ import IconApp from "../Icons/IconApp";
 import AppDropdown from "../AppDropdown/AppDropdown";
 import UserAvatarDropDown from "../UserAvatarDropDown/UserAvatarDropDown";
 import IconPersonCircle from "../Icons/IconPersonCircle";
+import IconList from "../Icons/IconList";
 
 interface PropsInterface {
     avatar_url: string;
     username: string;
+    handle_click_list_button: Function;
 }
 
 interface StateInterface {
+    is_hidden_bar_active: boolean;
     is_app_dropdown_expanded: boolean;
     is_user_avatar_dropdown_expanded: boolean;
 }
@@ -25,6 +28,7 @@ export default class Header extends React.Component<
     public constructor(props: PropsInterface) {
         super(props);
         this.state = {
+            is_hidden_bar_active: false,
             is_app_dropdown_expanded: false,
             is_user_avatar_dropdown_expanded: false,
         };
@@ -32,6 +36,13 @@ export default class Header extends React.Component<
     public render(): React.ReactNode {
         return (
             <header className={styles.header}>
+                <div
+                    className={styles.expand_setting_button}
+                    onClick={this.handle_click_list_button}
+                >
+                    <IconList side_length="22" />
+                </div>
+                <nav></nav>
                 <div
                     className={styles.app_outer}
                     onClick={this.handle_click_app}
@@ -69,6 +80,9 @@ export default class Header extends React.Component<
             </header>
         );
     }
+    private handle_click_list_button = (): void => {
+        this.props.handle_click_list_button();
+    };
     private handle_click_app = (): void => {
         this.setState((state, props) => {
             return {

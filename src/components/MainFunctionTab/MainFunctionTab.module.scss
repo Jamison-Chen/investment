@@ -1,0 +1,20 @@
+@use "../../global_variables" as _;
+
+.tab {
+    height: 45px;
+    padding: 0 20px;
+    color: _.$gray;
+    font-size: 0.9 * _.$base-font-size;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    &.active {
+        color: _.$blue;
+        background-color: #4c8bf520;
+    }
+    @media (hover: hover) {
+        &:not(.active):hover {
+            background-color: _.$noisy-white;
+        }
+    }
+}

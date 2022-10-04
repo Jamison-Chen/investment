@@ -6,12 +6,19 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-}
-
-.body {
-    display: flex;
-    justify-content: center;
-    flex-grow: 1;
-    width: 100%;
-    overflow: hidden;
+    .body {
+        display: flex;
+        justify-content: center;
+        flex-grow: 1;
+        width: 100%;
+        overflow: hidden;
+        & > .right_part {
+            height: 100%;
+            flex-grow: 1;
+            overflow: auto;
+            @media screen and (max-width: _.$hide-function-bar-boundry) {
+                width: 100%;
+            }
+        }
+    }
 }

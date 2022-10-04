@@ -6,13 +6,32 @@
     min-height: _.$header-height;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
     padding: 0 15px;
     color: _.$white;
     user-select: none;
     border-bottom: 1px solid _.$noisy-white;
     gap: 10px;
     z-index: 2;
+    & > .expand_setting_button {
+        display: none;
+        @media screen and (max-width: _.$hide-function-bar-boundry) {
+            color: _.$black;
+            border-radius: 100px;
+            display: flex;
+            align-items: center;
+            padding: 5px;
+            transition-duration: 300ms;
+            cursor: pointer;
+            @media (hover: hover) {
+                &:hover {
+                    background-color: _.$noisy-white;
+                }
+            }
+        }
+    }
+    & > nav {
+        flex-grow: 1;
+    }
     & > .app_outer,
     & > .user_avatar_outer {
         position: relative;

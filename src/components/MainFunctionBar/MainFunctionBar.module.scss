@@ -1,0 +1,64 @@
+@use "../../global_variables" as _;
+
+.bar {
+    position: relative;
+    width: 230px;
+    min-width: 230px;
+    background-color: _.$white;
+    height: 100%;
+    overflow-y: auto;
+    border-right: 0.5px solid _.$light-gray;
+    display: flex;
+    flex-direction: column;
+    & > .setting {
+        position: absolute;
+        bottom: 0;
+        padding: 10px;
+        border-top: 1px solid _.$light-gray;
+        width: 100%;
+        color: _.$gray;
+        font-size: 0.9 * _.$base-font-size;
+        display: flex;
+        align-items: center;
+        @media (hover: hover) {
+            &:hover {
+                background-color: _.$noisy-white;
+            }
+        }
+        & > span {
+            margin: 0 8px;
+        }
+    }
+}
+
+.small_screen_active_background {
+    display: none;
+}
+
+@media screen and (max-width: _.$hide-function-bar-boundry) {
+    .bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 4;
+        width: 250px;
+        transform: translateX(-100%);
+        transition-duration: 300ms;
+        &.active {
+            transform: translateX(0);
+        }
+    }
+    .small_screen_active_background {
+        &.active {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: block;
+            background-color: _.$black;
+            opacity: 0.5;
+            z-index: 3;
+        }
+    }
+}
