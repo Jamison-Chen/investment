@@ -1,6 +1,6 @@
 @use "../../global_variables" as _;
 
-.bar {
+.main {
     position: relative;
     width: 230px;
     min-width: 230px;
@@ -10,23 +10,61 @@
     border-right: 0.5px solid _.$light-gray;
     display: flex;
     flex-direction: column;
-    & > .setting {
+    .user_info {
+        display: flex;
+        align-items: flex-end;
+        gap: 10px;
+        padding: 10px 5px;
+        margin: 5px 10px;
+        border-bottom: 1px solid _.$noisy-white;
+        & > img {
+            width: 40px;
+            min-width: 40px;
+            border-radius: 100px;
+        }
+        & > .username {
+            font-size: 0.9 * _.$base-font-size;
+            font-weight: bold;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 5px;
+        }
+    }
+    & > .lower {
         position: absolute;
         bottom: 0;
-        padding: 10px;
-        border-top: 1px solid _.$light-gray;
         width: 100%;
-        color: _.$gray;
-        font-size: 0.9 * _.$base-font-size;
-        display: flex;
-        align-items: center;
-        @media (hover: hover) {
-            &:hover {
-                background-color: _.$noisy-white;
+        & > .logout_button {
+            text-align: center;
+            margin: 10px;
+            border-radius: 8px;
+            background-color: _.$noisy-white;
+            padding: 8px;
+            transition-duration: 150ms;
+            font-size: 0.9 * _.$base-font-size;
+            cursor: pointer;
+            @media (hover: hover) {
+                &:hover {
+                    background-color: _.$light-gray;
+                }
             }
         }
-        & > span {
-            margin: 0 8px;
+        & > .setting {
+            padding: 10px 15px;
+            border-top: 1px solid _.$light-gray;
+            color: _.$gray;
+            font-size: 0.9 * _.$base-font-size;
+            display: flex;
+            align-items: center;
+            @media (hover: hover) {
+                &:hover {
+                    background-color: _.$noisy-white;
+                }
+            }
+            & > span {
+                margin: 0 8px;
+            }
         }
     }
 }
@@ -36,7 +74,7 @@
 }
 
 @media screen and (max-width: _.$hide-function-bar-boundry) {
-    .bar {
+    .main {
         position: fixed;
         top: 0;
         left: 0;

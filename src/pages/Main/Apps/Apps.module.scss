@@ -1,0 +1,45 @@
+@use "../../../global_variables" as _;
+
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    .app_list {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        .app {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            height: 110px;
+            width: 110px;
+            overflow: hidden;
+            border-radius: 8px;
+            transition-duration: 200ms;
+            padding: 0 5px 20px 5px;
+            border: 1px solid _.$light-gray;
+            @media (hover: hover) {
+                &:hover {
+                    background-color: _.$transparent-blue;
+                }
+            }
+            & > img {
+                width: 50%;
+            }
+            & > .app_name {
+                display: flex;
+                align-items: center;
+                font-size: 0.9 * _.$base-font-size;
+                word-break: break-all;
+                padding: 0 3px;
+                text-align: center;
+            }
+        }
+    }
+}

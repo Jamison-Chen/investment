@@ -24,6 +24,7 @@ code {
 *:before,
 *:after {
     box-sizing: border-box;
+    user-select: none;
 }
 
 img {
@@ -52,13 +53,8 @@ a {
     justify-content: center;
     align-items: center;
     z-index: 2;
-    user-select: none;
     #loading_img_outer {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
         width: 5%;
-        min-width: 40px;
+        min-width: 60px;
     }
 }

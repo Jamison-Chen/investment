@@ -1,61 +1,23 @@
 @use "../../global_variables" as _;
 
-.header {
-    background-color: _.$white;
-    height: _.$header-height;
-    min-height: _.$header-height;
-    display: flex;
-    align-items: center;
-    padding: 0 15px;
-    color: _.$white;
-    user-select: none;
-    border-bottom: 1px solid _.$noisy-white;
-    gap: 10px;
-    z-index: 2;
-    & > .expand_setting_button {
-        display: none;
-        @media screen and (max-width: _.$hide-function-bar-boundry) {
-            color: _.$black;
-            border-radius: 100px;
-            display: flex;
-            align-items: center;
-            padding: 5px;
-            transition-duration: 300ms;
-            cursor: pointer;
-            @media (hover: hover) {
-                &:hover {
-                    background-color: _.$noisy-white;
-                }
-            }
-        }
-    }
-    & > nav {
-        flex-grow: 1;
-    }
-    & > .app_outer,
-    & > .user_avatar_outer {
-        position: relative;
+.main {
+    display: none;
+}
+
+@media screen and (max-width: _.$hide-function-bar-boundry) {
+    .main {
         display: flex;
-        justify-content: center;
         align-items: center;
-        padding: 5px;
-        height: 35px;
-        width: 35px;
-        border-radius: 100px;
-        color: _.$deep-gray;
-        transition-duration: 300ms;
-        & > .app_icon,
-        & > .user_avatar {
-            height: 100%;
-            display: flex;
-            align-items: center;
-            color: _.$gray;
-            cursor: pointer;
-        }
-        @media (hover: hover) {
-            &:hover {
-                background-color: _.$noisy-white;
-            }
+        gap: 10px;
+        height: _.$header-height;
+        min-height: _.$header-height;
+        padding: 0 15px;
+        background-color: _.$white;
+        color: _.$white;
+        border-bottom: 1px solid _.$noisy-white;
+        z-index: 2;
+        .user_avatar {
+            width: 25px;
         }
     }
 }

@@ -54,6 +54,7 @@ class Login extends React.Component<PropsInterface, StateInterface> {
         if (response && response.success) {
             this.props.router.navigate("/investment");
         }
+        window.addEventListener("keypress", this.handle_hit_enter);
     }
     public render(): React.ReactNode {
         return (
@@ -64,7 +65,7 @@ class Login extends React.Component<PropsInterface, StateInterface> {
                         <>
                             <Button
                                 onClick={this.handle_click_login_button}
-                                className="primary_fill"
+                                className="primary_fill l"
                             >
                                 登入
                             </Button>
@@ -108,6 +109,11 @@ class Login extends React.Component<PropsInterface, StateInterface> {
         if (response.success) {
             let from = this.props.router.search_params.get("from");
             this.props.router.navigate(from || `/investment`);
+        }
+    };
+    private handle_hit_enter = (e: KeyboardEvent): void => {
+        if (e.key === "Enter" && this.state.email && this.state.password) {
+            this.handle_click_login_button();
         }
     };
 }

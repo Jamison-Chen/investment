@@ -12,7 +12,6 @@
     margin: 0;
     color: _.$gray;
     transition-duration: 150ms;
-    user-select: none;
     cursor: pointer;
     &.disabled {
         color: _.$light-gray;
@@ -44,6 +43,5 @@
         color: _.$white;
         font-size: 0.8 * _.$base-font-size;
         border-radius: 3px;
-        user-select: none;
     }
 }

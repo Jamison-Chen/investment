@@ -16,9 +16,6 @@
             height: 100%;
             flex-grow: 1;
             overflow: auto;
-            @media screen and (max-width: _.$hide-function-bar-boundry) {
-                width: 100%;
-            }
         }
     }
 }

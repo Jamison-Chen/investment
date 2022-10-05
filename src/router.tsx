@@ -10,6 +10,7 @@ import Register from "./pages/Register/Register";
 import Overview from "./pages/Main/Overview/Overview";
 import Individual from "./pages/Main/Individual/Individual";
 import Account from "./pages/Main/Account/Account";
+import Apps from "./pages/Main/Apps/Apps";
 
 // layer three
 import Username from "./pages/Main/Account/Username/Username";
@@ -24,6 +25,7 @@ export default function MyRouter() {
                     <Route path="" element={<Navigate to="overview" />}></Route>
                     <Route path="overview" element={<Overview />}></Route>
                     <Route path="individual" element={<Individual />}></Route>
+                    <Route path="apps" element={<Apps />}></Route>
                     <Route path="account" element={<Account />}></Route>
                     <Route
                         path="account/username"

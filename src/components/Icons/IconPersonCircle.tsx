@@ -9,7 +9,7 @@ interface StateInterface {
     [key: string]: any;
 }
 
-export default class IconPersonCircle extends React.Component<
+export default class IconColumnsGap extends React.Component<
     PropsInterface,
     StateInterface
 > {
@@ -27,14 +27,10 @@ export default class IconPersonCircle extends React.Component<
                 width={this.props.side_length}
                 height={this.props.side_length}
                 fill={this.props.color || "currentColor"}
-                className="bi bi-person-circle"
+                className="bi bi-columns-gap"
                 viewBox="0 0 16 16"
             >
-                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-                <path
-                    fillRule="evenodd"
-                    d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
-                />
+                <path d="M6 1v3H1V1h5zM1 0a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1H1zm14 12v3h-5v-3h5zm-5-1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1h-5zM6 8v7H1V8h5zM1 7a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H1zm14-6v7h-5V1h5zm-5-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1h-5z" />
             </svg>
         );
     }

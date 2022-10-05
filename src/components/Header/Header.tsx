@@ -1,12 +1,9 @@
 import styles from "./Header.module.scss";
+import person_fill from "../../assets/person-fill.svg";
 
 import React from "react";
 
-import IconApp from "../Icons/IconApp";
-import AppDropdown from "../AppDropdown/AppDropdown";
-import UserAvatarDropDown from "../UserAvatarDropDown/UserAvatarDropDown";
-import IconPersonCircle from "../Icons/IconPersonCircle";
-import IconList from "../Icons/IconList";
+import RoundButton from "../RoundButton/RoundButton";
 
 interface PropsInterface {
     avatar_url: string;
@@ -35,67 +32,18 @@ export default class Header extends React.Component<
     }
     public render(): React.ReactNode {
         return (
-            <header className={styles.header}>
-                <div
-                    className={styles.expand_setting_button}
-                    onClick={this.handle_click_list_button}
-                >
-                    <IconList side_length="22" />
-                </div>
-                <nav></nav>
-                <div
-                    className={styles.app_outer}
-                    onClick={this.handle_click_app}
-                >
-                    <div className={styles.app_icon}>
-                        <IconApp side_length="18" />
-                    </div>
-                    <AppDropdown
-                        is_dropdown_expanded={
-                            this.state.is_app_dropdown_expanded
-                        }
+            <header className={styles.main}>
+                <RoundButton onClick={this.handle_click_user_avatar}>
+                    <img
+                        src={this.props.avatar_url || person_fill}
+                        alt=""
+                        className={styles.user_avatar}
                     />
-                </div>
-                <div
-                    className={styles.user_avatar_outer}
-                    onClick={this.handle_click_user_avatar}
-                >
-                    {this.props.avatar_url ? (
-                        <img
-                            src={this.props.avatar_url}
-                            alt=""
-                            className={styles.user_avatar}
-                        />
-                    ) : (
-                        <IconPersonCircle side_length="22" />
-                    )}
-                    <UserAvatarDropDown
-                        is_dropdown_expanded={
-                            this.state.is_user_avatar_dropdown_expanded
-                        }
-                        user_avatar_url={this.props.avatar_url}
-                        username={this.props.username}
-                    />
-                </div>
+                </RoundButton>
             </header>
         );
     }
-    private handle_click_list_button = (): void => {
-        this.props.handle_click_list_button();
-    };
-    private handle_click_app = (): void => {
-        this.setState((state, props) => {
-            return {
-                is_app_dropdown_expanded: !state.is_app_dropdown_expanded,
-            };
-        });
-    };
     private handle_click_user_avatar = (): void => {
-        this.setState((state, props) => {
-            return {
-                is_user_avatar_dropdown_expanded:
-                    !state.is_user_avatar_dropdown_expanded,
-            };
-        });
+        this.props.handle_click_list_button();
     };
 }

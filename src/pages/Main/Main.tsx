@@ -18,6 +18,7 @@ import MainFunctionTab from "../../components/MainFunctionTab/MainFunctionTab";
 import IconHouseDoorFill from "../../components/Icons/IconHouseDoorFill";
 import IconFileTextFill from "../../components/Icons/IconFileTextFill";
 import IconCashStack from "../../components/Icons/IconCashStack";
+import IconColumnsGap from "../../components/Icons/IconPersonCircle";
 
 interface PropsInterface {
     router: {
@@ -63,6 +64,11 @@ class Main extends React.Component<PropsInterface, StateInterface> {
                 tab_name: "持股",
                 path: "/investment/portfolio",
             },
+            {
+                tab_icon: <IconColumnsGap side_length="16" />,
+                tab_name: "其他應用程式",
+                path: "/investment/apps",
+            },
         ];
     }
     public async componentDidMount(): Promise<void> {
@@ -84,6 +90,8 @@ class Main extends React.Component<PropsInterface, StateInterface> {
                 />
                 <main className={styles.body}>
                     <MainFunctionBar
+                        user_avatar_url={this.state.avatar_url}
+                        username={this.state.username}
                         is_active_in_short_screen={
                             this.state.is_hidden_bar_active
                         }
