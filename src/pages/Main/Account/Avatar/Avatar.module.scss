@@ -1,24 +1,25 @@
-@use "../../../global_variables" as _;
+@use "../../../../global_variables" as _;
 
 .main {
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding-top: 15vh;
     height: 100%;
     width: 100%;
-    & > .header {
+    .header {
         display: flex;
         align-items: center;
         gap: 10px;
-        width: min(93%, 720px);
-        margin: 20px 0 10px 0;
+        width: 100%;
         & > h1 {
             font-size: 1.25 * _.$base-font-size;
             font-weight: normal;
         }
     }
-    .avatar {
-        width: 40px;
+    .avatar_preview {
+        margin: 10px auto;
+        width: 80px;
         border-radius: 100px;
     }
 }

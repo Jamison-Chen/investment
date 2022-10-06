@@ -4,7 +4,7 @@ export default class Env {
             window.location.href.includes("localhost") ||
             window.location.href.includes("127.0.0.1")
         ) {
-            return "http://127.0.0.1:8000/api/";
+            return "http://127.0.0.1:8001/api/";
         } else {
             return "https://investment-backend.herokuapp.com/api/";
         }

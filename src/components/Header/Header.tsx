@@ -4,6 +4,7 @@ import person_fill from "../../assets/person-fill.svg";
 import React from "react";
 
 import RoundButton from "../RoundButton/RoundButton";
+import FullLogo from "../FullLogo/FullLogo";
 
 interface PropsInterface {
     avatar_url: string;
@@ -33,6 +34,7 @@ export default class Header extends React.Component<
     public render(): React.ReactNode {
         return (
             <header className={styles.main}>
+                <FullLogo size="s" />
                 <RoundButton onClick={this.handle_click_user_avatar}>
                     <img
                         src={this.props.avatar_url || person_fill}

@@ -1,0 +1,59 @@
+@use "../../global_variables" as _;
+
+.background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: #0009;
+    z-index: 5;
+    user-select: none;
+    & > .main {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        max-width: min(95%, 720px);
+        background-color: _.$white;
+        border-radius: 8px;
+        transform: translate(-50%, -50%);
+        & > .header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            height: 50px;
+            padding: 0 10px;
+            & > .header_title {
+                display: flex;
+                align-items: center;
+                color: _.$gray;
+                flex-grow: 1;
+                padding-left: 10px;
+            }
+        }
+        & > .body {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 100%;
+            max-height: 512px;
+            padding: 0 20px;
+            overflow: auto;
+            & > .description {
+                font-size: 0.8 * _.$base-font-size;
+                color: _.$gray;
+            }
+        }
+        & > .footer {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            height: 65px;
+            padding: 0 20px;
+            gap: 15px;
+        }
+        & > .fake_footer {
+            height: 30px;
+        }
+    }
+}

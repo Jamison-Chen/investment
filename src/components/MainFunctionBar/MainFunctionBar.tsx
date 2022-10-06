@@ -1,11 +1,14 @@
 import styles from "./MainFunctionBar.module.scss";
 import person_fill from "../../assets/person-fill.svg";
 
-import React from "react";
+import React, { ReactElement } from "react";
 import { NavLink } from "react-router-dom";
 
 import Utils from "../../util";
 import IconGearFill from "../Icons/IconGearFill";
+import IconArrowRight from "../Icons/IconArrowRight";
+import Modal from "../Modal/Modal";
+import Button from "../Button/Button";
 
 interface PropsInterface {
     user_avatar_url: string;
@@ -15,7 +18,9 @@ interface PropsInterface {
     toggle: () => void;
 }
 
-interface StateInterface {}
+interface StateInterface {
+    active_modal_name: "check_logout" | null;
+}
 
 export default class MainFunctionBar extends React.Component<
     PropsInterface,
@@ -24,7 +29,9 @@ export default class MainFunctionBar extends React.Component<
     public state: StateInterface;
     public constructor(props: PropsInterface) {
         super(props);
-        this.state = {};
+        this.state = {
+            active_modal_name: null,
+        };
     }
     public render(): React.ReactNode {
         return (
@@ -37,7 +44,8 @@ export default class MainFunctionBar extends React.Component<
                             : "")
                     }
                 >
-                    <NavLink to="/investment/account">
+                    {this.active_modal}
+                    <NavLink to="/investment/account" onClick={this.toggle}>
                         <div className={styles.user_info}>
                             <img
                                 src={this.props.user_avatar_url || person_fill}
@@ -46,14 +54,16 @@ export default class MainFunctionBar extends React.Component<
                             <span className={styles.username}>
                                 {this.props.username}
                             </span>
+                            <span className={styles.cta}>
+                                <IconArrowRight side_length="20" />
+                            </span>
                         </div>
                     </NavLink>
                     {this.props.children}
-
                     <div className={styles.lower}>
                         <div
                             className={styles.logout_button}
-                            onClick={this.handle_click_sign_out}
+                            onClick={this.handle_click_logout_button}
                         >
                             登出
                         </div>
@@ -79,10 +89,43 @@ export default class MainFunctionBar extends React.Component<
             </>
         );
     }
+    private get active_modal(): ReactElement<Modal> | null {
+        if (this.state.active_modal_name === "check_logout") {
+            return (
+                <Modal
+                    header_title="您確定要登出嗎？"
+                    hide_modal={this.hide_modal}
+                >
+                    <div className={styles.modal_inner}>
+                        <Button
+                            className="light border"
+                            onClick={this.hide_modal}
+                        >
+                            返回
+                        </Button>
+                        <Button
+                            className="primary_fill"
+                            onClick={this.handle_click_check_logout}
+                        >
+                            登出
+                        </Button>
+                    </div>
+                </Modal>
+            );
+        }
+        return null;
+    }
     private toggle = (): void => {
         this.props.toggle();
     };
-    private handle_click_sign_out = async (): Promise<void> => {
+    private hide_modal = (): void => {
+        this.setState({ active_modal_name: null });
+    };
+    private handle_click_logout_button = (): void => {
+        this.toggle();
+        this.setState({ active_modal_name: "check_logout" });
+    };
+    private handle_click_check_logout = async (): Promise<void> => {
         let response: any = await Utils.send_request(
             "account/logout",
             "post",

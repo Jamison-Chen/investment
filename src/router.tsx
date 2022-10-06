@@ -13,6 +13,7 @@ import Account from "./pages/Main/Account/Account";
 import Apps from "./pages/Main/Apps/Apps";
 
 // layer three
+import Avatar from "./pages/Main/Account/Avatar/Avatar";
 import Username from "./pages/Main/Account/Username/Username";
 import Email from "./pages/Main/Account/Email/Email";
 import Password from "./pages/Main/Account/Password/Password";
@@ -27,6 +28,7 @@ export default function MyRouter() {
                     <Route path="individual" element={<Individual />}></Route>
                     <Route path="apps" element={<Apps />}></Route>
                     <Route path="account" element={<Account />}></Route>
+                    <Route path="account/avatar" element={<Avatar />}></Route>
                     <Route
                         path="account/username"
                         element={<Username />}

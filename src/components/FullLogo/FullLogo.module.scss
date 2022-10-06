@@ -1,0 +1,39 @@
+@use "../../global_variables" as _;
+
+.main {
+    display: flex;
+    align-items: flex-end;
+    .product_name {
+        color: _.$black;
+        white-space: nowrap;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-weight: bold;
+    }
+    &.s {
+        gap: 5px;
+        .logo {
+            width: 25px;
+        }
+        .product_name {
+            font-size: 0.75 * _.$base-font-size;
+        }
+    }
+    &.m {
+        gap: 7px;
+        .logo {
+            width: 50px;
+        }
+        .product_name {
+            font-size: 1.25 * _.$base-font-size;
+        }
+    }
+    &.l {
+        gap: 10px;
+        .logo {
+            width: 100px;
+        }
+        .product_name {
+            font-size: 2.5 * _.$base-font-size;
+        }
+    }
+}

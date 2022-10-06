@@ -99,14 +99,13 @@ class Main extends React.Component<PropsInterface, StateInterface> {
                     >
                         {this.subpage_list.map((each, idx) => {
                             return (
-                                <React.Fragment key={idx}>
-                                    <MainFunctionTab
-                                        tab_icon={each.tab_icon}
-                                        tab_name={each.tab_name}
-                                        to={`${each.path}`}
-                                        onClick={this.toggle_main_function_bar}
-                                    />
-                                </React.Fragment>
+                                <MainFunctionTab
+                                    tab_icon={each.tab_icon}
+                                    tab_name={each.tab_name}
+                                    to={`${each.path}`}
+                                    onClick={this.toggle_main_function_bar}
+                                    key={idx}
+                                />
                             );
                         })}
                     </MainFunctionBar>

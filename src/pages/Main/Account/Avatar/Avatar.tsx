@@ -1,4 +1,4 @@
-import styles from "./Password.module.scss";
+import styles from "./Avatar.module.scss";
 
 import React from "react";
 import {
@@ -39,20 +39,22 @@ interface PropsInterface {
 
 interface StateInterface {
     id: string;
-    old_password: string;
-    new_password: string;
+    avatar_url: string;
 }
 
-class Password extends React.Component<PropsInterface, StateInterface> {
+class Avatar extends React.Component<PropsInterface, StateInterface> {
     public state: StateInterface;
     public constructor(props: PropsInterface) {
         super(props);
-        this.state = { id: "", old_password: "", new_password: "" };
+        this.state = { id: "", avatar_url: "" };
     }
     public async componentDidMount(): Promise<void> {
         let response: any = await Utils.check_login();
         if (response && response.success) {
-            this.setState({ id: response.data.id });
+            this.setState({
+                id: response.data.id,
+                avatar_url: response.data.avatar_url,
+            });
         }
     }
     public render(): React.ReactNode {
@@ -71,7 +73,7 @@ class Password extends React.Component<PropsInterface, StateInterface> {
                             >
                                 <IconArrowLeft side_length="20" />
                             </RoundButton>
-                            <h1>密碼更新</h1>
+                            <h1>頭像</h1>
                         </div>
                     }
                     footer_buttons={
@@ -90,25 +92,25 @@ class Password extends React.Component<PropsInterface, StateInterface> {
                                 onClick={this.handle_click_save_button}
                                 className="primary_fill"
                             >
-                                更改密碼
+                                儲存
                             </Button>
                         </>
                     }
                 >
                     <LabeledInput
-                        title="原密碼"
-                        name="old_password"
-                        type="password"
-                        value={this.state.old_password}
+                        title="頭像網址"
+                        name="avatar_url"
+                        type="text"
+                        value={this.state.avatar_url || ""}
                         onChange={this.hadle_input_change}
                     />
-                    <LabeledInput
-                        title="新密碼"
-                        name="new_password"
-                        type="password"
-                        value={this.state.new_password}
-                        onChange={this.hadle_input_change}
-                    />
+                    {this.state.avatar_url ? (
+                        <img
+                            className={styles.avatar_preview}
+                            src={this.state.avatar_url}
+                            alt="圖片網址有誤"
+                        />
+                    ) : null}
                 </Form>
             </div>
         );
@@ -119,8 +121,7 @@ class Password extends React.Component<PropsInterface, StateInterface> {
     private handle_click_save_button = async (): Promise<void> => {
         let request_body = new URLSearchParams();
         request_body.append("id", this.state.id);
-        request_body.append("old_password", this.state.old_password);
-        request_body.append("new_password", this.state.new_password);
+        request_body.append("avatar_url", this.state.avatar_url);
         let response = await Utils.send_request(
             "account/update",
             "post",
@@ -140,7 +141,7 @@ export default function ComponentWithRouterProp(
     let params = useParams();
     let [search_params, set_search_params] = useSearchParams();
     return (
-        <Password
+        <Avatar
             {...props}
             router={{
                 location,

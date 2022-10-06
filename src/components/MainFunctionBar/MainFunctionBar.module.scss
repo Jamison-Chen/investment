@@ -2,14 +2,14 @@
 
 .main {
     position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     width: 230px;
     min-width: 230px;
     background-color: _.$white;
-    height: 100%;
     overflow-y: auto;
     border-right: 0.5px solid _.$light-gray;
-    display: flex;
-    flex-direction: column;
     .user_info {
         display: flex;
         align-items: flex-end;
@@ -17,18 +17,32 @@
         padding: 10px 5px;
         margin: 5px 10px;
         border-bottom: 1px solid _.$noisy-white;
+        @media (hover: hover) {
+            &:hover {
+                & > .cta {
+                    opacity: 1;
+                    transform: translateX(10px);
+                }
+            }
+        }
         & > img {
             width: 40px;
             min-width: 40px;
             border-radius: 100px;
         }
         & > .username {
+            flex-grow: 1;
             font-size: 0.9 * _.$base-font-size;
             font-weight: bold;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             margin-bottom: 5px;
+        }
+        & > .cta {
+            opacity: 0;
+            color: _.$gray;
+            transition-duration: 300ms;
         }
     }
     & > .lower {
@@ -71,6 +85,13 @@
 
 .small_screen_active_background {
     display: none;
+}
+
+.modal_inner {
+    display: flex;
+    justify-content: space-around;
+    width: min(80vw, 240px);
+    padding-top: 10px;
 }
 
 @media screen and (max-width: _.$hide-function-bar-boundry) {

@@ -8,16 +8,17 @@
     .main {
         display: flex;
         align-items: center;
+        justify-content: space-between;
         gap: 10px;
         height: _.$header-height;
         min-height: _.$header-height;
         padding: 0 15px;
         background-color: _.$white;
-        color: _.$white;
         border-bottom: 1px solid _.$noisy-white;
         z-index: 2;
         .user_avatar {
             width: 25px;
+            border-radius: 100px;
         }
     }
 }

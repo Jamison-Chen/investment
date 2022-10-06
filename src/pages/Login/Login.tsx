@@ -1,5 +1,4 @@
 import styles from "./Login.module.scss";
-import recorder_icon from "../../assets/recorder_icon.png";
 
 import React from "react";
 import {
@@ -18,6 +17,7 @@ import Form from "../../components/Form/Form";
 import Utils from "../../util";
 import Button from "../../components/Button/Button";
 import LabeledInput from "../../components/LabeledInput/LabeledInput";
+import FullLogo from "../../components/FullLogo/FullLogo";
 
 interface PropsInterface {
     router: {
@@ -60,7 +60,7 @@ class Login extends React.Component<PropsInterface, StateInterface> {
         return (
             <div className={styles.main}>
                 <Form
-                    header_img={<img src={recorder_icon} alt="logo" />}
+                    header_content={<FullLogo size="m" />}
                     footer_buttons={
                         <>
                             <Button
