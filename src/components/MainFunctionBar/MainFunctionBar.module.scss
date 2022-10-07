@@ -90,8 +90,7 @@
 .modal_inner {
     display: flex;
     justify-content: space-around;
-    width: min(80vw, 240px);
-    padding-top: 10px;
+    gap: 20px;
 }
 
 @media screen and (max-width: _.$hide-function-bar-boundry) {

@@ -22,13 +22,12 @@
             justify-content: flex-end;
             align-items: center;
             height: 50px;
-            padding: 0 10px;
+            padding: 0 15px;
             & > .header_title {
                 display: flex;
                 align-items: center;
                 color: _.$gray;
                 flex-grow: 1;
-                padding-left: 10px;
             }
         }
         & > .body {
@@ -53,7 +52,7 @@
             gap: 15px;
         }
         & > .fake_footer {
-            height: 30px;
+            height: 25px;
         }
     }
 }

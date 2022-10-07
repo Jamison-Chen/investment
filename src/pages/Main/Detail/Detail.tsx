@@ -1,4 +1,4 @@
-import styles from "./Individual.module.scss";
+import styles from "./Detail.module.scss";
 
 import React from "react";
 import {
@@ -20,7 +20,7 @@ interface PropsInterface {
 
 interface StateInterface {}
 
-class Individual extends React.Component<PropsInterface, StateInterface> {
+class Detail extends React.Component<PropsInterface, StateInterface> {
     public state: StateInterface;
     public constructor(props: PropsInterface) {
         super(props);
@@ -38,5 +38,5 @@ export default function ComponentWithRouterProp(
     let location = useLocation();
     let navigate = useNavigate();
     let params = useParams();
-    return <Individual {...props} router={{ location, navigate, params }} />;
+    return <Detail {...props} router={{ location, navigate, params }} />;
 }

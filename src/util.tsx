@@ -1,4 +1,4 @@
-import loading from "./assets/recorder_icon.png";
+import quill_pen from "./assets/quill_pen.png";
 import Env from "./env";
 
 export default class Utils {
@@ -88,7 +88,7 @@ export default class Utils {
             let loading_img_outer = document.createElement("img");
             loading_img_outer.id = "loading_img_outer";
 
-            let loading_img = loading;
+            let loading_img = quill_pen;
             loading_img_outer.src = loading_img;
             loading_screen.appendChild(loading_img_outer);
 

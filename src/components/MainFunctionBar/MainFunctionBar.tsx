@@ -95,16 +95,17 @@ export default class MainFunctionBar extends React.Component<
                 <Modal
                     header_title="您確定要登出嗎？"
                     hide_modal={this.hide_modal}
+                    no_x
                 >
                     <div className={styles.modal_inner}>
                         <Button
-                            className="light border"
+                            className="light border l"
                             onClick={this.hide_modal}
                         >
                             返回
                         </Button>
                         <Button
-                            className="primary_fill"
+                            className="primary_fill l"
                             onClick={this.handle_click_check_logout}
                         >
                             登出

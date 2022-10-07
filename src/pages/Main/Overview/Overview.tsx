@@ -10,6 +10,8 @@ import {
     useParams,
 } from "react-router-dom";
 
+import StretchableButton from "../../../components/StretchableButton/StretchableButton";
+
 interface PropsInterface {
     router: {
         location: Location;
@@ -28,7 +30,11 @@ class Overview extends React.Component<PropsInterface, StateInterface> {
     }
     public async componentDidMount(): Promise<void> {}
     public render(): React.ReactNode {
-        return <div className={styles.main}></div>;
+        return (
+            <div className={styles.main}>
+                <StretchableButton />
+            </div>
+        );
     }
 }
 

@@ -13,6 +13,7 @@ interface PropsInterface {
     footer?: React.ReactNode;
     hide_modal: Function;
     silent_background?: boolean;
+    no_x?: boolean;
 }
 
 interface StateInterface {}
@@ -45,9 +46,11 @@ export default class Modal extends React.Component<
                                 {this.props.header_title}
                             </div>
                         ) : null}
-                        <RoundButton onClick={this.hide_modal}>
-                            <IconXLarge side_length="20" />
-                        </RoundButton>
+                        {this.props.no_x ? null : (
+                            <RoundButton onClick={this.hide_modal}>
+                                <IconXLarge side_length="20" />
+                            </RoundButton>
+                        )}
                     </div>
                     <div className={styles.body}>
                         {this.props.description ? (

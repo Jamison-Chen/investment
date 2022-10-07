@@ -1,0 +1,98 @@
+@use "../../global_variables" as _;
+
+.main {
+    $trigger-side-length: 55px;
+    position: fixed;
+    bottom: 6%;
+    right: 8%;
+    border: 1px solid _.$noisy-white;
+    border-radius: 100px;
+    height: $trigger-side-length;
+    width: $trigger-side-length;
+    background-color: _.$white;
+    box-shadow: 0 0 5px 0 _.$light-gray;
+    transition-duration: 200ms;
+    &.active {
+        & > .button_container {
+            gap: 15px;
+            height: max-content;
+            width: max-content;
+            padding-bottom: $trigger-side-length + 15px;
+            opacity: 1;
+            & > .button {
+                height: $trigger-side-length;
+                width: $trigger-side-length;
+            }
+        }
+    }
+    @media (hover: hover) {
+        &:hover {
+            box-shadow: 0 20px 20px 0 _.$light-gray;
+        }
+    }
+    & > .button_image {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 5px;
+        height: 0.9 * $trigger-side-length;
+        width: 0.9 * $trigger-side-length;
+        border-radius: 100px;
+        z-index: 1;
+        transform: translate(-50%, -50%);
+        cursor: pointer;
+    }
+    & > .button_container {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 0;
+        height: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        transition-duration: 200ms;
+        z-index: 2;
+        opacity: 0;
+        & > .button {
+            position: relative;
+            height: 0;
+            width: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 100px;
+            border: 1px solid _.$noisy-white;
+            color: _.$deep-gray;
+            overflow: hidden;
+            cursor: pointer;
+            & > .hint_text {
+                position: absolute;
+                top: 50%;
+                left: 0;
+                transform: translate(-110%, -50%);
+                opacity: 0;
+                width: max-content;
+                padding: 3px 10px;
+                background-color: _.$black;
+                color: _.$white;
+                letter-spacing: 1px;
+                font-size: 0.8 * _.$base-font-size;
+                border-radius: 5px;
+            }
+            @media (hover: hover) {
+                &:hover {
+                    overflow: visible;
+                    & > .hint_text {
+                        opacity: 1;
+                        transition-delay: 200ms;
+                        transition-duration: 200ms;
+                    }
+                }
+            }
+        }
+    }
+}

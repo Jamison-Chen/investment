@@ -62,7 +62,7 @@ class Main extends React.Component<PropsInterface, StateInterface> {
             {
                 tab_icon: <IconCashStack side_length="16" />,
                 tab_name: "持股",
-                path: "/investment/portfolio",
+                path: "/investment/detail",
             },
             {
                 tab_icon: <IconColumnsGap side_length="16" />,
