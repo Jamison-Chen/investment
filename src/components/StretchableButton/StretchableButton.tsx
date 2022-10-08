@@ -7,6 +7,7 @@ import IconPencilSquare from "../Icons/IconPencilSquare";
 import IconPiggyBank from "../Icons/IconPiggyBank";
 import Modal from "../Modal/Modal";
 import TradeRecordModal from "../TradeRecordModal/TradeRecordModal";
+import CashDividendRecordModal from "../CashDividendRecordModal/CashDividendRecordModal";
 
 interface PropsInterface {}
 
@@ -77,7 +78,7 @@ export default class StretchableButton extends React.Component<
         } else if (
             this.state.active_modal_name === "create_cash_dividend_record"
         ) {
-            return null;
+            return <CashDividendRecordModal hide_modal={this.hide_modal} />;
         }
         return null;
     }

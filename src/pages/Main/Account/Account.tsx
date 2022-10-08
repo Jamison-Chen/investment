@@ -1,64 +1,36 @@
 import styles from "./Account.module.scss";
 
 import React from "react";
-import {
-    Location,
-    NavigateFunction,
-    Params,
-    URLSearchParamsInit,
-    useLocation,
-    useNavigate,
-    useParams,
-    useSearchParams,
-} from "react-router-dom";
+import { connect } from "react-redux";
 
-import Utils from "../../../util";
+import { RootState } from "../../../app/store";
 import BeautifulBlock from "../../../components/BeautifulBlock/BeautifulBlock";
 import BeautifulRow from "../../../components/BeautifulRow/BeautifulRow";
 import RoundButton from "../../../components/RoundButton/RoundButton";
 import IconArrowLeft from "../../../components/Icons/IconArrowLeft";
+import Utils, { RouterInterface } from "../../../util";
 
-interface PropsInterface {
-    router: {
-        location: Location;
-        params: Params;
-        navigate: NavigateFunction;
-        search_params: URLSearchParams;
-        set_search_params: (
-            nextInit: URLSearchParamsInit,
-            navigateOptions?:
-                | {
-                      replace?: boolean | undefined;
-                      state?: any;
-                  }
-                | undefined
-        ) => void;
-    };
+function mapStateToProps(root_state: RootState) {
+    let email = root_state.account.email;
+    let username = root_state.account.username;
+    let avatar_url = root_state.account.avatar_url;
+    return { email, username, avatar_url };
 }
 
-interface StateInterface {
-    id: string;
-    email: string;
-    username: string;
-    avatar_url: string | null;
-}
+interface PropsInterface
+    extends RouterInterface,
+        ReturnType<typeof mapStateToProps> {}
+
+interface StateInterface {}
 
 class Account extends React.Component<PropsInterface, StateInterface> {
     public state: StateInterface;
     public constructor(props: PropsInterface) {
         super(props);
-        this.state = { id: "", email: "", username: "", avatar_url: null };
+        this.state = {};
     }
     public async componentDidMount(): Promise<void> {
-        let response: any = await Utils.check_login();
-        if (response && response.success) {
-            this.setState({
-                id: response.data.id,
-                email: response.data.email,
-                username: response.data.username,
-                avatar_url: response.data.avatar_url,
-            });
-        }
+        // this.props.dispatch(fetch_account_info());
     }
     public render(): React.ReactNode {
         return (
@@ -83,13 +55,11 @@ class Account extends React.Component<PropsInterface, StateInterface> {
                             )
                         }
                     >
-                        {this.state.avatar_url ? (
-                            <img
-                                className={styles.avatar}
-                                src={this.state.avatar_url}
-                                alt=""
-                            />
-                        ) : null}
+                        <img
+                            className={styles.avatar}
+                            src={this.props.avatar_url}
+                            alt=""
+                        />
                     </BeautifulRow>
                     <BeautifulRow
                         label="姓名"
@@ -99,7 +69,7 @@ class Account extends React.Component<PropsInterface, StateInterface> {
                             )
                         }
                     >
-                        {this.state.username}
+                        {this.props.username}
                     </BeautifulRow>
                     <BeautifulRow
                         label="Email"
@@ -109,7 +79,7 @@ class Account extends React.Component<PropsInterface, StateInterface> {
                             )
                         }
                     >
-                        {this.state.email}
+                        {this.props.email}
                     </BeautifulRow>
                 </BeautifulBlock>
                 <div className={styles.header}>
@@ -132,23 +102,4 @@ class Account extends React.Component<PropsInterface, StateInterface> {
     }
 }
 
-export default function ComponentWithRouterProp(
-    props: any = {}
-): React.ReactElement {
-    let location = useLocation();
-    let navigate = useNavigate();
-    let params = useParams();
-    let [search_params, set_search_params] = useSearchParams();
-    return (
-        <Account
-            {...props}
-            router={{
-                location,
-                navigate,
-                params,
-                search_params,
-                set_search_params,
-            }}
-        />
-    );
-}
+export default connect(mapStateToProps)(Utils.withRouter(Account));

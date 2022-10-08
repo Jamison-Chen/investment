@@ -5,7 +5,6 @@ import {
     Location,
     NavigateFunction,
     Params,
-    URLSearchParamsInit,
     useLocation,
     useNavigate,
     useParams,
@@ -25,15 +24,7 @@ interface PropsInterface {
         params: Params;
         navigate: NavigateFunction;
         search_params: URLSearchParams;
-        set_search_params: (
-            nextInit: URLSearchParamsInit,
-            navigateOptions?:
-                | {
-                      replace?: boolean | undefined;
-                      state?: any;
-                  }
-                | undefined
-        ) => void;
+        set_search_params: ReturnType<typeof useSearchParams>;
     };
 }
 
@@ -71,7 +62,7 @@ class Password extends React.Component<PropsInterface, StateInterface> {
                             >
                                 <IconArrowLeft side_length="20" />
                             </RoundButton>
-                            <h1>密碼更新</h1>
+                            <h1>更新密碼</h1>
                         </div>
                     }
                     footer_buttons={

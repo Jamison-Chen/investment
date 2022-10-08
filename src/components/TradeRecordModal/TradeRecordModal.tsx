@@ -87,6 +87,7 @@ export default class TradeRecordModal extends React.Component<
                         <Button
                             className="primary_fill l"
                             onClick={this.handle_click_submit}
+                            disabled={!this.can_submit}
                         >
                             送出
                         </Button>
@@ -107,7 +108,6 @@ export default class TradeRecordModal extends React.Component<
                         value={this.state.sid}
                         onChange={this.handle_input_change}
                     />
-
                     <div className={styles.row}>
                         <LabeledInput
                             title="成交單價"
@@ -133,7 +133,7 @@ export default class TradeRecordModal extends React.Component<
                                 }
                                 onClick={this.handle_click_toggle}
                             >
-                                <IconToggleOn side_length="26" />
+                                <IconToggleOn side_length="28" />
                             </span>
                             <span>賣</span>
                         </div>
@@ -179,6 +179,18 @@ export default class TradeRecordModal extends React.Component<
         }
         return Math.max(1, fee);
     }
+    private get can_submit(): boolean {
+        if (
+            this.state.deal_time &&
+            this.state.sid &&
+            !Object.is(this.state.deal_price, NaN) &&
+            !Object.is(this.state.abs_deal_quantity, NaN) &&
+            !Object.is(this.state.handling_fee, NaN)
+        ) {
+            return true;
+        }
+        return false;
+    }
     private handle_input_change = (name: string, value: string): void => {
         if (name === "abs_deal_quantity" && parseInt(value) < 0) {
             value = "0";
@@ -213,13 +225,7 @@ export default class TradeRecordModal extends React.Component<
         });
     };
     private handle_click_submit = async (): Promise<void> => {
-        if (
-            this.state.deal_time &&
-            this.state.sid &&
-            !Object.is(this.state.deal_price, NaN) &&
-            !Object.is(this.state.abs_deal_quantity, NaN) &&
-            !Object.is(this.state.handling_fee, NaN)
-        ) {
+        if (this.can_submit) {
             if (this.state.record_id) {
                 // Update Mode
             } else {

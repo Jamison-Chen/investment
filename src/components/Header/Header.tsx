@@ -1,5 +1,4 @@
 import styles from "./Header.module.scss";
-import person_fill from "../../assets/person-fill.svg";
 
 import React from "react";
 
@@ -8,7 +7,6 @@ import FullLogo from "../FullLogo/FullLogo";
 
 interface PropsInterface {
     avatar_url: string;
-    username: string;
     handle_click_list_button: Function;
 }
 
@@ -37,7 +35,7 @@ export default class Header extends React.Component<
                 <FullLogo size="s" />
                 <RoundButton onClick={this.handle_click_user_avatar}>
                     <img
-                        src={this.props.avatar_url || person_fill}
+                        src={this.props.avatar_url}
                         alt=""
                         className={styles.user_avatar}
                     />

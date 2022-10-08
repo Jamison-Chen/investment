@@ -1,5 +1,4 @@
 import styles from "./MainFunctionBar.module.scss";
-import person_fill from "../../assets/person-fill.svg";
 
 import React, { ReactElement } from "react";
 import { NavLink } from "react-router-dom";
@@ -47,10 +46,7 @@ export default class MainFunctionBar extends React.Component<
                     {this.active_modal}
                     <NavLink to="/investment/account" onClick={this.toggle}>
                         <div className={styles.user_info}>
-                            <img
-                                src={this.props.user_avatar_url || person_fill}
-                                alt=""
-                            />
+                            <img src={this.props.user_avatar_url} alt="" />
                             <span className={styles.username}>
                                 {this.props.username}
                             </span>

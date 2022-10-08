@@ -5,7 +5,6 @@ import {
     Location,
     NavigateFunction,
     Params,
-    URLSearchParamsInit,
     useLocation,
     useNavigate,
     useParams,
@@ -25,20 +24,12 @@ interface PropsInterface {
         params: Params;
         navigate: NavigateFunction;
         search_params: URLSearchParams;
-        set_search_params: (
-            nextInit: URLSearchParamsInit,
-            navigateOptions?:
-                | {
-                      replace?: boolean | undefined;
-                      state?: any;
-                  }
-                | undefined
-        ) => void;
+        set_search_params: ReturnType<typeof useSearchParams>;
     };
 }
 
 interface StateInterface {
-    id: string;
+    user_id: string;
     avatar_url: string;
 }
 
@@ -46,13 +37,13 @@ class Avatar extends React.Component<PropsInterface, StateInterface> {
     public state: StateInterface;
     public constructor(props: PropsInterface) {
         super(props);
-        this.state = { id: "", avatar_url: "" };
+        this.state = { user_id: "", avatar_url: "" };
     }
     public async componentDidMount(): Promise<void> {
         let response: any = await Utils.check_login();
         if (response && response.success) {
             this.setState({
-                id: response.data.id,
+                user_id: response.data.id,
                 avatar_url: response.data.avatar_url,
             });
         }
@@ -120,7 +111,7 @@ class Avatar extends React.Component<PropsInterface, StateInterface> {
     };
     private handle_click_save_button = async (): Promise<void> => {
         let request_body = new URLSearchParams();
-        request_body.append("id", this.state.id);
+        request_body.append("id", this.state.user_id);
         request_body.append("avatar_url", this.state.avatar_url);
         let response = await Utils.send_request(
             "account/update",

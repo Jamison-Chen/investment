@@ -1,7 +1,50 @@
+import React from "react";
+import {
+    Location,
+    NavigateFunction,
+    Params,
+    useLocation,
+    useNavigate,
+    useParams,
+    useSearchParams,
+} from "react-router-dom";
+
 import quill_pen from "./assets/quill_pen.png";
 import Env from "./env";
 
+export interface RouterInterface {
+    router: {
+        location: Location;
+        navigate: NavigateFunction;
+        params: Params;
+        search_params: URLSearchParams;
+        set_search_params: ReturnType<typeof useSearchParams>;
+    };
+}
+
 export default class Utils {
+    public static withRouter(
+        Component: any
+    ): (props: any) => React.ReactElement<RouterInterface> {
+        return (props: any = {}): React.ReactElement<RouterInterface> => {
+            let location = useLocation();
+            let navigate = useNavigate();
+            let params = useParams();
+            let [search_params, set_search_params] = useSearchParams();
+            return (
+                <Component
+                    {...props}
+                    router={{
+                        location,
+                        navigate,
+                        params,
+                        search_params,
+                        set_search_params,
+                    }}
+                />
+            );
+        };
+    }
     public static get_cookie(key: string): string | null {
         let divider = key + "=";
         let decodedCookie = decodeURIComponent(document.cookie);
