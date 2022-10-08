@@ -55,11 +55,13 @@ class Account extends React.Component<PropsInterface, StateInterface> {
                             )
                         }
                     >
-                        <img
-                            className={styles.avatar}
-                            src={this.props.avatar_url}
-                            alt=""
-                        />
+                        {this.props.avatar_url ? (
+                            <img
+                                className={styles.avatar}
+                                src={this.props.avatar_url}
+                                alt=""
+                            />
+                        ) : null}
                     </BeautifulRow>
                     <BeautifulRow
                         label="姓名"

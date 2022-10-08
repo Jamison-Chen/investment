@@ -1,11 +1,12 @@
 import styles from "./Main.module.scss";
+import person_fill from "../../assets/person-fill.svg";
 
 import React from "react";
 import { Outlet } from "react-router-dom";
 import { connect } from "react-redux";
 
 import { RootState, AppDispatch } from "../../app/store";
-import { fetch_account_info } from "./Account/AccountSlice";
+import { fetch_account_info } from "../../app/AccountSlice";
 import Header from "../../components/Header/Header";
 import MainFunctionBar from "../../components/MainFunctionBar/MainFunctionBar";
 import MainFunctionTab from "../../components/MainFunctionTab/MainFunctionTab";
@@ -73,12 +74,12 @@ class Main extends React.Component<PropsInterface, StateInterface> {
         return (
             <div className={styles.main}>
                 <Header
-                    avatar_url={this.props.avatar_url}
+                    avatar_url={this.props.avatar_url || person_fill}
                     handle_click_list_button={this.toggle_main_function_bar}
                 />
                 <main className={styles.body}>
                     <MainFunctionBar
-                        user_avatar_url={this.props.avatar_url}
+                        user_avatar_url={this.props.avatar_url || person_fill}
                         username={this.props.username}
                         is_active_in_short_screen={
                             this.state.is_hidden_bar_active

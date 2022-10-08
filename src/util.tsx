@@ -12,21 +12,9 @@ import {
 import quill_pen from "./assets/quill_pen.png";
 import Env from "./env";
 
-export interface RouterInterface {
-    router: {
-        location: Location;
-        navigate: NavigateFunction;
-        params: Params;
-        search_params: URLSearchParams;
-        set_search_params: ReturnType<typeof useSearchParams>;
-    };
-}
-
 export default class Utils {
-    public static withRouter(
-        Component: any
-    ): (props: any) => React.ReactElement<RouterInterface> {
-        return (props: any = {}): React.ReactElement<RouterInterface> => {
+    public static withRouter(Component: any) {
+        return (props: any = {}) => {
             let location = useLocation();
             let navigate = useNavigate();
             let params = useParams();
@@ -109,8 +97,9 @@ export default class Utils {
     }
     private static async handle_response(r: Response): Promise<void> {
         Utils.remove_loading_screen();
-        if (r.status === 404) Utils.go_to_404_page();
-        else if (r.status === 401) {
+        if (r.status === 404) {
+            Utils.go_to_404_page();
+        } else if (r.status === 401) {
             Utils.delete_cookie("token");
             Utils.go_to_login_page();
         } else return r.json();
@@ -161,6 +150,16 @@ export default class Utils {
     public static are_arrays_equal(a1: any[], a2: any[]): boolean {
         return a1.length === a2.length && a1.every((e) => a2.includes(e));
     }
+}
+
+export interface RouterInterface {
+    router: {
+        location: Location;
+        navigate: NavigateFunction;
+        params: Params;
+        search_params: URLSearchParams;
+        set_search_params: ReturnType<typeof useSearchParams>;
+    };
 }
 
 export interface GQLInterface {

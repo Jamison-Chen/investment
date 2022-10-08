@@ -1,26 +1,25 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import Utils from "../../../util";
-import person_fill from "../../../assets/person-fill.svg";
+import Utils from "../util";
 
 export interface AccountState {
     user_id: string;
     email: string;
     username: string;
-    avatar_url: string;
+    avatar_url: string | null;
 }
 
 const initialState: AccountState = {
     user_id: "",
     email: "",
     username: "",
-    avatar_url: person_fill,
+    avatar_url: "",
 };
 
 export const fetch_account_info = createAsyncThunk(
     "account/fetch_account_info",
     async (): Promise<{
-        user_id: string;
+        id: string;
         email: string;
         username: string;
         avatar_url: string | null;
@@ -36,7 +35,7 @@ export const update_account_info = createAsyncThunk(
     async (
         request_body: URLSearchParams
     ): Promise<{
-        user_id: string;
+        id: string;
         email: string;
         username: string;
         avatar_url: string | null;
@@ -59,19 +58,19 @@ export const account_slice = createSlice({
         builder
             .addCase(fetch_account_info.pending, (state) => {})
             .addCase(fetch_account_info.fulfilled, (state, action) => {
-                state.user_id = action.payload.user_id;
+                state.user_id = action.payload.id;
                 state.email = action.payload.email;
                 state.username = action.payload.username;
-                state.avatar_url = action.payload.avatar_url || person_fill;
+                state.avatar_url = action.payload.avatar_url;
             })
             .addCase(fetch_account_info.rejected, (state) => {})
 
             .addCase(update_account_info.pending, (state) => {})
             .addCase(update_account_info.fulfilled, (state, action) => {
-                state.user_id = action.payload.user_id;
+                state.user_id = action.payload.id;
                 state.email = action.payload.email;
                 state.username = action.payload.username;
-                state.avatar_url = action.payload.avatar_url || person_fill;
+                state.avatar_url = action.payload.avatar_url;
             })
             .addCase(update_account_info.rejected, (state) => {});
     },

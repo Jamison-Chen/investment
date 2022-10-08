@@ -1,35 +1,33 @@
 import styles from "./Avatar.module.scss";
 
 import React from "react";
-import {
-    Location,
-    NavigateFunction,
-    Params,
-    useLocation,
-    useNavigate,
-    useParams,
-    useSearchParams,
-} from "react-router-dom";
+import { connect } from "react-redux";
 
-import Utils from "../../../../util";
+import Utils, { RouterInterface } from "../../../../util";
 import Form from "../../../../components/Form/Form";
 import RoundButton from "../../../../components/RoundButton/RoundButton";
 import IconArrowLeft from "../../../../components/Icons/IconArrowLeft";
 import Button from "../../../../components/Button/Button";
 import LabeledInput from "../../../../components/LabeledInput/LabeledInput";
+import { RootState, AppDispatch } from "../../../../app/store";
+import {
+    update_account_info,
+    fetch_account_info,
+} from "../../../../app/AccountSlice";
 
-interface PropsInterface {
-    router: {
-        location: Location;
-        params: Params;
-        navigate: NavigateFunction;
-        search_params: URLSearchParams;
-        set_search_params: ReturnType<typeof useSearchParams>;
-    };
+function mapStateToProps(root_state: RootState) {
+    let user_id = root_state.account.user_id;
+    let avatar_url = root_state.account.avatar_url;
+    return { user_id, avatar_url };
+}
+
+interface PropsInterface
+    extends RouterInterface,
+        ReturnType<typeof mapStateToProps> {
+    dispatch: AppDispatch;
 }
 
 interface StateInterface {
-    user_id: string;
     avatar_url: string;
 }
 
@@ -37,16 +35,11 @@ class Avatar extends React.Component<PropsInterface, StateInterface> {
     public state: StateInterface;
     public constructor(props: PropsInterface) {
         super(props);
-        this.state = { user_id: "", avatar_url: "" };
+        this.state = { avatar_url: "" };
     }
     public async componentDidMount(): Promise<void> {
-        let response: any = await Utils.check_login();
-        if (response && response.success) {
-            this.setState({
-                user_id: response.data.id,
-                avatar_url: response.data.avatar_url,
-            });
-        }
+        await this.props.dispatch(fetch_account_info());
+        this.setState({ avatar_url: this.props.avatar_url || "" });
     }
     public render(): React.ReactNode {
         return (
@@ -111,36 +104,13 @@ class Avatar extends React.Component<PropsInterface, StateInterface> {
     };
     private handle_click_save_button = async (): Promise<void> => {
         let request_body = new URLSearchParams();
-        request_body.append("id", this.state.user_id);
+        request_body.append("id", this.props.user_id);
         request_body.append("avatar_url", this.state.avatar_url);
-        let response = await Utils.send_request(
-            "account/update",
-            "post",
-            request_body
-        );
-        if (response && response.success) {
-            this.props.router.navigate("/investment/account");
-        }
+
+        await this.props.dispatch(update_account_info(request_body));
+
+        this.props.router.navigate("/investment/account");
     };
 }
 
-export default function ComponentWithRouterProp(
-    props: any = {}
-): React.ReactElement {
-    let location = useLocation();
-    let navigate = useNavigate();
-    let params = useParams();
-    let [search_params, set_search_params] = useSearchParams();
-    return (
-        <Avatar
-            {...props}
-            router={{
-                location,
-                navigate,
-                params,
-                search_params,
-                set_search_params,
-            }}
-        />
-    );
-}
+export default connect(mapStateToProps)(Utils.withRouter(Avatar));
