@@ -5,8 +5,8 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import { connect } from "react-redux";
 
-import { RootState, AppDispatch } from "../../app/store";
-import { fetch_account_info } from "../../app/AccountSlice";
+import { RootState, AppDispatch } from "../../redux/store";
+import { fetch_account_info } from "../../redux/AccountSlice";
 import Header from "../../components/Header/Header";
 import MainFunctionBar from "../../components/MainFunctionBar/MainFunctionBar";
 import MainFunctionTab from "../../components/MainFunctionTab/MainFunctionTab";
@@ -14,7 +14,7 @@ import IconHouseDoorFill from "../../components/Icons/IconHouseDoorFill";
 import IconFileTextFill from "../../components/Icons/IconFileTextFill";
 import IconCashStack from "../../components/Icons/IconCashStack";
 import IconColumnsGap from "../../components/Icons/IconPersonCircle";
-import Utils, { RouterInterface } from "../../util";
+import { RouterInterface, withRouter } from "../../router";
 
 function mapStateToProps(root_state: RootState) {
     let username = root_state.account.username;
@@ -62,7 +62,7 @@ class Main extends React.Component<PropsInterface, StateInterface> {
                 {
                     tab_icon: <IconColumnsGap side_length="16" />,
                     tab_name: "應用程式",
-                    path: "/investment/apps",
+                    path: "/investment/external-apps",
                 },
             ],
         };
@@ -112,4 +112,4 @@ class Main extends React.Component<PropsInterface, StateInterface> {
     };
 }
 
-export default connect(mapStateToProps)(Utils.withRouter(Main));
+export default connect(mapStateToProps)(withRouter(Main));

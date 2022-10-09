@@ -1,35 +1,29 @@
 import styles from "./Password.module.scss";
 
 import React from "react";
-import {
-    Location,
-    NavigateFunction,
-    Params,
-    useLocation,
-    useNavigate,
-    useParams,
-    useSearchParams,
-} from "react-router-dom";
+import { connect } from "react-redux";
 
-import Utils from "../../../../util";
 import Form from "../../../../components/Form/Form";
 import RoundButton from "../../../../components/RoundButton/RoundButton";
 import IconArrowLeft from "../../../../components/Icons/IconArrowLeft";
 import Button from "../../../../components/Button/Button";
 import LabeledInput from "../../../../components/LabeledInput/LabeledInput";
+import { RouterInterface, withRouter } from "../../../../router";
+import { RootState, AppDispatch } from "../../../../redux/store";
+import { update_account_info } from "../../../../redux/AccountSlice";
 
-interface PropsInterface {
-    router: {
-        location: Location;
-        params: Params;
-        navigate: NavigateFunction;
-        search_params: URLSearchParams;
-        set_search_params: ReturnType<typeof useSearchParams>;
-    };
+function mapStateToProps(root_state: RootState) {
+    let user_id = root_state.account.user_id;
+    return { user_id };
+}
+
+interface PropsInterface
+    extends RouterInterface,
+        ReturnType<typeof mapStateToProps> {
+    dispatch: AppDispatch;
 }
 
 interface StateInterface {
-    id: string;
     old_password: string;
     new_password: string;
 }
@@ -38,14 +32,9 @@ class Password extends React.Component<PropsInterface, StateInterface> {
     public state: StateInterface;
     public constructor(props: PropsInterface) {
         super(props);
-        this.state = { id: "", old_password: "", new_password: "" };
+        this.state = { old_password: "", new_password: "" };
     }
-    public async componentDidMount(): Promise<void> {
-        let response: any = await Utils.check_login();
-        if (response && response.success) {
-            this.setState({ id: response.data.id });
-        }
-    }
+    public async componentDidMount(): Promise<void> {}
     public render(): React.ReactNode {
         return (
             <div className={styles.main}>
@@ -81,7 +70,7 @@ class Password extends React.Component<PropsInterface, StateInterface> {
                                 onClick={this.handle_click_save_button}
                                 className="primary_fill"
                             >
-                                更改密碼
+                                更新密碼
                             </Button>
                         </>
                     }
@@ -108,38 +97,21 @@ class Password extends React.Component<PropsInterface, StateInterface> {
         if (name in this.state) this.setState({ [name]: value } as any);
     };
     private handle_click_save_button = async (): Promise<void> => {
-        let request_body = new URLSearchParams();
-        request_body.append("id", this.state.id);
-        request_body.append("old_password", this.state.old_password);
-        request_body.append("new_password", this.state.new_password);
-        let response = await Utils.send_request(
-            "account/update",
-            "post",
-            request_body
-        );
-        if (response && response.success) {
+        try {
+            await this.props
+                .dispatch(
+                    update_account_info({
+                        id: this.props.user_id,
+                        old_password: this.state.old_password,
+                        new_password: this.state.new_password,
+                    })
+                )
+                .unwrap();
             this.props.router.navigate("/investment/account");
+        } catch (rejectedValueOrSerializedError) {
+            console.log(rejectedValueOrSerializedError);
         }
     };
 }
 
-export default function ComponentWithRouterProp(
-    props: any = {}
-): React.ReactElement {
-    let location = useLocation();
-    let navigate = useNavigate();
-    let params = useParams();
-    let [search_params, set_search_params] = useSearchParams();
-    return (
-        <Password
-            {...props}
-            router={{
-                location,
-                navigate,
-                params,
-                search_params,
-                set_search_params,
-            }}
-        />
-    );
-}
+export default connect(mapStateToProps)(withRouter(Password));

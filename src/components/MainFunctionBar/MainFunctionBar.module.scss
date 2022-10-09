@@ -88,9 +88,7 @@
 }
 
 .modal_inner {
-    display: flex;
-    justify-content: space-around;
-    gap: 20px;
+    width: min(90vw, 300px);
 }
 
 @media screen and (max-width: _.$hide-function-bar-boundry) {

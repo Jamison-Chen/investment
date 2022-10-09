@@ -1,38 +1,7 @@
-import React from "react";
-import {
-    Location,
-    NavigateFunction,
-    Params,
-    useLocation,
-    useNavigate,
-    useParams,
-    useSearchParams,
-} from "react-router-dom";
-
 import quill_pen from "./assets/quill_pen.png";
 import Env from "./env";
 
 export default class Utils {
-    public static withRouter(Component: any) {
-        return (props: any = {}) => {
-            let location = useLocation();
-            let navigate = useNavigate();
-            let params = useParams();
-            let [search_params, set_search_params] = useSearchParams();
-            return (
-                <Component
-                    {...props}
-                    router={{
-                        location,
-                        navigate,
-                        params,
-                        search_params,
-                        set_search_params,
-                    }}
-                />
-            );
-        };
-    }
     public static get_cookie(key: string): string | null {
         let divider = key + "=";
         let decodedCookie = decodeURIComponent(document.cookie);
@@ -83,6 +52,11 @@ export default class Utils {
         }
 
         let header = new Headers();
+        header.append("Accept", "application/json");
+
+        if (typeof request_body === "string") {
+            header.append("Content-Type", "application/json");
+        }
 
         let options: RequestInit = {
             method: method,
@@ -150,16 +124,6 @@ export default class Utils {
     public static are_arrays_equal(a1: any[], a2: any[]): boolean {
         return a1.length === a2.length && a1.every((e) => a2.includes(e));
     }
-}
-
-export interface RouterInterface {
-    router: {
-        location: Location;
-        navigate: NavigateFunction;
-        params: Params;
-        search_params: URLSearchParams;
-        set_search_params: ReturnType<typeof useSearchParams>;
-    };
 }
 
 export interface GQLInterface {

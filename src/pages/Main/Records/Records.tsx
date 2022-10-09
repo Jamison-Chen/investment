@@ -1,4 +1,4 @@
-import styles from "./Overview.module.scss";
+import styles from "./Records.module.scss";
 
 import React from "react";
 import { connect } from "react-redux";
@@ -17,7 +17,7 @@ interface PropsInterface
 
 interface StateInterface {}
 
-class Overview extends React.Component<PropsInterface, StateInterface> {
+class Records extends React.Component<PropsInterface, StateInterface> {
     public state: StateInterface;
     public constructor(props: PropsInterface) {
         super(props);
@@ -33,4 +33,4 @@ class Overview extends React.Component<PropsInterface, StateInterface> {
     }
 }
 
-export default connect(mapStateToProps)(withRouter(Overview));
+export default connect(mapStateToProps)(withRouter(Records));

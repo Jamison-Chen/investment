@@ -1,32 +1,16 @@
 import styles from "./Register.module.scss";
 
 import React from "react";
-import {
-    Link,
-    Location,
-    NavigateFunction,
-    Params,
-    useLocation,
-    useNavigate,
-    useParams,
-    useSearchParams,
-} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import Form from "../../components/Form/Form";
 import Utils from "../../util";
 import Button from "../../components/Button/Button";
 import LabeledInput from "../../components/LabeledInput/LabeledInput";
 import FullLogo from "../../components/FullLogo/FullLogo";
+import { RouterInterface, withRouter } from "../../router";
 
-interface PropsInterface {
-    router: {
-        location: Location;
-        params: Params;
-        navigate: NavigateFunction;
-        search_params: URLSearchParams;
-        set_search_params: ReturnType<typeof useSearchParams>;
-    };
-}
+interface PropsInterface extends RouterInterface {}
 
 interface StateInterface {
     email: string;
@@ -105,23 +89,4 @@ class Register extends React.Component<PropsInterface, StateInterface> {
     };
 }
 
-export default function ComponentWithRouterProp(
-    props: any = {}
-): React.ReactElement {
-    let location = useLocation();
-    let navigate = useNavigate();
-    let params = useParams();
-    let [search_params, set_search_params] = useSearchParams();
-    return (
-        <Register
-            {...props}
-            router={{
-                location,
-                navigate,
-                params,
-                search_params,
-                set_search_params,
-            }}
-        />
-    );
-}
+export default withRouter(Register);

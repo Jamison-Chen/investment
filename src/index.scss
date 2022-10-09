@@ -9,6 +9,7 @@ body {
         "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
         "Helvetica Neue", sans-serif;
     color: _.$deep-gray;
+    font-size: _.$base-font-size;
 }
 
 code {
@@ -22,7 +23,6 @@ code {
     box-sizing: border-box;
     user-select: none;
     letter-spacing: _.$base-letter-spacing;
-    font-size: _.$base-font-size;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }

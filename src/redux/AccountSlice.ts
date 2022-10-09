@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import Utils from "../util";
+import { UpdateAccountInfoRequestBody } from "../api/AccountApi";
 
 export interface AccountState {
     user_id: string;
@@ -33,7 +34,7 @@ export const fetch_account_info = createAsyncThunk(
 export const update_account_info = createAsyncThunk(
     "account/update_account_info",
     async (
-        request_body: URLSearchParams
+        request_body: UpdateAccountInfoRequestBody
     ): Promise<{
         id: string;
         email: string;
@@ -43,7 +44,7 @@ export const update_account_info = createAsyncThunk(
         let response = await Utils.send_request(
             "account/update",
             "post",
-            request_body
+            JSON.stringify(request_body)
         );
         if (response && response.success) return response.data;
         else throw Error("Failed to update info");

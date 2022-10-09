@@ -3,12 +3,12 @@ import styles from "./Account.module.scss";
 import React from "react";
 import { connect } from "react-redux";
 
-import { RootState } from "../../../app/store";
+import { RootState } from "../../../redux/store";
 import BeautifulBlock from "../../../components/BeautifulBlock/BeautifulBlock";
 import BeautifulRow from "../../../components/BeautifulRow/BeautifulRow";
 import RoundButton from "../../../components/RoundButton/RoundButton";
 import IconArrowLeft from "../../../components/Icons/IconArrowLeft";
-import Utils, { RouterInterface } from "../../../util";
+import { RouterInterface, withRouter } from "../../../router";
 
 function mapStateToProps(root_state: RootState) {
     let email = root_state.account.email;
@@ -29,9 +29,7 @@ class Account extends React.Component<PropsInterface, StateInterface> {
         super(props);
         this.state = {};
     }
-    public async componentDidMount(): Promise<void> {
-        // this.props.dispatch(fetch_account_info());
-    }
+    public async componentDidMount(): Promise<void> {}
     public render(): React.ReactNode {
         return (
             <div className={styles.main}>
@@ -104,4 +102,4 @@ class Account extends React.Component<PropsInterface, StateInterface> {
     }
 }
 
-export default connect(mapStateToProps)(Utils.withRouter(Account));
+export default connect(mapStateToProps)(withRouter(Account));

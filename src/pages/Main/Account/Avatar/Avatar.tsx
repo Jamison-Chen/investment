@@ -3,17 +3,17 @@ import styles from "./Avatar.module.scss";
 import React from "react";
 import { connect } from "react-redux";
 
-import Utils, { RouterInterface } from "../../../../util";
+import { RouterInterface, withRouter } from "../../../../router";
 import Form from "../../../../components/Form/Form";
 import RoundButton from "../../../../components/RoundButton/RoundButton";
 import IconArrowLeft from "../../../../components/Icons/IconArrowLeft";
 import Button from "../../../../components/Button/Button";
 import LabeledInput from "../../../../components/LabeledInput/LabeledInput";
-import { RootState, AppDispatch } from "../../../../app/store";
+import { RootState, AppDispatch } from "../../../../redux/store";
 import {
     update_account_info,
     fetch_account_info,
-} from "../../../../app/AccountSlice";
+} from "../../../../redux/AccountSlice";
 
 function mapStateToProps(root_state: RootState) {
     let user_id = root_state.account.user_id;
@@ -38,8 +38,10 @@ class Avatar extends React.Component<PropsInterface, StateInterface> {
         this.state = { avatar_url: "" };
     }
     public async componentDidMount(): Promise<void> {
-        await this.props.dispatch(fetch_account_info());
-        this.setState({ avatar_url: this.props.avatar_url || "" });
+        try {
+            await this.props.dispatch(fetch_account_info());
+            this.setState({ avatar_url: this.props.avatar_url || "" });
+        } catch {}
     }
     public render(): React.ReactNode {
         return (
@@ -103,14 +105,20 @@ class Avatar extends React.Component<PropsInterface, StateInterface> {
         if (name in this.state) this.setState({ [name]: value } as any);
     };
     private handle_click_save_button = async (): Promise<void> => {
-        let request_body = new URLSearchParams();
-        request_body.append("id", this.props.user_id);
-        request_body.append("avatar_url", this.state.avatar_url);
-
-        await this.props.dispatch(update_account_info(request_body));
-
-        this.props.router.navigate("/investment/account");
+        try {
+            await this.props
+                .dispatch(
+                    update_account_info({
+                        id: this.props.user_id,
+                        avatar_url: this.state.avatar_url,
+                    })
+                )
+                .unwrap();
+            this.props.router.navigate("/investment/account");
+        } catch (rejectedValueOrSerializedError) {
+            console.log(rejectedValueOrSerializedError);
+        }
     };
 }
 
-export default connect(mapStateToProps)(Utils.withRouter(Avatar));
+export default connect(mapStateToProps)(withRouter(Avatar));

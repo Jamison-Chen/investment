@@ -89,23 +89,28 @@ export default class MainFunctionBar extends React.Component<
         if (this.state.active_modal_name === "check_logout") {
             return (
                 <Modal
-                    header_title="您確定要登出嗎？"
+                    header_title="登出"
                     hide_modal={this.hide_modal}
                     no_x
+                    footer={
+                        <>
+                            <Button
+                                className="light border l"
+                                onClick={this.hide_modal}
+                            >
+                                返回
+                            </Button>
+                            <Button
+                                className="primary_fill l"
+                                onClick={this.handle_click_check_logout}
+                            >
+                                登出
+                            </Button>
+                        </>
+                    }
                 >
                     <div className={styles.modal_inner}>
-                        <Button
-                            className="light border l"
-                            onClick={this.hide_modal}
-                        >
-                            返回
-                        </Button>
-                        <Button
-                            className="primary_fill l"
-                            onClick={this.handle_click_check_logout}
-                        >
-                            登出
-                        </Button>
+                        您確定要登出此帳號嗎？
                     </div>
                 </Modal>
             );

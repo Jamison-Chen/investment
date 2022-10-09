@@ -1,35 +1,33 @@
 import styles from "./Username.module.scss";
 
 import React from "react";
-import {
-    Location,
-    NavigateFunction,
-    Params,
-    useLocation,
-    useNavigate,
-    useParams,
-    useSearchParams,
-} from "react-router-dom";
+import { connect } from "react-redux";
 
-import Utils from "../../../../util";
 import Form from "../../../../components/Form/Form";
 import RoundButton from "../../../../components/RoundButton/RoundButton";
 import IconArrowLeft from "../../../../components/Icons/IconArrowLeft";
 import Button from "../../../../components/Button/Button";
 import LabeledInput from "../../../../components/LabeledInput/LabeledInput";
+import { RouterInterface, withRouter } from "../../../../router";
+import { RootState, AppDispatch } from "../../../../redux/store";
+import {
+    update_account_info,
+    fetch_account_info,
+} from "../../../../redux/AccountSlice";
 
-interface PropsInterface {
-    router: {
-        location: Location;
-        params: Params;
-        navigate: NavigateFunction;
-        search_params: URLSearchParams;
-        set_search_params: ReturnType<typeof useSearchParams>;
-    };
+function mapStateToProps(root_state: RootState) {
+    let user_id = root_state.account.user_id;
+    let username = root_state.account.username;
+    return { user_id, username };
+}
+
+interface PropsInterface
+    extends RouterInterface,
+        ReturnType<typeof mapStateToProps> {
+    dispatch: AppDispatch;
 }
 
 interface StateInterface {
-    id: string;
     username: string;
 }
 
@@ -37,16 +35,13 @@ class Username extends React.Component<PropsInterface, StateInterface> {
     public state: StateInterface;
     public constructor(props: PropsInterface) {
         super(props);
-        this.state = { id: "", username: "" };
+        this.state = { username: "" };
     }
     public async componentDidMount(): Promise<void> {
-        let response: any = await Utils.check_login();
-        if (response && response.success) {
-            this.setState({
-                id: response.data.id,
-                username: response.data.username,
-            });
-        }
+        try {
+            await this.props.dispatch(fetch_account_info());
+            this.setState({ username: this.props.username });
+        } catch {}
     }
     public render(): React.ReactNode {
         return (
@@ -103,37 +98,20 @@ class Username extends React.Component<PropsInterface, StateInterface> {
         if (name in this.state) this.setState({ [name]: value } as any);
     };
     private handle_click_save_button = async (): Promise<void> => {
-        let request_body = new URLSearchParams();
-        request_body.append("id", this.state.id);
-        request_body.append("username", this.state.username);
-        let response = await Utils.send_request(
-            "account/update",
-            "post",
-            request_body
-        );
-        if (response && response.success) {
+        try {
+            await this.props
+                .dispatch(
+                    update_account_info({
+                        id: this.props.user_id,
+                        username: this.state.username,
+                    })
+                )
+                .unwrap();
             this.props.router.navigate("/investment/account");
+        } catch (rejectedValueOrSerializedError) {
+            console.log(rejectedValueOrSerializedError);
         }
     };
 }
 
-export default function ComponentWithRouterProp(
-    props: any = {}
-): React.ReactElement {
-    let location = useLocation();
-    let navigate = useNavigate();
-    let params = useParams();
-    let [search_params, set_search_params] = useSearchParams();
-    return (
-        <Username
-            {...props}
-            router={{
-                location,
-                navigate,
-                params,
-                search_params,
-                set_search_params,
-            }}
-        />
-    );
-}
+export default connect(mapStateToProps)(withRouter(Username));

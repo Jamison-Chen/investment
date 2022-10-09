@@ -1,4 +1,15 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import {
+    Routes,
+    Route,
+    Navigate,
+    Location,
+    NavigateFunction,
+    Params,
+    useLocation,
+    useNavigate,
+    useParams,
+    useSearchParams,
+} from "react-router-dom";
 
 // layer one
 import Main from "./pages/Main/Main";
@@ -7,10 +18,11 @@ import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 
 // layer two
-import Overview from "./pages/Main/Overview/Overview";
-import Detail from "./pages/Main/Detail/Detail";
 import Account from "./pages/Main/Account/Account";
-import Apps from "./pages/Main/Apps/Apps";
+import Overview from "./pages/Main/Overview/Overview";
+import Records from "./pages/Main/Records/Records";
+import Detail from "./pages/Main/Detail/Detail";
+import ExternalApps from "./pages/Main/ExternalApps/ExternalApps";
 
 // layer three
 import Avatar from "./pages/Main/Account/Avatar/Avatar";
@@ -24,9 +36,6 @@ export default function MyRouter() {
             <Route path="investment">
                 <Route path="" element={<Main />}>
                     <Route path="" element={<Navigate to="overview" />}></Route>
-                    <Route path="overview" element={<Overview />}></Route>
-                    <Route path="detail" element={<Detail />}></Route>
-                    <Route path="apps" element={<Apps />}></Route>
                     <Route path="account" element={<Account />}></Route>
                     <Route path="account/avatar" element={<Avatar />}></Route>
                     <Route
@@ -38,6 +47,13 @@ export default function MyRouter() {
                         path="account/password"
                         element={<Password />}
                     ></Route>
+                    <Route path="overview" element={<Overview />}></Route>
+                    <Route path="records" element={<Records />}></Route>
+                    <Route path="detail" element={<Detail />}></Route>
+                    <Route
+                        path="external-apps"
+                        element={<ExternalApps />}
+                    ></Route>
                 </Route>
                 <Route path="login" element={<Login />} />
                 <Route path="register" element={<Register />} />
@@ -45,4 +61,35 @@ export default function MyRouter() {
             </Route>
         </Routes>
     );
+}
+
+export interface RouterInterface {
+    router: {
+        location: Location;
+        navigate: NavigateFunction;
+        params: Params;
+        search_params: URLSearchParams;
+        set_search_params: ReturnType<typeof useSearchParams>;
+    };
+}
+
+export function withRouter(Component: any) {
+    return (props: any = {}) => {
+        let location = useLocation();
+        let navigate = useNavigate();
+        let params = useParams();
+        let [search_params, set_search_params] = useSearchParams();
+        return (
+            <Component
+                {...props}
+                router={{
+                    location,
+                    navigate,
+                    params,
+                    search_params,
+                    set_search_params,
+                }}
+            />
+        );
+    };
 }
