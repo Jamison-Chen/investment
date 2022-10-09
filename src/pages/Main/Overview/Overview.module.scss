@@ -1,7 +1,8 @@
 @use "../../../global_variables" as _;
 
 .main {
-    display: flex;
-    // align-items: flex-end;
-    height: 200vh;
+    min-height: calc(
+        100% - _.$header-height - _.$footer-height -
+            _.$show-header-border-boundry
+    );
 }

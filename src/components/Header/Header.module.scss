@@ -5,12 +5,11 @@
 }
 
 @media screen and (max-width: _.$hide-function-bar-boundry) {
-    $show-border-threshold: 5px;
     .main {
         position: sticky;
-        top: -$show-border-threshold;
+        top: -1 * _.$show-header-border-boundry;
         display: block;
-        height: _.$header-height + $show-border-threshold;
+        height: _.$header-height + _.$show-header-border-boundry;
         z-index: 2;
         backface-visibility: hidden;
         &::before,
@@ -18,10 +17,10 @@
             content: "";
             position: sticky;
             display: block;
-            height: $show-border-threshold;
+            height: _.$show-header-border-boundry;
         }
         &::before {
-            top: _.$header-height - $show-border-threshold;
+            top: _.$header-height - _.$show-header-border-boundry;
             box-shadow: 0 0 0 1px _.$noisy-white;
         }
         &::after {
@@ -37,7 +36,7 @@
             justify-content: space-between;
             height: _.$header-height;
             width: 100%;
-            margin-top: -$show-border-threshold;
+            margin-top: -1 * _.$show-header-border-boundry;
             padding: 0 15px;
             background-color: _.$white;
             z-index: 4;
