@@ -10,7 +10,7 @@ import Button from "../../../../components/Button/Button";
 import LabeledInput from "../../../../components/LabeledInput/LabeledInput";
 import { RouterInterface, withRouter } from "../../../../router";
 import { RootState, AppDispatch } from "../../../../redux/store";
-import { update_account_info } from "../../../../redux/AccountSlice";
+import { update_account_info } from "../../../../redux/slices/AccountSlice";
 
 function mapStateToProps(root_state: RootState) {
     let user_id = root_state.account.user_id;

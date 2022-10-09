@@ -3,8 +3,8 @@
 .main {
     $trigger-side-length: 55px;
     position: fixed;
-    bottom: 6%;
-    right: 8%;
+    bottom: _.$footer-height + 15px;
+    right: 30px;
     border: 1px solid _.$noisy-white;
     border-radius: 100px;
     height: $trigger-side-length;

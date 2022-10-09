@@ -10,11 +10,7 @@ interface PropsInterface {
     handle_click_list_button: Function;
 }
 
-interface StateInterface {
-    is_hidden_bar_active: boolean;
-    is_app_dropdown_expanded: boolean;
-    is_user_avatar_dropdown_expanded: boolean;
-}
+interface StateInterface {}
 
 export default class Header extends React.Component<
     PropsInterface,
@@ -23,23 +19,21 @@ export default class Header extends React.Component<
     public state: StateInterface;
     public constructor(props: PropsInterface) {
         super(props);
-        this.state = {
-            is_hidden_bar_active: false,
-            is_app_dropdown_expanded: false,
-            is_user_avatar_dropdown_expanded: false,
-        };
+        this.state = {};
     }
     public render(): React.ReactNode {
         return (
             <header className={styles.main}>
-                <FullLogo size="s" />
-                <RoundButton onClick={this.handle_click_user_avatar}>
-                    <img
-                        src={this.props.avatar_url}
-                        alt=""
-                        className={styles.user_avatar}
-                    />
-                </RoundButton>
+                <div className={styles.header_inner}>
+                    <FullLogo size="s" />
+                    <RoundButton onClick={this.handle_click_user_avatar}>
+                        <img
+                            src={this.props.avatar_url}
+                            alt=""
+                            className={styles.user_avatar}
+                        />
+                    </RoundButton>
+                </div>
             </header>
         );
     }

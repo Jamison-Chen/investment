@@ -19,9 +19,8 @@
         border-bottom: 1px solid _.$noisy-white;
         @media (hover: hover) {
             &:hover {
-                & > .cta {
-                    opacity: 1;
-                    transform: translateX(10px);
+                .hint {
+                    opacity: 1 !important;
                 }
             }
         }
@@ -30,19 +29,23 @@
             min-width: 40px;
             border-radius: 100px;
         }
-        & > .username {
+        & > .middle {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
             flex-grow: 1;
-            font-size: 0.9 * _.$base-font-size;
-            font-weight: bold;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            margin-bottom: 5px;
-        }
-        & > .cta {
-            opacity: 0;
-            color: _.$gray;
-            transition-duration: 300ms;
+            & > .username {
+                font-size: 0.9 * _.$base-font-size;
+                font-weight: bold;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            & > .hint {
+                font-size: 0.8 * _.$base-font-size;
+                color: _.$blue;
+                opacity: 0.9;
+            }
         }
     }
     & > .lower {

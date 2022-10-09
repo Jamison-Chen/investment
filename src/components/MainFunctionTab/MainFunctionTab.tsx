@@ -32,7 +32,7 @@ export default class MainFunctionTab extends React.Component<
                 }}
                 onClick={this.props.onClick}
             >
-                {this.props.tab_icon}
+                <div className={styles.icon_outer}> {this.props.tab_icon}</div>
                 {this.props.tab_name}
             </NavLink>
         );

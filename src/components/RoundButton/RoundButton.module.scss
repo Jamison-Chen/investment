@@ -8,6 +8,7 @@
     border-radius: 100px;
     width: min-content;
     height: min-content;
+    aspect-ratio: 1;
     padding: 6px;
     margin: 0;
     color: _.$gray;
@@ -17,9 +18,15 @@
         color: _.$light-gray;
         cursor: default;
     }
+    &:active {
+        &:not(.disabled) {
+            background-color: _.$transparent-black;
+        }
+    }
     @media (hover: hover) {
         &:hover {
             &:not(.disabled) {
+                color: _.$deep-gray;
                 background-color: _.$transparent-black;
             }
             & > .hint_text {

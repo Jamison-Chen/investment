@@ -13,7 +13,7 @@ import { RootState, AppDispatch } from "../../../../redux/store";
 import {
     update_account_info,
     fetch_account_info,
-} from "../../../../redux/AccountSlice";
+} from "../../../../redux/slices/AccountSlice";
 
 function mapStateToProps(root_state: RootState) {
     let user_id = root_state.account.user_id;

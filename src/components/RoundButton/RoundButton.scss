@@ -11,8 +11,13 @@
     }
     &.active {
         &:not(.disabled) {
-            color: _.$blue;
-            background-color: _.$transparent-blue;
+            color: _.$deep-gray;
+        }
+        &.primary {
+            &:not(.disabled) {
+                color: _.$blue;
+                background-color: _.$transparent-blue;
+            }
         }
     }
     &.p-8 {

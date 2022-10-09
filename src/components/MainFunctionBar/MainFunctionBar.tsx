@@ -5,7 +5,6 @@ import { NavLink } from "react-router-dom";
 
 import Utils from "../../util";
 import IconGearFill from "../Icons/IconGearFill";
-import IconArrowRight from "../Icons/IconArrowRight";
 import Modal from "../Modal/Modal";
 import Button from "../Button/Button";
 
@@ -47,12 +46,12 @@ export default class MainFunctionBar extends React.Component<
                     <NavLink to="/investment/account" onClick={this.toggle}>
                         <div className={styles.user_info}>
                             <img src={this.props.user_avatar_url} alt="" />
-                            <span className={styles.username}>
-                                {this.props.username}
-                            </span>
-                            <span className={styles.cta}>
-                                <IconArrowRight side_length="20" />
-                            </span>
+                            <div className={styles.middle}>
+                                <div className={styles.username}>
+                                    {this.props.username}
+                                </div>
+                                <div className={styles.hint}>查看個人資料</div>
+                            </div>
                         </div>
                     </NavLink>
                     {this.props.children}

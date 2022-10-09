@@ -1,0 +1,34 @@
+@use "../../global_variables" as _;
+
+.main {
+    display: none;
+}
+
+@media screen and (max-width: _.$hide-function-bar-boundry) {
+    .main {
+        position: sticky;
+        bottom: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        height: _.$footer-height;
+        min-height: _.$footer-height;
+        width: 100%;
+        padding: 0 15px;
+        background-color: _.$white;
+        border-top: 1px solid _.$noisy-white;
+        z-index: 2;
+        & > .icon_outer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 25px;
+            aspect-ratio: 1;
+            color: _.$gray;
+            &.active {
+                color: _.$deep-gray;
+            }
+        }
+    }
+}
