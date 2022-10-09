@@ -26,8 +26,13 @@ const initialState: StockInfoState = {
 
 export const fetch_all_stock_info = createAsyncThunk(
     "stock_info/fetch_all_stock_info",
-    async (): Promise<StockInfo[]> => {
-        let response = await Utils.send_request("stock/info", "get");
+    async (sid_list: string[] = []): Promise<StockInfo[]> => {
+        let response = await Utils.send_request(
+            `stock/info${
+                sid_list.length > 0 ? `?sid-list=${sid_list.join(",")}` : ""
+            }`,
+            "get"
+        );
         if (response && response.success) return response.data;
         else throw Error("Failed to fetch stock info");
     }
