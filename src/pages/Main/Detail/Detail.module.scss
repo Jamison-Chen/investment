@@ -1,8 +1,14 @@
 @use "../../../global_variables" as _;
 
 .main {
-    min-height: calc(
-        100% - _.$header-height - _.$footer-height -
-            _.$show-header-border-boundry
-    );
+    min-height: 100%;
+}
+
+@media screen and (max-width: _.$hide-function-bar-boundry) {
+    .main {
+        min-height: calc(
+            100% - _.$header-height - _.$footer-height -
+                _.$show-header-border-boundry
+        );
+    }
 }

@@ -8,11 +8,12 @@ import { connect } from "react-redux";
 import { RootState, AppDispatch } from "../../redux/store";
 import { fetch_account_info } from "../../redux/slices/AccountSlice";
 import { fetch_all_trade_records } from "../../redux/slices/TradeRecordSlice";
+import { fetch_all_stock_info } from "../../redux/slices/StockInfoSlice";
 import Header from "../../components/Header/Header";
 import MainFunctionBar from "../../components/MainFunctionBar/MainFunctionBar";
 import MainFunctionTab from "../../components/MainFunctionTab/MainFunctionTab";
 import IconHouseDoorFill from "../../components/Icons/IconHouseDoorFill";
-import IconFileTextFill from "../../components/Icons/IconFileTextFill";
+import IconJournalText from "../../components/Icons/IconJournalText";
 import IconCashStack from "../../components/Icons/IconCashStack";
 import IconColumnsGap from "../../components/Icons/IconPersonCircle";
 import { RouterInterface, withRouter } from "../../router";
@@ -52,7 +53,7 @@ class Main extends React.Component<PropsInterface, StateInterface> {
                     path: "/investment/overview",
                 },
                 {
-                    tab_icon: <IconFileTextFill side_length="95%" />,
+                    tab_icon: <IconJournalText side_length="95%" />,
                     tab_name: "歷史紀錄",
                     path: "/investment/records",
                 },
@@ -75,6 +76,7 @@ class Main extends React.Component<PropsInterface, StateInterface> {
             .unwrap()
             .then(() => {
                 this.props.dispatch(fetch_all_trade_records());
+                this.props.dispatch(fetch_all_stock_info());
             });
     }
     public render(): React.ReactNode {

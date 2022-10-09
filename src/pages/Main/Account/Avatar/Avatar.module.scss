@@ -5,10 +5,7 @@
     flex-direction: column;
     align-items: center;
     padding-top: 15vh;
-    min-height: calc(
-        100% - _.$header-height - _.$footer-height -
-            _.$show-header-border-boundry
-    );
+    min-height: 100%;
     width: 100%;
     .header {
         display: flex;
@@ -24,5 +21,14 @@
         margin: 10px auto;
         width: 80px;
         border-radius: 100px;
+    }
+}
+
+@media screen and (max-width: _.$hide-function-bar-boundry) {
+    .main {
+        min-height: calc(
+            100% - _.$header-height - _.$footer-height -
+                _.$show-header-border-boundry
+        );
     }
 }

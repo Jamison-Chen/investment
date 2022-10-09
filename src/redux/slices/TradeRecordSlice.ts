@@ -14,11 +14,13 @@ export type TradeRecord = {
 };
 
 export interface TradeRecordState {
-    records: TradeRecord[];
+    record_list: TradeRecord[];
+    sid_records_map: { [idx: string]: TradeRecord[] };
 }
 
 const initialState: TradeRecordState = {
-    records: [],
+    record_list: [],
+    sid_records_map: {},
 };
 
 export const fetch_all_trade_records = createAsyncThunk(
@@ -33,7 +35,7 @@ export const fetch_all_trade_records = createAsyncThunk(
             request_body
         );
         if (response && response.success) return response.data;
-        else throw Error("Failed to fetch trade records");
+        else throw Error("Failed to fetch trade record");
     }
 );
 
@@ -65,7 +67,10 @@ export const trade_record_slice = createSlice({
         builder
             .addCase(fetch_all_trade_records.pending, (state) => {})
             .addCase(fetch_all_trade_records.fulfilled, (state, action) => {
-                state.records = [...action.payload];
+                state.record_list = [...action.payload];
+                state.sid_records_map = get_sid_trade_records_map([
+                    ...action.payload,
+                ]);
             })
             .addCase(fetch_all_trade_records.rejected, (state) => {});
 
@@ -79,5 +84,18 @@ export const trade_record_slice = createSlice({
         // .addCase(update_account_info.rejected, (state) => {});
     },
 });
+
+function get_sid_trade_records_map(all_records: TradeRecord[]): {
+    [idx: string]: TradeRecord[];
+} {
+    let reversed_records = [...all_records].reverse();
+    let result: { [idx: string]: TradeRecord[] } = {};
+    for (let record of reversed_records) {
+        let s = record["sid"];
+        if (result[s] === undefined) result[s] = [record];
+        else result[s].push(record);
+    }
+    return result;
+}
 
 export default trade_record_slice.reducer;

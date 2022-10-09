@@ -1,8 +1,39 @@
 @use "../../../global_variables" as _;
 
 .main {
-    min-height: calc(
-        100% - _.$header-height - _.$footer-height -
-            _.$show-header-border-boundry
-    );
+    $block-body-width: min(420px, 87vw);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, $block-body-width);
+    justify-content: center;
+    gap: 20px;
+    min-height: 100%;
+    width: 100%;
+    padding: 10px 20px;
+    background-color: _.$transparent-black;
+    & > .block {
+        width: fit-content;
+        & > .title {
+            font-weight: normal;
+            margin-left: 5px;
+            font-size: 1.1 * _.$base-font-size;
+        }
+        & > .body {
+            display: flex;
+            height: 280px;
+            width: $block-body-width;
+            border-radius: 20px;
+            overflow: hidden;
+            background-color: _.$transparent-white;
+            box-shadow: 0 5px 5px 0 _.$light-gray;
+        }
+    }
+}
+
+@media screen and (max-width: _.$hide-function-bar-boundry) {
+    .main {
+        min-height: calc(
+            100% - _.$header-height - _.$footer-height -
+                _.$show-header-border-boundry
+        );
+    }
 }
