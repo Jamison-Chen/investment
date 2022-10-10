@@ -94,10 +94,10 @@ export default class MainFunctionBar extends React.Component<
                     footer={
                         <>
                             <Button
-                                className="light border l"
+                                className="light l"
                                 onClick={this.hide_modal}
                             >
-                                返回
+                                取消
                             </Button>
                             <Button
                                 className="primary_fill l"

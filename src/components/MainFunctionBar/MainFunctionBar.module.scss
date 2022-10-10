@@ -42,7 +42,7 @@
                 text-overflow: ellipsis;
             }
             & > .hint {
-                font-size: 0.8 * _.$base-font-size;
+                font-size: 0.75 * _.$base-font-size;
                 color: _.$blue;
                 opacity: 0.9;
             }

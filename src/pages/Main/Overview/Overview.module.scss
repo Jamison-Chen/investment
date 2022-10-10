@@ -2,6 +2,7 @@
 
 .main {
     $block-body-width: min(420px, 87vw);
+    position: relative;
     display: grid;
     grid-template-columns: repeat(auto-fit, $block-body-width);
     justify-content: center;
@@ -9,22 +10,56 @@
     min-height: 100%;
     width: 100%;
     padding: 10px 20px;
-    background-color: _.$transparent-black;
+    & > .background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        z-index: -1;
+        filter: blur(5px);
+        opacity: 0.3;
+        background-position: 50%
+            (_.$header-height + _.$show-header-border-boundry);
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-image: url("../../../assets/unnamed.jpg");
+    }
     & > .block {
         width: fit-content;
         & > .title {
             font-weight: normal;
-            margin-left: 5px;
-            font-size: 1.1 * _.$base-font-size;
+            font-size: _.$base-font-size;
         }
         & > .body {
+            position: relative;
             display: flex;
             height: 280px;
             width: $block-body-width;
-            border-radius: 20px;
+            border-radius: 15px;
             overflow: hidden;
             background-color: _.$transparent-white;
-            box-shadow: 0 5px 5px 0 _.$light-gray;
+            box-shadow: 0 0 5px 0 _.$noisy-white;
+            .chart_center {
+                position: absolute;
+                top: 50%;
+                left: calc(1px + 34.5%);
+                transform: translate(-50%, -50%);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                font-size: 0.85 * _.$base-font-size;
+                color: _.$gray;
+                font-weight: bold;
+                hr {
+                    border: none;
+                    border-top: 1px solid;
+                    border-radius: 10px;
+                    width: 100%;
+                    color: _.$light-gray;
+                }
+            }
         }
     }
 }

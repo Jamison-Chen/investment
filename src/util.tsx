@@ -124,6 +124,22 @@ export default class Utils {
     public static are_arrays_equal(a1: any[], a2: any[]): boolean {
         return a1.length === a2.length && a1.every((e) => a2.includes(e));
     }
+    public static get_date_string_list(
+        startDate: Date,
+        endDate: Date
+    ): string[] {
+        let result = [];
+        for (
+            let date = new Date(startDate);
+            date <= endDate;
+            date.setDate(date.getDate() + 1)
+        ) {
+            // Do not drop weekend because sometimes the market would open on weekend
+            // e.g. 2022-01-01
+            result.push(date.toLocaleDateString("af"));
+        }
+        return result;
+    }
 }
 
 export interface GQLInterface {
