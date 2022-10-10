@@ -52,4 +52,30 @@ export const stock_info_slice = createSlice({
     },
 });
 
+export const get_sid_market_value_map = (
+    stock_info_list: StockInfo[],
+    inventory_map: { [idx: string]: number }
+) => {
+    let result: { [idx: string]: number } = {};
+    for (let sid in inventory_map) {
+        result[sid] =
+            stock_info_list.find((info) => info.sid === sid)!.close *
+            inventory_map[sid];
+    }
+    return result;
+};
+
+export const get_total_market_value = (
+    stock_info_list: StockInfo[],
+    inventory_map: { [idx: string]: number }
+): number => {
+    let result = 0;
+    for (let sid in inventory_map) {
+        result +=
+            stock_info_list.find((info) => info.sid === sid)!.close *
+            inventory_map[sid];
+    }
+    return result;
+};
+
 export default stock_info_slice.reducer;

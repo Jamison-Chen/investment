@@ -22,8 +22,7 @@ import Footer from "../../components/Footer/Footer";
 function mapStateToProps(root_state: RootState) {
     let username = root_state.account.username;
     let avatar_url = root_state.account.avatar_url;
-    let sid_records_map = root_state.trade_record.sid_records_map;
-    return { username, avatar_url, sid_records_map };
+    return { username, avatar_url };
 }
 
 interface PropsInterface
@@ -70,18 +69,15 @@ class Main extends React.Component<PropsInterface, StateInterface> {
                 },
             ],
         };
-    }
-    public async componentDidMount(): Promise<void> {
         this.props
             .dispatch(fetch_account_info())
             .unwrap()
             .then(() => {
-                return Promise.all([
-                    this.props.dispatch(fetch_all_trade_records()),
-                    this.props.dispatch(fetch_all_stock_info()),
-                ]);
+                this.props.dispatch(fetch_all_trade_records());
+                this.props.dispatch(fetch_all_stock_info());
             });
     }
+    public async componentDidMount(): Promise<void> {}
     public render(): React.ReactNode {
         return (
             <main className={styles.main}>

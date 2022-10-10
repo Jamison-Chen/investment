@@ -4,15 +4,31 @@ import React from "react";
 import { connect } from "react-redux";
 import { Chart } from "react-google-charts";
 
-import StretchableButton from "../../../components/StretchableButton/StretchableButton";
 import { RouterInterface, withRouter } from "../../../router";
 import { RootState } from "../../../redux/store";
+import {
+    get_sid_trade_records_map,
+    get_inventory_map,
+} from "../../../redux/slices/TradeRecordSlice";
+import { get_sid_market_value_map } from "../../../redux/slices/StockInfoSlice";
+import StretchableButton from "../../../components/StretchableButton/StretchableButton";
 
 function mapStateToProps(root_state: RootState) {
     let trade_record_list = root_state.trade_record.record_list;
-    let sid_trade_records_map = root_state.trade_record.sid_records_map;
     let stock_info_list = root_state.stock_info.info_list;
-    return { trade_record_list, sid_trade_records_map, stock_info_list };
+    let sid_trade_records_map = get_sid_trade_records_map(trade_record_list);
+    let inventory_map = get_inventory_map(sid_trade_records_map);
+    let sid_market_value_map = get_sid_market_value_map(
+        stock_info_list,
+        inventory_map
+    );
+    return {
+        trade_record_list,
+        stock_info_list,
+        sid_trade_records_map,
+        inventory_map,
+        sid_market_value_map,
+    };
 }
 
 interface PropsInterface
@@ -66,40 +82,10 @@ class Overview extends React.Component<PropsInterface, StateInterface> {
             </div>
         );
     }
-    private get inventory_map(): { [idx: string]: number } {
-        let result: { [idx: string]: number } = {};
-        for (let sid in this.props.sid_trade_records_map) {
-            for (let record of this.props.sid_trade_records_map[sid]) {
-                if (result[sid] === undefined) {
-                    result[sid] = record.deal_quantity;
-                } else result[sid] += record.deal_quantity;
-            }
-        }
-        for (let sid in result) if (result[sid] === 0) delete result[sid];
-        return result;
-    }
-    private get sid_market_value_map(): { [idx: string]: number } {
-        let result: { [idx: string]: number } = {};
-        for (let sid in this.inventory_map) {
-            result[sid] =
-                this.props.stock_info_list.find((info) => info.sid === sid)!
-                    .close * this.inventory_map[sid];
-        }
-        return result;
-    }
-    private get total_market_value(): number {
-        let result = 0;
-        for (let sid in this.inventory_map) {
-            result +=
-                this.props.stock_info_list.find((info) => info.sid === sid)!
-                    .close * this.inventory_map[sid];
-        }
-        return result;
-    }
     private get market_value_pie_chart_data(): (string | number)[][] {
         let result: (string | number)[][] = [["Sid", "Market Value"]];
-        for (let sid in this.sid_market_value_map) {
-            result.push([sid, this.sid_market_value_map[sid]]);
+        for (let sid in this.props.sid_market_value_map) {
+            result.push([sid, this.props.sid_market_value_map[sid]]);
         }
         return result;
     }

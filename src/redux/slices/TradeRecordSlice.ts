@@ -15,12 +15,10 @@ export type TradeRecord = {
 
 export interface TradeRecordState {
     record_list: TradeRecord[];
-    sid_records_map: { [idx: string]: TradeRecord[] };
 }
 
 const initialState: TradeRecordState = {
     record_list: [],
-    sid_records_map: {},
 };
 
 export const fetch_all_trade_records = createAsyncThunk(
@@ -39,26 +37,6 @@ export const fetch_all_trade_records = createAsyncThunk(
     }
 );
 
-// export const update_account_info = createAsyncThunk(
-//     "trade_record/update_account_info",
-//     async (
-//         request_body: UpdateAccountInfoRequestBody
-//     ): Promise<{
-//         id: string;
-//         email: string;
-//         username: string;
-//         avatar_url: string | null;
-//     }> => {
-//         let response = await Utils.send_request(
-//             "account/update",
-//             "post",
-//             JSON.stringify(request_body)
-//         );
-//         if (response && response.success) return response.data;
-//         else throw Error("Failed to update info");
-//     }
-// );
-
 export const trade_record_slice = createSlice({
     name: "trade_record",
     initialState,
@@ -68,9 +46,6 @@ export const trade_record_slice = createSlice({
             .addCase(fetch_all_trade_records.pending, (state) => {})
             .addCase(fetch_all_trade_records.fulfilled, (state, action) => {
                 state.record_list = [...action.payload];
-                state.sid_records_map = get_sid_trade_records_map([
-                    ...action.payload,
-                ]);
             })
             .addCase(fetch_all_trade_records.rejected, (state) => {});
 
@@ -85,9 +60,11 @@ export const trade_record_slice = createSlice({
     },
 });
 
-function get_sid_trade_records_map(all_records: TradeRecord[]): {
+export const get_sid_trade_records_map = (
+    all_records: TradeRecord[]
+): {
     [idx: string]: TradeRecord[];
-} {
+} => {
     let reversed_records = [...all_records].reverse();
     let result: { [idx: string]: TradeRecord[] } = {};
     for (let record of reversed_records) {
@@ -96,6 +73,20 @@ function get_sid_trade_records_map(all_records: TradeRecord[]): {
         else result[s].push(record);
     }
     return result;
-}
+};
+
+export const get_inventory_map = (sid_trade_records_map: {
+    [idx: string]: TradeRecord[];
+}): { [idx: string]: number } => {
+    let result: { [idx: string]: number } = {};
+    for (let sid in sid_trade_records_map) {
+        for (let record of sid_trade_records_map[sid]) {
+            if (result[sid] === undefined) result[sid] = record.deal_quantity;
+            else result[sid] += record.deal_quantity;
+        }
+    }
+    for (let sid in result) if (result[sid] === 0) delete result[sid];
+    return result;
+};
 
 export default trade_record_slice.reducer;
