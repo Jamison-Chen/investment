@@ -13,7 +13,7 @@ export type TradeRecord = {
     handling_fee: number;
 };
 
-interface StockWarehouse {
+export interface StockWarehouse {
     [sid: string]: {
         [date: string]: {
             [price: string]: number;
@@ -162,148 +162,134 @@ export const get_sid_cash_invested_map = (
     return result;
 };
 
-export const get_total_cash_invested = (
-    stock_warehouse: StockWarehouse
-): number => {
-    let result = 0;
-    for (let sid in stock_warehouse) {
-        for (let t in stock_warehouse[sid]) {
-            for (let p in stock_warehouse[sid][t]) {
-                result += stock_warehouse[sid][t][p] * parseFloat(p);
-            }
-        }
-    }
-    return result;
-};
+// export const get_cash_invested_chart_data = (
+//     trade_record_list: TradeRecord[]
+// ): (string | number)[][] => {
+//     let ascending_trade_record_list = [...trade_record_list].sort((a, b) => {
+//         return Date.parse(a.deal_time) - Date.parse(b.deal_time);
+//     });
+//     let non_zero_inventory_sid_list: string[] = [
+//         ...new Set(trade_record_list.map((record) => record.sid)),
+//     ];
 
-export const get_cash_invested_chart_data = (
-    trade_record_list: TradeRecord[]
-): (string | number)[][] => {
-    let ascending_trade_record_list = [...trade_record_list].sort((a, b) => {
-        return Date.parse(a.deal_time) - Date.parse(b.deal_time);
-    });
-    let non_zero_inventory_sid_list: string[] = [
-        ...new Set(trade_record_list.map((record) => record.sid)),
-    ];
+//     // To be returned
+//     let cash_invested_chart_data: (string | number)[][] = [
+//         ["日期", "投入金額"],
+//     ];
+//     let everydate_to_sid_to_p_to_q: {
+//         [date: string]: {
+//             [sid: string]: { [p_string: string]: { q: number; sold: number } };
+//         };
+//     } = {};
 
-    // To be returned
-    let cash_invested_chart_data: (string | number)[][] = [
-        ["日期", "投入金額"],
-    ];
-    let everydate_to_sid_to_p_to_q: {
-        [date: string]: {
-            [sid: string]: { [p_string: string]: { q: number; sold: number } };
-        };
-    } = {};
+//     if (ascending_trade_record_list.length > 0) {
+//         let start_date_string = ascending_trade_record_list[0].deal_time;
+//         let date_string_list = Utils.get_date_string_list(
+//             new Date(start_date_string),
+//             new Date()
+//         );
+//         let sid_column_idx_map: { [idx: string]: number } = {};
+//         non_zero_inventory_sid_list.forEach(
+//             (sid, idx) => (sid_column_idx_map[sid] = idx + 1)
+//         );
+//         for (let date_string of date_string_list) {
+//             everydate_to_sid_to_p_to_q[date_string] = {};
+//             let date = new Date(date_string);
+//             date.setDate(date.getDate() - 1);
+//             if (date.toLocaleDateString("af") in everydate_to_sid_to_p_to_q) {
+//                 for (let sid of non_zero_inventory_sid_list) {
+//                     everydate_to_sid_to_p_to_q[date_string][sid] = JSON.parse(
+//                         JSON.stringify(
+//                             everydate_to_sid_to_p_to_q[
+//                                 date.toLocaleDateString("af")
+//                             ][sid]
+//                         )
+//                     );
+//                 }
+//             } else {
+//                 for (let sid of non_zero_inventory_sid_list) {
+//                     everydate_to_sid_to_p_to_q[date_string][sid] = {};
+//                 }
+//             }
 
-    if (ascending_trade_record_list.length > 0) {
-        let start_date_string = ascending_trade_record_list[0].deal_time;
-        let date_string_list = Utils.get_date_string_list(
-            new Date(start_date_string),
-            new Date()
-        );
-        let sid_column_idx_map: { [idx: string]: number } = {};
-        non_zero_inventory_sid_list.forEach(
-            (sid, idx) => (sid_column_idx_map[sid] = idx + 1)
-        );
-        for (let date_string of date_string_list) {
-            everydate_to_sid_to_p_to_q[date_string] = {};
-            let date = new Date(date_string);
-            date.setDate(date.getDate() - 1);
-            if (date.toLocaleDateString("af") in everydate_to_sid_to_p_to_q) {
-                for (let sid of non_zero_inventory_sid_list) {
-                    everydate_to_sid_to_p_to_q[date_string][sid] = JSON.parse(
-                        JSON.stringify(
-                            everydate_to_sid_to_p_to_q[
-                                date.toLocaleDateString("af")
-                            ][sid]
-                        )
-                    );
-                }
-            } else {
-                for (let sid of non_zero_inventory_sid_list) {
-                    everydate_to_sid_to_p_to_q[date_string][sid] = {};
-                }
-            }
+//             ascending_trade_record_list
+//                 .filter((record: TradeRecord) => {
+//                     return record.deal_time === date_string;
+//                 })
+//                 .forEach((record: TradeRecord) => {
+//                     let s: string = record.sid;
+//                     let t: string = record.deal_time;
+//                     let p: number = record.deal_price;
+//                     let q: number = record.deal_quantity;
+//                     if (q >= 0) {
+//                         // buying
+//                         if (p in everydate_to_sid_to_p_to_q[t][s]) {
+//                             everydate_to_sid_to_p_to_q[t][s][p].q += q;
+//                         } else {
+//                             everydate_to_sid_to_p_to_q[t][s][p] = {
+//                                 q: q,
+//                                 sold: 0,
+//                             };
+//                         }
+//                     } else {
+//                         // selling
+//                         for (let old_date in everydate_to_sid_to_p_to_q) {
+//                             if (q === 0) break;
+//                             for (let each_p in everydate_to_sid_to_p_to_q[
+//                                 old_date
+//                             ][s]) {
+//                                 let unsold: number =
+//                                     everydate_to_sid_to_p_to_q[old_date][s][
+//                                         each_p
+//                                     ].q -
+//                                     everydate_to_sid_to_p_to_q[old_date][s][
+//                                         each_p
+//                                     ].sold;
+//                                 let unresolved_q = q + unsold;
+//                                 if (unresolved_q < 0) {
+//                                     q = unresolved_q;
+//                                     delete everydate_to_sid_to_p_to_q[t][s][
+//                                         each_p
+//                                     ];
+//                                 } else {
+//                                     if (unresolved_q === 0) {
+//                                         delete everydate_to_sid_to_p_to_q[t][s][
+//                                             each_p
+//                                         ];
+//                                     } else {
+//                                         // everydate_to_sid_to_p_to_q[t][s][
+//                                         //     each_p
+//                                         // ] = unsold + q;
+//                                     }
+//                                     q = 0;
+//                                     break;
+//                                 }
+//                             }
+//                         }
+//                     }
+//                 });
+//             ascending_trade_record_list = ascending_trade_record_list.filter(
+//                 (record: TradeRecord) => record.deal_time !== date_string
+//             );
+//         }
 
-            ascending_trade_record_list
-                .filter((record: TradeRecord) => {
-                    return record.deal_time === date_string;
-                })
-                .forEach((record: TradeRecord) => {
-                    let s: string = record.sid;
-                    let t: string = record.deal_time;
-                    let p: number = record.deal_price;
-                    let q: number = record.deal_quantity;
-                    if (q >= 0) {
-                        // buying
-                        if (p in everydate_to_sid_to_p_to_q[t][s]) {
-                            everydate_to_sid_to_p_to_q[t][s][p].q += q;
-                        } else {
-                            everydate_to_sid_to_p_to_q[t][s][p] = {
-                                q: q,
-                                sold: 0,
-                            };
-                        }
-                    } else {
-                        // selling
-                        for (let old_date in everydate_to_sid_to_p_to_q) {
-                            if (q === 0) break;
-                            for (let each_p in everydate_to_sid_to_p_to_q[
-                                old_date
-                            ][s]) {
-                                let unsold: number =
-                                    everydate_to_sid_to_p_to_q[old_date][s][
-                                        each_p
-                                    ].q -
-                                    everydate_to_sid_to_p_to_q[old_date][s][
-                                        each_p
-                                    ].sold;
-                                let unresolved_q = q + unsold;
-                                if (unresolved_q < 0) {
-                                    q = unresolved_q;
-                                    delete everydate_to_sid_to_p_to_q[t][s][
-                                        each_p
-                                    ];
-                                } else {
-                                    if (unresolved_q === 0) {
-                                        delete everydate_to_sid_to_p_to_q[t][s][
-                                            each_p
-                                        ];
-                                    } else {
-                                        // everydate_to_sid_to_p_to_q[t][s][
-                                        //     each_p
-                                        // ] = unsold + q;
-                                    }
-                                    q = 0;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                });
-            ascending_trade_record_list = ascending_trade_record_list.filter(
-                (record: TradeRecord) => record.deal_time !== date_string
-            );
-        }
+//         // Complete cash_invested_chart_data
+//         for (let t of date_string_list) {
+//             let cash_invested = 0;
+//             // for (let s in everydate_to_sid_to_p_to_q[t]) {
+//             //     for (let p in everydate_to_sid_to_p_to_q[t][s]) {
+//             //         cash_invested +=
+//             //             everydate_to_sid_to_p_to_q[t][s][p] * parseFloat(p);
+//             //     }
+//             // }
+//             cash_invested_chart_data.push([t, cash_invested]);
+//         }
+//     } else {
+//         cash_invested_chart_data = [["Date", "Cash Invested"]];
+//     }
 
-        // Complete cash_invested_chart_data
-        for (let t of date_string_list) {
-            let cash_invested = 0;
-            // for (let s in everydate_to_sid_to_p_to_q[t]) {
-            //     for (let p in everydate_to_sid_to_p_to_q[t][s]) {
-            //         cash_invested +=
-            //             everydate_to_sid_to_p_to_q[t][s][p] * parseFloat(p);
-            //     }
-            // }
-            cash_invested_chart_data.push([t, cash_invested]);
-        }
-    } else {
-        cash_invested_chart_data = [["Date", "Cash Invested"]];
-    }
-
-    return cash_invested_chart_data;
-};
+//     return cash_invested_chart_data;
+// };
 
 export default trade_record_slice.reducer;
 

@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import { RootState, AppDispatch } from "../../redux/store";
 import { fetch_account_info } from "../../redux/slices/AccountSlice";
 import { fetch_all_trade_records } from "../../redux/slices/TradeRecordSlice";
+import { fetch_all_cash_dividend_records } from "../../redux/slices/CashDividendRecordSlice";
 import { fetch_all_stock_info } from "../../redux/slices/StockInfoSlice";
 import Header from "../../components/Header/Header";
 import MainFunctionBar from "../../components/MainFunctionBar/MainFunctionBar";
@@ -75,6 +76,7 @@ class Main extends React.Component<PropsInterface, StateInterface> {
             .then(() => {
                 this.props.dispatch(fetch_all_trade_records());
                 this.props.dispatch(fetch_all_stock_info());
+                this.props.dispatch(fetch_all_cash_dividend_records());
             });
     }
     public async componentDidMount(): Promise<void> {}
