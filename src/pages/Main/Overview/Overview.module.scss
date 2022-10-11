@@ -17,7 +17,6 @@
         height: 100%;
         width: 100%;
         z-index: -1;
-        // filter: blur(5px);
         opacity: 0.25;
         background-position: 50%
             (_.$header-height + _.$show-header-border-boundry);
@@ -35,16 +34,39 @@
         & > .body {
             position: relative;
             display: flex;
-            height: 280px;
+            flex-direction: column;
             width: $block-body-width;
             border-radius: 15px;
             overflow: hidden;
             background-color: _.$transparent-white;
             box-shadow: 0 0 5px 0 _.$noisy-white;
+            &.portfolio {
+                height: 280px;
+            }
+            &.performance {
+                .row {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 18px 15px;
+                    font-size: 0.9 * _.$base-font-size;
+                    &:not(:last-child) {
+                        border-bottom: 2px solid _.$noisy-white;
+                    }
+                    & > .number {
+                        font-family: monospace;
+                        font-size: 1.05 * _.$base-font-size;
+                        color: _.$black;
+                    }
+                }
+            }
+            &.cash_invested {
+                height: 240px;
+            }
             .chart_center {
                 position: absolute;
                 top: 50%;
-                left: calc(1px + 34.5%);
+                left: calc(1px + 36.5%);
                 transform: translate(-50%, -50%);
                 display: flex;
                 flex-direction: column;

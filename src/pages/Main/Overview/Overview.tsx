@@ -14,12 +14,12 @@ import {
     StockWarehouse,
     TradeRecord,
 } from "../../../redux/slices/TradeRecordSlice";
-import { CashDividendRecord } from "../../../redux/slices/CashDividendRecordSlice";
 import {
     get_sid_market_value_map,
     get_total_market_value,
 } from "../../../redux/slices/StockInfoSlice";
 import StretchableButton from "../../../components/StretchableButton/StretchableButton";
+import Utils from "../../../util";
 
 function mapStateToProps(root_state: RootState) {
     let trade_record_list = root_state.trade_record.record_list;
@@ -35,7 +35,11 @@ function mapStateToProps(root_state: RootState) {
         stock_info_list,
         inventory_map
     );
-    let stock_warehouse = get_stock_warehouse(trade_record_list);
+    let stock_warehouse = get_stock_warehouse(
+        [...trade_record_list].sort(
+            (a, b) => Date.parse(a.deal_time) - Date.parse(b.deal_time)
+        )
+    );
     let sid_cash_invested_map = get_sid_cash_invested_map(stock_warehouse);
     return {
         trade_record_list,
@@ -69,7 +73,7 @@ class Overview extends React.Component<PropsInterface, StateInterface> {
                 <div className={styles.background}></div>
                 <div className={styles.block}>
                     <h2 className={styles.title}>投資組合</h2>
-                    <div className={styles.body}>
+                    <div className={styles.body + " " + styles.portfolio}>
                         <Chart
                             chartType="PieChart"
                             data={this.market_value_pie_chart_data}
@@ -81,56 +85,148 @@ class Overview extends React.Component<PropsInterface, StateInterface> {
                                 chartArea: {
                                     left: "10%",
                                     top: "20%",
-                                    width: "80%",
+                                    width: "85%",
                                     height: "60%",
                                 },
                             }}
                             width={"100%"}
                             height={"100%"}
                         />
-                        <div className={styles.chart_center}>
-                            <div className={styles.upper}>今日市值</div>
-                            <hr />
-                            <div className={styles.lower}>
-                                $
-                                {Math.round(
-                                    this.props.total_market_value
-                                ).toLocaleString()}
+                        {this.market_value_pie_chart_data.length > 1 ? (
+                            <div className={styles.chart_center}>
+                                <div className={styles.upper}>今日市值</div>
+                                <hr />
+                                <div className={styles.lower}>
+                                    $
+                                    {Math.round(
+                                        this.props.total_market_value
+                                    ).toLocaleString()}
+                                </div>
                             </div>
-                        </div>
+                        ) : null}
                     </div>
                 </div>
                 <div className={styles.block}>
                     <h2 className={styles.title}>投資績效</h2>
-                    <div className={styles.body}>
-                        <Chart
-                            chartType="ColumnChart"
-                            data={this.bar_chart_data}
-                            options={{
-                                vAxis: {
-                                    minValue: 0,
-                                    scaleType: "mirrorLog",
-                                    textPosition: "none",
-                                    gridlines: { count: 0 },
-                                },
-                                bar: { groupWidth: "61.8%" },
-                                legend: { position: "none" },
-                                chartArea: {
-                                    left: "8%",
-                                    top: "0%",
-                                    width: "84%",
-                                    height: "85%",
-                                },
-                                backgroundColor: "transparent",
-                            }}
-                            width={"100%"}
-                            height={"100%"}
-                        />
+                    <div className={styles.body + " " + styles.performance}>
+                        <div className={styles.row}>
+                            <span>報酬率</span>
+                            <span className={styles.number}>{0}</span>
+                        </div>
+                        <div className={styles.row}>
+                            <span>現金投入</span>
+                            <span className={styles.number}>
+                                $
+                                {Math.round(
+                                    this.get_total_cash_invested(
+                                        this.props.stock_warehouse
+                                    )
+                                ).toLocaleString()}
+                            </span>
+                        </div>
+                        <div className={styles.row}>
+                            <span>實現損益</span>
+                            <span className={styles.number}>
+                                ${Math.round(this.total_gain).toLocaleString()}
+                            </span>
+                        </div>
+                        <div className={styles.row}>
+                            <span>手續費用</span>
+                            <span className={styles.number}>
+                                ${this.total_handling_fee.toLocaleString()}
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <div className={styles.block}>
                     <h2 className={styles.title}>投資金額</h2>
-                    <div className={styles.body}></div>
+                    <div className={styles.body + " " + styles.cash_invested}>
+                        {this.props.trade_record_list.length > 0 ? (
+                            <Chart
+                                chartType="LineChart"
+                                data={this.get_cash_invested_chart_data(
+                                    [...this.props.trade_record_list].sort(
+                                        (a, b) =>
+                                            Date.parse(a.deal_time) -
+                                            Date.parse(b.deal_time)
+                                    )
+                                )}
+                                options={{
+                                    legend: { position: "none" },
+                                    hAxis: {
+                                        textPosition: "none",
+                                        gridlines: {
+                                            color: "none",
+                                        },
+                                    },
+                                    vAxis: {
+                                        textPosition: "none",
+                                        gridlines: {
+                                            color: "none",
+                                        },
+                                    },
+                                    chartArea: {
+                                        left: "5%",
+                                        top: "0%",
+                                        width: "90%",
+                                        height: "95%",
+                                    },
+                                }}
+                                width={"100%"}
+                                height={"200px"}
+                                chartPackages={["corechart", "controls"]}
+                                controls={[
+                                    {
+                                        controlType: "ChartRangeFilter",
+                                        options: {
+                                            filterColumnIndex: 0,
+                                            ui: {
+                                                chartType: "LineChart",
+                                                chartOptions: {
+                                                    chartArea: {
+                                                        width: "90%",
+                                                        height: "10%",
+                                                    },
+                                                    hAxis: {
+                                                        baselineColor: "none",
+                                                        textPosition: "none",
+                                                        gridlines: {
+                                                            color: "none",
+                                                        },
+                                                    },
+                                                    vAxis: {
+                                                        textPosition: "none",
+                                                        gridlines: {
+                                                            color: "none",
+                                                        },
+                                                        baselineColor: "none",
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        controlPosition: "bottom",
+                                        controlWrapperParams: {
+                                            state: {
+                                                range: {
+                                                    start: new Date(
+                                                        Math.min(
+                                                            ...this.props.trade_record_list.map(
+                                                                (record) =>
+                                                                    Date.parse(
+                                                                        record.deal_time
+                                                                    )
+                                                            )
+                                                        )
+                                                    ),
+                                                    end: new Date(),
+                                                },
+                                            },
+                                        },
+                                    },
+                                ]}
+                            />
+                        ) : null}
+                    </div>
                 </div>
                 <StretchableButton />
             </div>
@@ -160,28 +256,23 @@ class Overview extends React.Component<PropsInterface, StateInterface> {
         }
         return result;
     };
-    private get_total_cash_dividend = (
-        cash_dividend_record_list: CashDividendRecord[]
-    ): number => {
+    private get total_cash_dividend(): number {
         let result = 0;
-        for (let record of cash_dividend_record_list) {
+        for (let record of this.props.cash_dividend_record_list) {
             result += record.cash_dividend;
         }
         return result;
-    };
-    private get_total_gain(
-        sid_trade_records_map: { [sid: string]: TradeRecord[] },
-        total_cash_dividend: number
-    ): number {
+    }
+    private get total_gain(): number {
         let total_gain = 0;
         let sid_gain_map: { [sid: string]: number } = {};
 
-        for (let sid in sid_trade_records_map) {
+        for (let sid in this.props.sid_trade_records_map) {
             // `queue` can only contain elements with all positive q or all negative q
             let queue: { q: number; p: number }[] = [];
             sid_gain_map[sid] = 0;
 
-            for (let record of sid_trade_records_map[sid]) {
+            for (let record of this.props.sid_trade_records_map[sid]) {
                 let q = record.deal_quantity;
                 let p = record.deal_price;
                 if (queue.length === 0) queue.push({ q: q, p: p });
@@ -210,39 +301,56 @@ class Overview extends React.Component<PropsInterface, StateInterface> {
         }
         for (let sid in sid_gain_map) total_gain += sid_gain_map[sid];
 
-        return total_gain + total_cash_dividend;
+        return total_gain + this.total_cash_dividend;
     }
-    private get_total_handling_fee(trade_record_list: TradeRecord[]): number {
+    private get total_handling_fee(): number {
         let result = 0;
-        for (let record of trade_record_list) result += record.handling_fee;
+        for (let record of this.props.trade_record_list) {
+            result += record.handling_fee;
+        }
         return result;
     }
-    private get bar_chart_data(): any[][] {
-        let total_cash_invested = this.get_total_cash_invested(
-            get_stock_warehouse(this.props.trade_record_list)
+    private get_cash_invested_chart_data = (
+        ascending_trade_record_list: TradeRecord[],
+        date_string_list: string[] = [],
+        stock_warehouse: StockWarehouse = {},
+        result: (Date | string | number)[][] = [["日期", "現金投入"]]
+    ): (Date | string | number)[][] => {
+        if (
+            ascending_trade_record_list.length === 0 &&
+            date_string_list.length === 0
+        ) {
+            return result;
+        }
+        if (date_string_list.length === 0) {
+            date_string_list = Utils.get_date_string_list(
+                new Date(ascending_trade_record_list[0].deal_time),
+                new Date()
+            );
+        }
+        let solving_date_string = date_string_list.shift();
+        let solving_date: Date = new Date(
+            solving_date_string!.split("-").map((e) => parseInt(e)) as any
         );
-        let total_gain = this.get_total_gain(
-            this.props.sid_trade_records_map,
-            this.get_total_cash_dividend(this.props.cash_dividend_record_list)
+
+        let solving_list = ascending_trade_record_list.filter(
+            (record) => record.deal_time === solving_date_string
         );
-        return [
-            ["Assets", "", { role: "style" }],
-            ["現金投入", total_cash_invested, "#FBBC05"],
-            [
-                "證券市值",
-                this.props.total_market_value,
-                this.props.total_market_value > total_cash_invested
-                    ? "#DE5246"
-                    : "#1AA260",
-            ],
-            ["實現損益", total_gain, total_gain > 0 ? "#DE5246" : "#000"],
-            [
-                "費用",
-                this.get_total_handling_fee(this.props.trade_record_list),
-                "#aaa",
-            ],
-        ];
-    }
+        ascending_trade_record_list = ascending_trade_record_list.filter(
+            (record) => record.deal_time !== solving_date_string
+        );
+        stock_warehouse = get_stock_warehouse(solving_list, stock_warehouse);
+        result.push([
+            solving_date,
+            Math.round(this.get_total_cash_invested(stock_warehouse)),
+        ]);
+        return this.get_cash_invested_chart_data(
+            ascending_trade_record_list,
+            date_string_list,
+            stock_warehouse,
+            result
+        );
+    };
 }
 
 export default connect(mapStateToProps)(withRouter(Overview));
