@@ -121,9 +121,7 @@ class Overview extends React.Component<PropsInterface, StateInterface> {
                                     width: "84%",
                                     height: "85%",
                                 },
-
                                 backgroundColor: "transparent",
-                                pieSliceText: "none",
                             }}
                             width={"100%"}
                             height={"100%"}
