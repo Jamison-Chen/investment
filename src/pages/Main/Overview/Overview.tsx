@@ -153,6 +153,7 @@ class Overview extends React.Component<PropsInterface, StateInterface> {
                                 )}
                                 options={{
                                     legend: { position: "none" },
+                                    backgroundColor: "transparent",
                                     hAxis: {
                                         textPosition: "none",
                                         gridlines: {
@@ -166,14 +167,14 @@ class Overview extends React.Component<PropsInterface, StateInterface> {
                                         },
                                     },
                                     chartArea: {
-                                        left: "5%",
+                                        left: "0%",
                                         top: "0%",
-                                        width: "90%",
-                                        height: "95%",
+                                        width: "100%",
+                                        height: "90%",
                                     },
                                 }}
                                 width={"100%"}
-                                height={"200px"}
+                                height={"220px"}
                                 chartPackages={["corechart", "controls"]}
                                 controls={[
                                     {
@@ -184,9 +185,11 @@ class Overview extends React.Component<PropsInterface, StateInterface> {
                                                 chartType: "LineChart",
                                                 chartOptions: {
                                                     chartArea: {
-                                                        width: "90%",
+                                                        width: "95%",
                                                         height: "10%",
                                                     },
+                                                    backgroundColor:
+                                                        "transparent",
                                                     hAxis: {
                                                         baselineColor: "none",
                                                         textPosition: "none",
