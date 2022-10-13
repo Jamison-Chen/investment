@@ -19,6 +19,7 @@ import IconCashStack from "../../components/Icons/IconCashStack";
 import IconColumnsGap from "../../components/Icons/IconPersonCircle";
 import { RouterInterface, withRouter } from "../../router";
 import Footer from "../../components/Footer/Footer";
+import Utils from "../../util";
 
 function mapStateToProps(root_state: RootState) {
     let username = root_state.account.username;
@@ -73,10 +74,14 @@ class Main extends React.Component<PropsInterface, StateInterface> {
         this.props
             .dispatch(fetch_account_info())
             .unwrap()
-            .then(() => {
-                this.props.dispatch(fetch_all_trade_records());
-                this.props.dispatch(fetch_all_stock_info());
-                this.props.dispatch(fetch_all_cash_dividend_records());
+            .then(async () => {
+                Utils.render_loading_screen();
+                await Promise.all([
+                    this.props.dispatch(fetch_all_trade_records()),
+                    this.props.dispatch(fetch_all_stock_info()),
+                    this.props.dispatch(fetch_all_cash_dividend_records()),
+                ]);
+                Utils.remove_loading_screen();
             });
     }
     public async componentDidMount(): Promise<void> {}

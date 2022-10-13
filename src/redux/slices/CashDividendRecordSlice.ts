@@ -30,7 +30,7 @@ export const fetch_all_cash_dividend_records = createAsyncThunk(
             request_body
         );
         if (response && response.success) return response.data;
-        else throw Error("Failed to fetch trade record");
+        else throw Error("Failed to fetch cash dividend record");
     }
 );
 
