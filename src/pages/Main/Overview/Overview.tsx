@@ -85,7 +85,7 @@ class Overview extends React.Component<PropsInterface, StateInterface> {
                                 chartArea: {
                                     left: "10%",
                                     top: "20%",
-                                    width: "85%",
+                                    width: "90%",
                                     height: "60%",
                                 },
                             }}
@@ -111,16 +111,16 @@ class Overview extends React.Component<PropsInterface, StateInterface> {
                     <div className={styles.body + " " + styles.performance}>
                         <div className={styles.row}>
                             <span>報酬率</span>
-                            <span className={styles.number}>{0}</span>
+                            <span className={styles.number}>
+                                {this.rate_of_return.toFixed(2)}%
+                            </span>
                         </div>
                         <div className={styles.row}>
                             <span>現金投入</span>
                             <span className={styles.number}>
                                 $
                                 {Math.round(
-                                    this.get_total_cash_invested(
-                                        this.props.stock_warehouse
-                                    )
+                                    this.get_total_cash_invested()
                                 ).toLocaleString()}
                             </span>
                         </div>
@@ -144,13 +144,7 @@ class Overview extends React.Component<PropsInterface, StateInterface> {
                         {this.props.trade_record_list.length > 0 ? (
                             <Chart
                                 chartType="LineChart"
-                                data={this.get_cash_invested_chart_data(
-                                    [...this.props.trade_record_list].sort(
-                                        (a, b) =>
-                                            Date.parse(a.deal_time) -
-                                            Date.parse(b.deal_time)
-                                    )
-                                )}
+                                data={this.cash_invested_chart_data}
                                 options={{
                                     legend: { position: "none" },
                                     backgroundColor: "transparent",
@@ -247,7 +241,7 @@ class Overview extends React.Component<PropsInterface, StateInterface> {
         return result;
     }
     private get_total_cash_invested = (
-        stock_warehouse: StockWarehouse
+        stock_warehouse: StockWarehouse = this.props.stock_warehouse
     ): number => {
         let result = 0;
         for (let sid in stock_warehouse) {
@@ -313,6 +307,23 @@ class Overview extends React.Component<PropsInterface, StateInterface> {
         }
         return result;
     }
+    private get rate_of_return(): number {
+        let num_of_days = 0;
+        let cumulative_cash_invested = 0;
+        this.cash_invested_chart_data.slice(1).forEach((row) => {
+            num_of_days++;
+            cumulative_cash_invested += row[1] as number;
+        });
+        let average_cash_invested = cumulative_cash_invested / num_of_days;
+        return (
+            ((this.props.total_market_value -
+                this.get_total_cash_invested() +
+                this.total_gain -
+                this.total_handling_fee) /
+                average_cash_invested) *
+            100
+        );
+    }
     private get_cash_invested_chart_data = (
         ascending_trade_record_list: TradeRecord[],
         date_string_list: string[] = [],
@@ -324,8 +335,7 @@ class Overview extends React.Component<PropsInterface, StateInterface> {
             date_string_list.length === 0
         ) {
             return result;
-        }
-        if (date_string_list.length === 0) {
+        } else if (date_string_list.length === 0) {
             date_string_list = Utils.get_date_string_list(
                 new Date(ascending_trade_record_list[0].deal_time),
                 new Date()
@@ -354,6 +364,13 @@ class Overview extends React.Component<PropsInterface, StateInterface> {
             result
         );
     };
+    private get cash_invested_chart_data(): (Date | string | number)[][] {
+        return this.get_cash_invested_chart_data(
+            [...this.props.trade_record_list].sort(
+                (a, b) => Date.parse(a.deal_time) - Date.parse(b.deal_time)
+            )
+        );
+    }
 }
 
 export default connect(mapStateToProps)(withRouter(Overview));
