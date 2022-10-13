@@ -20,12 +20,14 @@
         color: _.$light-gray !important;
         background-color: _.$noisy-white !important;
     }
-    &.clean {
+    &.transparent {
+        background-color: transparent;
+        color: _.$deep-gray;
+    }
+    &.white {
         background-color: _.$white;
         color: _.$deep-gray;
-        &:hover:not(:disabled) {
-            background-color: _.$noisy-white;
-        }
+        opacity: 1;
     }
     &.light {
         background-color: _.$noisy-white;

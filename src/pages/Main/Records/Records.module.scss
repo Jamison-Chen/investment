@@ -1,7 +1,43 @@
 @use "../../../global_variables" as _;
 
 .main {
+    position: relative;
     min-height: 100%;
+    padding: 10px 20px;
+    & > .background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        z-index: -1;
+        opacity: 0.25;
+        background-position: 50%
+            (_.$header-height + _.$show-header-border-boundry);
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-image: url("../../../assets/unnamed.jpg");
+    }
+    .switch_button_container {
+        display: flex;
+        width: fit-content;
+        padding: 3px;
+        border-radius: 8px;
+        background-color: _.$light-gray;
+        margin: 0 auto;
+        margin-bottom: 20px;
+        & > hr {
+            border: none;
+            border-left: 2px solid;
+            border-radius: 10px;
+            color: _.$gray;
+            margin: 5px 4px;
+        }
+    }
+    .search_keyword_input_outer {
+        width: min(512px, 90%);
+    }
 }
 
 @media screen and (max-width: _.$hide-function-bar-boundry) {

@@ -1,0 +1,32 @@
+@use "../../global_variables" as _;
+
+.main {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid _.$light-gray;
+    border-radius: 100px;
+    height: 40px;
+    width: min(512px, 100%);
+    padding: 8px 15px;
+    margin: 10px 0;
+    color: _.$gray;
+    background-color: _.$transparent-white;
+    transition-duration: 200ms;
+    &:hover {
+        box-shadow: 0px 2px 5px 0px _.$light-gray;
+    }
+    input {
+        height: 100%;
+        flex-grow: 1;
+        margin: 0;
+        border: none;
+        font-size: inherit;
+        font-family: inherit;
+        outline: none;
+        background-color: _.$transparent-white;
+        &::placeholder {
+            color: _.$light-gray;
+        }
+    }
+}
