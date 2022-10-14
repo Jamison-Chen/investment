@@ -62,7 +62,7 @@ class Records extends React.Component<PropsInterface, StateInterface> {
                     </Button>
                 </div>
                 <SearchKeywordInput
-                    placeholder="輸入證券代號或名稱以篩選"
+                    placeholder="輸入證券代號或名稱"
                     name="search_keyword"
                     keyword={this.state.search_keyword || ""}
                     onChange={this.handle_input_change}

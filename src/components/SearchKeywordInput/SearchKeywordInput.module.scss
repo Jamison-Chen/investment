@@ -24,7 +24,7 @@
         font-size: inherit;
         font-family: inherit;
         outline: none;
-        background-color: _.$transparent-white;
+        background-color: transparent;
         &::placeholder {
             color: _.$light-gray;
         }
