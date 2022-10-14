@@ -2,8 +2,10 @@
 
 .main {
     position: relative;
-    min-height: 100%;
-    padding: 10px 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 10px 15px;
     & > .background {
         position: absolute;
         top: 0;
@@ -26,7 +28,7 @@
         border-radius: 8px;
         background-color: _.$light-gray;
         margin: 0 auto;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
         & > hr {
             border: none;
             border-left: 2px solid;
@@ -38,13 +40,91 @@
     .search_keyword_input_outer {
         width: min(512px, 90%);
     }
+    .record_list {
+        display: flex;
+        flex-direction: column;
+        padding: 20px 0;
+        font-size: 0.9 * _.$base-font-size;
+        background-color: _.$transparent-white;
+        border-radius: 20px;
+        box-shadow: 0 0 5px 1px _.$transparent-black;
+        overflow: auto;
+        & > .row {
+            position: relative;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 20px;
+            &:not(:first-child) {
+                border-top: 1px solid _.$noisy-white;
+            }
+            @media (hover: hover) {
+                &:hover {
+                    box-shadow: 0 2px 5px 0 _.$light-gray;
+                    & > .action_outer {
+                        display: flex;
+                    }
+                }
+            }
+            & > .company {
+                width: 130px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            & > .price {
+                width: 60px;
+                white-space: nowrap;
+            }
+            & > .trade_type {
+                font-weight: bold;
+                margin: 0 5px 0 5px;
+                &.buy {
+                    color: _.$red;
+                }
+                &.sell {
+                    color: _.$blue;
+                }
+            }
+            & > .quantity {
+                width: 60px;
+                white-space: nowrap;
+            }
+            & > .date {
+                font-size: 0.75 * _.$base-font-size;
+                color: _.$gray;
+                white-space: nowrap;
+            }
+            & > .action_outer {
+                position: absolute;
+                top: 0;
+                right: 0;
+                display: none;
+                align-items: center;
+                gap: 5px;
+                height: 100%;
+                padding: 0 5px;
+                background: _.$transparent-white;
+            }
+        }
+    }
+    .show_more_button_outer {
+        margin: 15px 0 50px 0;
+        display: flex;
+        justify-content: center;
+    }
 }
 
 @media screen and (max-width: _.$hide-function-bar-boundry) {
     .main {
-        min-height: calc(
+        height: calc(
             100% - _.$header-height - _.$footer-height -
                 _.$show-header-border-boundry
         );
+        padding: 0;
+        .record_list {
+            border-radius: 0;
+        }
     }
 }
