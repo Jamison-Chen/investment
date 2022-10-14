@@ -89,8 +89,8 @@ class Records extends React.Component<PropsInterface, StateInterface> {
         );
     }
     private get_switch_button_class(name: "trade" | "cash_dividend"): string {
-        if (this.state.active_subpage_name === name) return "white";
-        return "transparent";
+        if (this.state.active_subpage_name === name) return "white xs";
+        return "transparent xs";
     }
     private handle_input_change = (name: string, value: string): void => {
         if (name in this.state) this.setState({ [name]: value } as any);
