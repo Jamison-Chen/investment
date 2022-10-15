@@ -11,6 +11,7 @@
     width: $trigger-side-length;
     background-color: _.$white;
     box-shadow: 0 2px 5px 0 _.$light-gray;
+    z-index: 1;
     transition-duration: 200ms;
     &.active {
         & > .button_container {

@@ -15,11 +15,12 @@ import MainFunctionBar from "../../components/MainFunctionBar/MainFunctionBar";
 import MainFunctionTab from "../../components/MainFunctionTab/MainFunctionTab";
 import IconHouseDoorFill from "../../components/Icons/IconHouseDoorFill";
 import IconJournalText from "../../components/Icons/IconJournalText";
-import IconCashStack from "../../components/Icons/IconCashStack";
 import IconColumnsGap from "../../components/Icons/IconPersonCircle";
 import { RouterInterface, withRouter } from "../../router";
 import Footer from "../../components/Footer/Footer";
 import Utils from "../../util";
+import IconWatch from "../../components/Icons/IconWatch";
+import IconViewList from "../../components/Icons/IconViewList";
 
 function mapStateToProps(root_state: RootState) {
     let username = root_state.account.username;
@@ -55,14 +56,19 @@ class Main extends React.Component<PropsInterface, StateInterface> {
                     path: "/investment/overview",
                 },
                 {
+                    tab_icon: <IconViewList side_length="100%" />,
+                    tab_name: "持倉細況",
+                    path: "/investment/details",
+                },
+                {
                     tab_icon: <IconJournalText side_length="95%" />,
                     tab_name: "歷史紀錄",
                     path: "/investment/records",
                 },
                 {
-                    tab_icon: <IconCashStack side_length="100%" />,
-                    tab_name: "持股",
-                    path: "/investment/detail",
+                    tab_icon: <IconWatch side_length="100%" />,
+                    tab_name: "買賣計畫",
+                    path: "/investment/plans",
                 },
                 {
                     tab_icon: <IconColumnsGap side_length="90%" />,

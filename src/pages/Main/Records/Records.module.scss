@@ -62,7 +62,7 @@
             @media (hover: hover) {
                 &:hover {
                     box-shadow: 0 2px 5px 0 _.$light-gray;
-                    & > .action_outer {
+                    & > .action_bar_outer {
                         display: flex;
                     }
                 }
@@ -96,16 +96,15 @@
                 color: _.$gray;
                 white-space: nowrap;
             }
-            & > .action_outer {
+            & > .action_bar_outer {
                 position: absolute;
-                top: 0;
+                bottom: 7px;
                 right: 0;
                 display: none;
-                align-items: center;
-                gap: 5px;
-                height: 100%;
-                padding: 0 5px;
-                background: _.$transparent-white;
+                margin-right: 10px;
+                &.active {
+                    display: flex;
+                }
             }
         }
     }

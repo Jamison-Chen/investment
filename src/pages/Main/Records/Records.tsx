@@ -5,13 +5,11 @@ import { connect } from "react-redux";
 
 import StretchableButton from "../../../components/StretchableButton/StretchableButton";
 import { RouterInterface, withRouter } from "../../../router";
-import { RootState } from "../../../redux/store";
+import { RootState, AppDispatch } from "../../../redux/store";
 import Button from "../../../components/Button/Button";
 import SearchKeywordInput from "../../../components/SearchKeywordInput/SearchKeywordInput";
 import { TradeRecord } from "../../../redux/slices/TradeRecordSlice";
-import RoundButton from "../../../components/RoundButton/RoundButton";
-import IconTrash from "../../../components/Icons/IconTrash";
-import IconPencilSquare from "../../../components/Icons/IconPencilSquare";
+import TradeRecordActionBar from "../../../components/TradeRecordActionBar/TradeRecordActionBar";
 
 function mapStateToProps(root_state: RootState) {
     let trade_record_list = root_state.trade_record.record_list;
@@ -21,11 +19,14 @@ function mapStateToProps(root_state: RootState) {
 
 interface PropsInterface
     extends RouterInterface,
-        ReturnType<typeof mapStateToProps> {}
+        ReturnType<typeof mapStateToProps> {
+    dispatch: AppDispatch;
+}
 
 interface StateInterface {
     active_subpage_name: "trade" | "cash_dividend";
     search_keyword: string | null;
+    active_row_index: number | null;
     shown_record_number: number;
 }
 
@@ -36,6 +37,7 @@ class Records extends React.Component<PropsInterface, StateInterface> {
         this.state = {
             active_subpage_name: "trade",
             search_keyword: null,
+            active_row_index: null,
             shown_record_number: 15,
         };
     }
@@ -101,7 +103,11 @@ class Records extends React.Component<PropsInterface, StateInterface> {
                 .slice(0, this.state.shown_record_number)
                 .map((record: TradeRecord, idx) => {
                     return (
-                        <div key={idx} className={styles.row}>
+                        <div
+                            key={idx}
+                            className={styles.row}
+                            onClick={() => this.handle_click_row(idx)}
+                        >
                             <span
                                 className={styles.company}
                             >{`${record.sid} ${record.company_name}`}</span>
@@ -121,13 +127,13 @@ class Records extends React.Component<PropsInterface, StateInterface> {
                             <span className={styles.date}>
                                 {record.deal_time}
                             </span>
-                            <span className={styles.action_outer}>
-                                <RoundButton className="p-8">
-                                    <IconPencilSquare side_length="16" />
-                                </RoundButton>
-                                <RoundButton className="p-8">
-                                    <IconTrash side_length="16" />
-                                </RoundButton>
+                            <span
+                                className={this.get_action_bar_outer_class(idx)}
+                            >
+                                <TradeRecordActionBar
+                                    record={record}
+                                    dispatch={this.props.dispatch}
+                                />
                             </span>
                         </div>
                     );
@@ -142,6 +148,18 @@ class Records extends React.Component<PropsInterface, StateInterface> {
             styles.trade_type + " " + (quantity > 0 ? styles.buy : styles.sell)
         );
     }
+    private get_action_bar_outer_class(idx: number): string {
+        if (this.state.active_row_index === idx) {
+            return styles.action_bar_outer + " " + styles.active;
+        } else return styles.action_bar_outer;
+    }
+    private handle_click_row = (idx: number): void => {
+        this.setState((state, props) => {
+            if (state.active_row_index !== null) {
+                return { active_row_index: null };
+            } else return { active_row_index: idx };
+        });
+    };
     private handle_click_show_more = (): void => {
         this.setState((state, props) => {
             return { shown_record_number: state.shown_record_number * 2 };

@@ -45,6 +45,23 @@ export const fetch_all_trade_records = createAsyncThunk(
     }
 );
 
+export const delete_record = createAsyncThunk(
+    "trade_record/delete_record",
+    async (id: string | number): Promise<string | number> => {
+        let request_body = new URLSearchParams();
+        request_body.append("mode", "delete");
+        request_body.append("id", id.toString());
+
+        let response = await Utils.send_request(
+            "stock/trade",
+            "post",
+            request_body
+        );
+        if (response && response.success) return id;
+        else throw Error("Failed to delete trade record");
+    }
+);
+
 export const trade_record_slice = createSlice({
     name: "trade_record",
     initialState,
@@ -55,16 +72,15 @@ export const trade_record_slice = createSlice({
             .addCase(fetch_all_trade_records.fulfilled, (state, action) => {
                 state.record_list = [...action.payload];
             })
-            .addCase(fetch_all_trade_records.rejected, (state) => {});
+            .addCase(fetch_all_trade_records.rejected, (state) => {})
 
-        // .addCase(update_account_info.pending, (state) => {})
-        // .addCase(update_account_info.fulfilled, (state, action) => {
-        //     state.user_id = action.payload.id;
-        //     state.email = action.payload.email;
-        //     state.username = action.payload.username;
-        //     state.avatar_url = action.payload.avatar_url;
-        // })
-        // .addCase(update_account_info.rejected, (state) => {});
+            .addCase(delete_record.pending, (state) => {})
+            .addCase(delete_record.fulfilled, (state, action) => {
+                state.record_list = [...state.record_list].filter(
+                    (record) => record.id !== action.payload
+                );
+            })
+            .addCase(delete_record.rejected, (state) => {});
     },
 });
 
