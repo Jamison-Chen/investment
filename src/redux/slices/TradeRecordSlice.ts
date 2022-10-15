@@ -114,22 +114,32 @@ export const trade_record_slice = createSlice({
         builder
             .addCase(fetch_all_trade_records.pending, (state) => {})
             .addCase(fetch_all_trade_records.fulfilled, (state, action) => {
-                state.record_list = [...action.payload];
+                state.record_list = [...action.payload].sort(
+                    (a, b) => Date.parse(b.deal_time) - Date.parse(a.deal_time)
+                );
             })
             .addCase(fetch_all_trade_records.rejected, (state) => {})
 
             .addCase(create_record.pending, (state) => {})
             .addCase(create_record.fulfilled, (state, action) => {
-                state.record_list = [action.payload, ...state.record_list];
+                state.record_list = [action.payload, ...state.record_list].sort(
+                    (a, b) => Date.parse(b.deal_time) - Date.parse(a.deal_time)
+                );
             })
             .addCase(create_record.rejected, (state) => {})
 
             .addCase(update_record.pending, (state) => {})
             .addCase(update_record.fulfilled, (state, action) => {
-                state.record_list = state.record_list.map((record) => {
-                    if (record.id === action.payload.id) return action.payload;
-                    return record;
-                });
+                state.record_list = state.record_list
+                    .map((record) => {
+                        if (record.id === action.payload.id)
+                            return action.payload;
+                        return record;
+                    })
+                    .sort(
+                        (a, b) =>
+                            Date.parse(b.deal_time) - Date.parse(a.deal_time)
+                    );
             })
             .addCase(update_record.rejected, (state) => {})
 
