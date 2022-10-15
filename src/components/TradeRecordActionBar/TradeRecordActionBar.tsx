@@ -1,6 +1,7 @@
 import styles from "./TradeRecordActionBar.module.scss";
 
-import React from "react";
+import React, { MouseEvent } from "react";
+import { connect } from "react-redux";
 
 import IconPencilSquare from "../Icons/IconPencilSquare";
 import Modal from "../Modal/Modal";
@@ -12,6 +13,7 @@ import {
     TradeRecord,
     delete_record,
 } from "../../redux/slices/TradeRecordSlice";
+import TradeRecordModal from "../TradeRecordModal/TradeRecordModal";
 
 interface PropsInterface {
     record: TradeRecord;
@@ -22,7 +24,7 @@ interface StateInterface {
     active_modal_name: "edit" | "check_delete" | null;
 }
 
-export default class TradeRecordActionBar extends React.Component<
+class TradeRecordActionBar extends React.Component<
     PropsInterface,
     StateInterface
 > {
@@ -38,7 +40,11 @@ export default class TradeRecordActionBar extends React.Component<
         return (
             <span className={styles.main}>
                 {this.active_modal}
-                <RoundButton className="p-8" hint_text="編輯">
+                <RoundButton
+                    className="p-8"
+                    hint_text="編輯"
+                    onClick={this.handle_click_pencil}
+                >
                     <IconPencilSquare side_length="16" />
                 </RoundButton>
                 <RoundButton
@@ -53,6 +59,12 @@ export default class TradeRecordActionBar extends React.Component<
     }
     private get active_modal(): React.ReactElement<Modal> | null {
         if (this.state.active_modal_name === "edit") {
+            return (
+                <TradeRecordModal
+                    record={this.props.record}
+                    hide_modal={this.hide_modal}
+                />
+            );
         } else if (this.state.active_modal_name === "check_delete") {
             return (
                 <Modal
@@ -115,7 +127,12 @@ export default class TradeRecordActionBar extends React.Component<
     private hide_modal = (): void => {
         this.setState({ active_modal_name: null });
     };
-    private handle_click_trash_can = (): void => {
+    private handle_click_pencil = (e: MouseEvent): void => {
+        e.stopPropagation();
+        this.setState({ active_modal_name: "edit" });
+    };
+    private handle_click_trash_can = (e: MouseEvent): void => {
+        e.stopPropagation();
         this.setState({ active_modal_name: "check_delete" });
     };
     private handle_click_check_delete = (): void => {
@@ -127,3 +144,5 @@ export default class TradeRecordActionBar extends React.Component<
             });
     };
 }
+
+export default connect()(TradeRecordActionBar);

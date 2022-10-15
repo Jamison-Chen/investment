@@ -1,7 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import Utils from "../../util";
-// import { UpdateAccountInfoRequestBody } from "../../api/AccountApi";
+import {
+    CreateTradeRecordRequestBody,
+    UpdateTradeRecordRequestBody,
+} from "../../api/TradeRecordApi";
 
 export type TradeRecord = {
     id: number;
@@ -45,6 +48,47 @@ export const fetch_all_trade_records = createAsyncThunk(
     }
 );
 
+export const create_record = createAsyncThunk(
+    "trade_record/create_record",
+    async (data: CreateTradeRecordRequestBody): Promise<TradeRecord> => {
+        let request_body = new URLSearchParams();
+        request_body.append("mode", "create");
+        request_body.append("sid", data.sid);
+        request_body.append("deal_time", data.deal_time);
+        request_body.append("deal_price", data.deal_price);
+        request_body.append("deal_quantity", data.deal_quantity);
+        request_body.append("handling_fee", data.handling_fee);
+        let response = await Utils.send_request(
+            "stock/trade",
+            "post",
+            request_body
+        );
+        if (response && response.success) return response.data;
+        else throw Error("Failed to create trade record");
+    }
+);
+
+export const update_record = createAsyncThunk(
+    "trade_record/update_record",
+    async (data: UpdateTradeRecordRequestBody): Promise<TradeRecord> => {
+        let request_body = new URLSearchParams();
+        request_body.append("mode", "update");
+        request_body.append("id", data.id);
+        request_body.append("sid", data.sid);
+        request_body.append("deal_time", data.deal_time);
+        request_body.append("deal_price", data.deal_price);
+        request_body.append("deal_quantity", data.deal_quantity);
+        request_body.append("handling_fee", data.handling_fee);
+        let response = await Utils.send_request(
+            "stock/trade",
+            "post",
+            request_body
+        );
+        if (response && response.success) return response.data;
+        else throw Error("Failed to update trade record");
+    }
+);
+
 export const delete_record = createAsyncThunk(
     "trade_record/delete_record",
     async (id: string | number): Promise<string | number> => {
@@ -73,6 +117,21 @@ export const trade_record_slice = createSlice({
                 state.record_list = [...action.payload];
             })
             .addCase(fetch_all_trade_records.rejected, (state) => {})
+
+            .addCase(create_record.pending, (state) => {})
+            .addCase(create_record.fulfilled, (state, action) => {
+                state.record_list = [action.payload, ...state.record_list];
+            })
+            .addCase(create_record.rejected, (state) => {})
+
+            .addCase(update_record.pending, (state) => {})
+            .addCase(update_record.fulfilled, (state, action) => {
+                state.record_list = state.record_list.map((record) => {
+                    if (record.id === action.payload.id) return action.payload;
+                    return record;
+                });
+            })
+            .addCase(update_record.rejected, (state) => {})
 
             .addCase(delete_record.pending, (state) => {})
             .addCase(delete_record.fulfilled, (state, action) => {

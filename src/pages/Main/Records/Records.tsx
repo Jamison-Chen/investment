@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 
 import StretchableButton from "../../../components/StretchableButton/StretchableButton";
 import { RouterInterface, withRouter } from "../../../router";
-import { RootState, AppDispatch } from "../../../redux/store";
+import { RootState } from "../../../redux/store";
 import Button from "../../../components/Button/Button";
 import SearchKeywordInput from "../../../components/SearchKeywordInput/SearchKeywordInput";
 import { TradeRecord } from "../../../redux/slices/TradeRecordSlice";
@@ -19,9 +19,7 @@ function mapStateToProps(root_state: RootState) {
 
 interface PropsInterface
     extends RouterInterface,
-        ReturnType<typeof mapStateToProps> {
-    dispatch: AppDispatch;
-}
+        ReturnType<typeof mapStateToProps> {}
 
 interface StateInterface {
     active_subpage_name: "trade" | "cash_dividend";
@@ -130,10 +128,7 @@ class Records extends React.Component<PropsInterface, StateInterface> {
                             <span
                                 className={this.get_action_bar_outer_class(idx)}
                             >
-                                <TradeRecordActionBar
-                                    record={record}
-                                    dispatch={this.props.dispatch}
-                                />
+                                <TradeRecordActionBar record={record} />
                             </span>
                         </div>
                     );

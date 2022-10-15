@@ -46,7 +46,6 @@ export default class Utils {
         method: "get" | "post",
         request_body?: URLSearchParams | string
     ): Promise<any> {
-        Utils.render_loading_screen();
         if (method === "post" && request_body === undefined) {
             throw Error("POST methods need request_body");
         }
@@ -70,7 +69,6 @@ export default class Utils {
         );
     }
     private static async handle_response(r: Response): Promise<void> {
-        Utils.remove_loading_screen();
         if (r.status === 404) {
             Utils.go_to_404_page();
         } else if (r.status === 401) {
