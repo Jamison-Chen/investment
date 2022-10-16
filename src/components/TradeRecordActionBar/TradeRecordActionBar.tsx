@@ -88,6 +88,7 @@ class TradeRecordActionBar extends React.Component<
                             <Button
                                 className="dangerous_fill l"
                                 onClick={this.handle_click_check_delete}
+                                disabled={this.props.is_waiting}
                             >
                                 {this.props.is_waiting ? (
                                     <img
