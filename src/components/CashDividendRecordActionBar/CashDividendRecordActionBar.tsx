@@ -1,4 +1,4 @@
-import styles from "./TradeRecordActionBar.module.scss";
+import styles from "./CashDividendRecordActionBar.module.scss";
 import waiting_spinner from "../../assets/loading.svg";
 
 import React, { MouseEvent } from "react";
@@ -11,18 +11,18 @@ import IconTrash from "../Icons/IconTrash";
 import Button from "../Button/Button";
 import { RootState, AppDispatch } from "../../redux/store";
 import {
-    TradeRecord,
     delete_record,
-} from "../../redux/slices/TradeRecordSlice";
-import TradeRecordModal from "../TradeRecordModal/TradeRecordModal";
+    CashDividendRecord,
+} from "../../redux/slices/CashDividendRecordSlice";
+import CashDividendRecordModal from "../CashDividendRecordModal/CashDividendRecordModal";
 
 function mapStateToProps(root_state: RootState) {
-    let is_waiting = root_state.trade_record.is_waiting;
+    let is_waiting = root_state.cash_dividend.is_waiting;
     return { is_waiting };
 }
 
 interface PropsInterface extends ReturnType<typeof mapStateToProps> {
-    record: TradeRecord;
+    record: CashDividendRecord;
     dispatch: AppDispatch;
 }
 
@@ -30,7 +30,7 @@ interface StateInterface {
     active_modal_name: "edit" | "check_delete" | null;
 }
 
-class TradeRecordActionBar extends React.Component<
+class CashDividendRecordActionBar extends React.Component<
     PropsInterface,
     StateInterface
 > {
@@ -66,7 +66,7 @@ class TradeRecordActionBar extends React.Component<
     private get active_modal(): React.ReactElement<Modal> | null {
         if (this.state.active_modal_name === "edit") {
             return (
-                <TradeRecordModal
+                <CashDividendRecordModal
                     record={this.props.record}
                     hide_modal={this.hide_modal}
                 />
@@ -108,19 +108,8 @@ class TradeRecordActionBar extends React.Component<
                                 className={styles.company}
                             >{`${this.props.record.sid} ${this.props.record.company_name}`}</span>
                             <span className={styles.price}>
-                                ${this.props.record.deal_price.toLocaleString()}
-                            </span>
-                            <span
-                                className={this.get_trade_type_class(
-                                    this.props.record.deal_quantity
-                                )}
-                            >
-                                {this.props.record.deal_quantity > 0
-                                    ? "買"
-                                    : "賣"}
-                            </span>
-                            <span className={styles.quantity}>
-                                {Math.abs(this.props.record.deal_quantity)} 股
+                                $
+                                {this.props.record.cash_dividend.toLocaleString()}
                             </span>
                             <span className={styles.date}>
                                 {this.props.record.deal_time}
@@ -132,11 +121,6 @@ class TradeRecordActionBar extends React.Component<
             );
         }
         return null;
-    }
-    private get_trade_type_class(quantity: number): string {
-        return (
-            styles.trade_type + " " + (quantity > 0 ? styles.buy : styles.sell)
-        );
     }
     private hide_modal = (): void => {
         this.setState({ active_modal_name: null });
@@ -159,4 +143,4 @@ class TradeRecordActionBar extends React.Component<
     };
 }
 
-export default connect(mapStateToProps)(TradeRecordActionBar);
+export default connect(mapStateToProps)(CashDividendRecordActionBar);

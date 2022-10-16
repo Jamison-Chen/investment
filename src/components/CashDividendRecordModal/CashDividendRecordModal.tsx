@@ -1,18 +1,28 @@
 import styles from "./CashDividendRecordModal.module.scss";
+import waiting_spinner from "../../assets/loading.svg";
 
 import React from "react";
+import { connect } from "react-redux";
 
 import Modal from "../Modal/Modal";
 import Button from "../Button/Button";
 import LabeledInput from "../LabeledInput/LabeledInput";
-import Utils from "../../util";
+import {
+    create_record,
+    update_record,
+    CashDividendRecord,
+} from "../../redux/slices/CashDividendRecordSlice";
+import { RootState, AppDispatch } from "../../redux/store";
 
-interface PropsInterface {
-    record_id?: string | null;
-    deal_time?: string;
-    sid?: string;
-    cash_dividend?: number;
+function mapStateToProps(root_state: RootState) {
+    let is_waiting = root_state.cash_dividend.is_waiting;
+    return { is_waiting };
+}
+
+interface PropsInterface extends ReturnType<typeof mapStateToProps> {
+    record?: CashDividendRecord;
     hide_modal: Function;
+    dispatch: AppDispatch;
 }
 
 interface StateInterface {
@@ -22,7 +32,7 @@ interface StateInterface {
     cash_dividend: number;
 }
 
-export default class CashDividendRecordModal extends React.Component<
+class CashDividendRecordModal extends React.Component<
     PropsInterface,
     StateInterface
 > {
@@ -38,19 +48,15 @@ export default class CashDividendRecordModal extends React.Component<
     }
     public componentDidMount(): void {
         this.setState((state, props) => {
-            if (
-                props.record_id !== undefined &&
-                props.deal_time !== undefined &&
-                props.sid !== undefined &&
-                props.cash_dividend !== undefined
-            ) {
+            if (props.record) {
                 return {
-                    record_id: props.record_id,
-                    deal_time: props.deal_time,
-                    sid: props.sid,
-                    cash_dividend: props.cash_dividend,
-                };
+                    record_id: props.record.id.toString(),
+                    deal_time: props.record.deal_time,
+                    sid: props.record.sid,
+                    cash_dividend: props.record.cash_dividend,
+                } as StateInterface;
             }
+            return {};
         });
     }
     public render(): React.ReactNode {
@@ -73,7 +79,15 @@ export default class CashDividendRecordModal extends React.Component<
                             onClick={this.handle_click_submit}
                             disabled={!this.can_submit}
                         >
-                            送出
+                            {this.props.is_waiting ? (
+                                <img
+                                    className={styles.waiting}
+                                    src={waiting_spinner}
+                                    alt=""
+                                />
+                            ) : (
+                                "送出"
+                            )}
                         </Button>
                     </>
                 }
@@ -112,7 +126,8 @@ export default class CashDividendRecordModal extends React.Component<
         if (
             this.state.deal_time &&
             this.state.sid &&
-            !Object.is(this.state.cash_dividend, NaN)
+            !Object.is(this.state.cash_dividend, NaN) &&
+            !this.props.is_waiting
         ) {
             return true;
         }
@@ -127,24 +142,37 @@ export default class CashDividendRecordModal extends React.Component<
     private handle_click_submit = async (): Promise<void> => {
         if (this.can_submit) {
             if (this.state.record_id) {
-                // Update Mode
+                // Update
+                this.props
+                    .dispatch(
+                        update_record({
+                            id: this.state.record_id!,
+                            sid: this.state.sid,
+                            deal_time: this.state.deal_time,
+                            cash_dividend: this.state.cash_dividend.toString(),
+                        })
+                    )
+                    .unwrap()
+                    .then((response) => {
+                        if (response) this.props.hide_modal();
+                    });
             } else {
-                // Create Mode
-                let request_body = new URLSearchParams();
-                request_body.append("mode", "create");
-                request_body.append("sid", this.state.sid);
-                request_body.append("deal_time", this.state.deal_time);
-                request_body.append(
-                    "cash_dividend",
-                    this.state.cash_dividend.toString()
-                );
-                let response = await Utils.send_request(
-                    "stock/dividend",
-                    "post",
-                    request_body
-                );
-                if (response && response.success) this.props.hide_modal();
+                // Create
+                this.props
+                    .dispatch(
+                        create_record({
+                            sid: this.state.sid,
+                            deal_time: this.state.deal_time,
+                            cash_dividend: this.state.cash_dividend.toString(),
+                        })
+                    )
+                    .unwrap()
+                    .then((response) => {
+                        if (response) this.props.hide_modal();
+                    });
             }
         }
     };
 }
+
+export default connect(mapStateToProps)(CashDividendRecordModal);

@@ -81,7 +81,6 @@ class Main extends React.Component<PropsInterface, StateInterface> {
             .dispatch(fetch_account_info())
             .unwrap()
             .then(async () => {
-                Utils.render_loading_screen();
                 await Promise.all([
                     this.props.dispatch(fetch_all_trade_records()),
                     this.props.dispatch(fetch_all_stock_info()),
@@ -90,7 +89,9 @@ class Main extends React.Component<PropsInterface, StateInterface> {
                 Utils.remove_loading_screen();
             });
     }
-    public async componentDidMount(): Promise<void> {}
+    public async componentDidMount(): Promise<void> {
+        Utils.render_loading_screen();
+    }
     public render(): React.ReactNode {
         return (
             <main className={styles.main}>

@@ -23,6 +23,11 @@
     &.transparent {
         background-color: transparent;
         color: _.$deep-gray;
+        &:disabled {
+            cursor: not-allowed;
+            color: _.$light-gray !important;
+            background-color: transparent !important;
+        }
     }
     &.white {
         background-color: _.$white;

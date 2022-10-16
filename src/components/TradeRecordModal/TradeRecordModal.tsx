@@ -1,4 +1,5 @@
 import styles from "./TradeRecordModal.module.scss";
+import waiting_spinner from "../../assets/loading.svg";
 
 import React from "react";
 import { connect } from "react-redux";
@@ -12,9 +13,14 @@ import {
     update_record,
     TradeRecord,
 } from "../../redux/slices/TradeRecordSlice";
-import { AppDispatch } from "../../redux/store";
+import { RootState, AppDispatch } from "../../redux/store";
 
-interface PropsInterface {
+function mapStateToProps(root_state: RootState) {
+    let is_waiting = root_state.trade_record.is_waiting;
+    return { is_waiting };
+}
+
+interface PropsInterface extends ReturnType<typeof mapStateToProps> {
     record?: TradeRecord;
     hide_modal: Function;
     dispatch: AppDispatch;
@@ -80,7 +86,15 @@ class TradeRecordModal extends React.Component<PropsInterface, StateInterface> {
                             onClick={this.handle_click_submit}
                             disabled={!this.can_submit}
                         >
-                            送出
+                            {this.props.is_waiting ? (
+                                <img
+                                    className={styles.waiting}
+                                    src={waiting_spinner}
+                                    alt=""
+                                />
+                            ) : (
+                                "送出"
+                            )}
                         </Button>
                     </>
                 }
@@ -176,7 +190,8 @@ class TradeRecordModal extends React.Component<PropsInterface, StateInterface> {
             this.state.sid &&
             !Object.is(this.state.deal_price, NaN) &&
             !Object.is(this.state.abs_deal_quantity, NaN) &&
-            !Object.is(this.state.handling_fee, NaN)
+            !Object.is(this.state.handling_fee, NaN) &&
+            !this.props.is_waiting
         ) {
             return true;
         }
@@ -261,4 +276,4 @@ class TradeRecordModal extends React.Component<PropsInterface, StateInterface> {
     };
 }
 
-export default connect()(TradeRecordModal);
+export default connect(mapStateToProps)(TradeRecordModal);
