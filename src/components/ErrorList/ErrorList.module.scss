@@ -1,0 +1,39 @@
+@use "../../global_variables" as _;
+
+.main {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: fit-content;
+    max-width: 250px;
+    font-weight: bold;
+    color: _.$noisy-white;
+    font-size: 0.9 * _.$base-font-size;
+    z-index: 5;
+    user-select: none;
+    .box {
+        animation: popout 0.3s ease;
+        border-radius: 3px;
+        background-color: _.$red;
+        padding: 5px 5px 5px 10px;
+        margin-left: auto;
+        box-shadow: 0 3px 8px 0 _.$light-gray;
+    }
+    @keyframes popout {
+        from {
+            transform: scale(0);
+        }
+        50% {
+            transform: scale(1.2);
+        }
+        75% {
+            transform: scale(0.8);
+        }
+        to {
+            transform: scale(1);
+        }
+    }
+}

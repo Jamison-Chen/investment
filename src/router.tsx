@@ -21,7 +21,7 @@ import Register from "./pages/Register/Register";
 import Account from "./pages/Main/Account/Account";
 import Overview from "./pages/Main/Overview/Overview";
 import Records from "./pages/Main/Records/Records";
-import Detail from "./pages/Main/Detail/Detail";
+import Details from "./pages/Main/Details/Details";
 import ExternalApps from "./pages/Main/ExternalApps/ExternalApps";
 
 // layer three
@@ -49,7 +49,7 @@ export default function MyRouter() {
                     ></Route>
                     <Route path="overview" element={<Overview />}></Route>
                     <Route path="records" element={<Records />}></Route>
-                    <Route path="detail" element={<Detail />}></Route>
+                    <Route path="details" element={<Details />}></Route>
                     <Route
                         path="external-apps"
                         element={<ExternalApps />}

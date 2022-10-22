@@ -2,6 +2,7 @@ import styles from "./Login.module.scss";
 
 import React from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
 import Form from "../../components/Form/Form";
 import Utils from "../../util";
@@ -9,8 +10,13 @@ import Button from "../../components/Button/Button";
 import LabeledInput from "../../components/LabeledInput/LabeledInput";
 import FullLogo from "../../components/FullLogo/FullLogo";
 import { RouterInterface, withRouter } from "../../router";
+import { AppDispatch } from "../../redux/store";
+import ErrorList from "../../components/ErrorList/ErrorList";
+import { push_error } from "../../redux/slices/ErrorSlice";
 
-interface PropsInterface extends RouterInterface {}
+interface PropsInterface extends RouterInterface {
+    dispatch: AppDispatch;
+}
 
 interface StateInterface {
     email: string;
@@ -34,6 +40,7 @@ class Login extends React.Component<PropsInterface, StateInterface> {
     public render(): React.ReactNode {
         return (
             <div className={styles.main}>
+                <ErrorList />
                 <Form
                     header_content={<FullLogo size="m" />}
                     footer_buttons={
@@ -84,6 +91,8 @@ class Login extends React.Component<PropsInterface, StateInterface> {
         if (response.success) {
             let from = this.props.router.search_params.get("from");
             this.props.router.navigate(from || `/investment`);
+        } else {
+            this.props.dispatch(push_error({ message: response.error }));
         }
     };
     private handle_hit_enter = (e: KeyboardEvent): void => {
@@ -93,4 +102,4 @@ class Login extends React.Component<PropsInterface, StateInterface> {
     };
 }
 
-export default withRouter(Login);
+export default connect()(withRouter(Login));

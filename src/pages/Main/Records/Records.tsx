@@ -45,7 +45,7 @@ class Records extends React.Component<PropsInterface, StateInterface> {
     public render(): React.ReactNode {
         return (
             <div className={styles.main}>
-                <div className={styles.background}></div>
+                <div className={styles.background} />
                 <div className={styles.switch_button_container}>
                     <Button
                         className={this.get_switch_button_class("trade")}
