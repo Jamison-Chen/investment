@@ -12,6 +12,7 @@ import {
     get_stock_warehouse,
     StockWarehouse,
     TradeRecord,
+    get_sid_gain_map,
 } from "../../../redux/slices/TradeRecordSlice";
 import {
     get_sid_market_value_map,
@@ -30,6 +31,7 @@ function mapStateToProps(root_state: RootState) {
         stock_info_list,
         inventory_map
     );
+    let sid_gain_map = get_sid_gain_map(sid_trade_records_map);
     let total_market_value = get_total_market_value(
         stock_info_list,
         inventory_map
@@ -44,6 +46,7 @@ function mapStateToProps(root_state: RootState) {
         cash_dividend_record_list,
         sid_trade_records_map,
         sid_market_value_map,
+        sid_gain_map,
         total_market_value,
         stock_warehouse,
     };
@@ -256,44 +259,11 @@ class Overview extends React.Component<PropsInterface, StateInterface> {
         return result;
     }
     private get total_gain(): number {
-        let total_gain = 0;
-        let sid_gain_map: { [sid: string]: number } = {};
-
-        for (let sid in this.props.sid_trade_records_map) {
-            // `queue` can only contain elements with all positive q or all negative q
-            let queue: { q: number; p: number }[] = [];
-            sid_gain_map[sid] = 0;
-
-            for (let record of this.props.sid_trade_records_map[sid]) {
-                let q = record.deal_quantity;
-                let p = record.deal_price;
-                if (queue.length === 0) queue.push({ q: q, p: p });
-                else {
-                    // Check if the last q in `queue` is of the same sign as the incoming q
-                    if (queue[queue.length - 1].q * q > 0) {
-                        queue.push({ q: q, p: p });
-                    } else {
-                        while (queue.length > 0 && q !== 0) {
-                            // Check if there's remaining q after eliminating the first
-                            // element in `queue` with the incoming q
-                            if ((queue[0].q + q) * queue[0].q > 0) {
-                                queue[0].q += q;
-                                sid_gain_map[sid] += (p - queue[0].p) * -q;
-                                q = 0;
-                            } else {
-                                q += queue[0].q;
-                                sid_gain_map[sid] +=
-                                    (p - queue[0].p) * queue[0].q;
-                                queue.shift();
-                            }
-                        }
-                    }
-                }
-            }
+        let result = 0;
+        for (let sid in this.props.sid_gain_map) {
+            result += this.props.sid_gain_map[sid];
         }
-        for (let sid in sid_gain_map) total_gain += sid_gain_map[sid];
-
-        return total_gain + this.total_cash_dividend;
+        return result + this.total_cash_dividend;
     }
     private get total_handling_fee(): number {
         let result = 0;

@@ -6,13 +6,18 @@ import { connect } from "react-redux";
 import { RouterInterface, withRouter } from "../../../router";
 import { RootState } from "../../../redux/store";
 import {
+    get_sid_market_value_map,
     get_sid_stock_info_map,
     StockInfo,
 } from "../../../redux/slices/StockInfoSlice";
 import Button from "../../../components/Button/Button";
 import {
     get_inventory_map,
+    get_sid_cash_invested_map,
+    get_sid_gain_map,
+    get_sid_handling_fee_map,
     get_sid_trade_records_map,
+    get_stock_warehouse,
 } from "../../../redux/slices/TradeRecordSlice";
 
 function mapStateToProps(root_state: RootState) {
@@ -21,7 +26,27 @@ function mapStateToProps(root_state: RootState) {
     let trade_record_list = root_state.trade_record.record_list;
     let sid_trade_records_map = get_sid_trade_records_map(trade_record_list);
     let inventory_map = get_inventory_map(sid_trade_records_map);
-    return { sid_stock_info_map, sid_trade_records_map, inventory_map };
+    let stock_warehouse = get_stock_warehouse(
+        [...trade_record_list].sort(
+            (a, b) => Date.parse(a.deal_time) - Date.parse(b.deal_time)
+        )
+    );
+    let sid_cash_invested_map = get_sid_cash_invested_map(stock_warehouse);
+    let sid_handling_fee_map = get_sid_handling_fee_map(sid_trade_records_map);
+    let sid_gain_map = get_sid_gain_map(sid_trade_records_map);
+    let sid_market_value_map = get_sid_market_value_map(
+        stock_info_list,
+        inventory_map
+    );
+    return {
+        sid_stock_info_map,
+        sid_trade_records_map,
+        inventory_map,
+        sid_cash_invested_map,
+        sid_handling_fee_map,
+        sid_gain_map,
+        sid_market_value_map,
+    };
 }
 
 interface PropsInterface
@@ -66,9 +91,7 @@ class Details extends React.Component<PropsInterface, StateInterface> {
                         個股細節
                     </Button>
                 </div>
-                <div className={styles.subpage_outer}>
-                    {this.active_subpage}
-                </div>
+                {this.active_subpage}
             </div>
         );
     }
@@ -89,16 +112,22 @@ class Details extends React.Component<PropsInterface, StateInterface> {
                 <div className={styles.stock_list}>
                     {Object.keys(this.props.inventory_map).map((sid, idx) => {
                         return (
-                            <div key={idx} className={styles.card}>
+                            <div
+                                key={idx}
+                                className={this.get_card_class_name(
+                                    this.props.sid_stock_info_map[sid]
+                                        .fluct_price
+                                )}
+                            >
                                 <div className={styles.upper}>
                                     <div className={styles.company}>
                                         {`${sid} ${this.props.sid_stock_info_map[sid].name}`}
                                     </div>
                                     <div className={styles.mid}>
                                         <div className={styles.trade_quantity}>
-                                            {`成交 ${this.props.sid_stock_info_map[
+                                            {`成交${this.props.sid_stock_info_map[
                                                 sid
-                                            ].quantity.toLocaleString()} 張`}
+                                            ].quantity.toLocaleString()}張`}
                                         </div>
                                         <div
                                             className={styles.price_fluctuation}
@@ -118,7 +147,7 @@ class Details extends React.Component<PropsInterface, StateInterface> {
                                             ${
                                                 this.props.sid_stock_info_map[
                                                     sid
-                                                ].fluct_price != 0
+                                                ].fluct_price !== 0
                                                     ? Math.abs(
                                                           this.props
                                                               .sid_stock_info_map[
@@ -130,7 +159,7 @@ class Details extends React.Component<PropsInterface, StateInterface> {
                                             ${
                                                 this.props.sid_stock_info_map[
                                                     sid
-                                                ].fluct_price != 0
+                                                ].fluct_price !== 0
                                                     ? "(" +
                                                       (
                                                           Math.abs(
@@ -149,7 +178,22 @@ class Details extends React.Component<PropsInterface, StateInterface> {
                                         {`$${this.props.sid_stock_info_map[sid].close}`}
                                     </div>
                                 </div>
-                                <div className={styles.lower}></div>
+                                <div className={styles.lower}>
+                                    <div className={styles.inventory}>
+                                        {`庫存 ${this.props.inventory_map[sid]} 股`}
+                                    </div>
+                                    <div
+                                        className={styles.average_cost}
+                                    >{`平均成本 $${(
+                                        this.props.sid_cash_invested_map[sid] /
+                                        this.props.inventory_map[sid]
+                                    ).toFixed(2)}`}</div>
+                                    <div className={styles.rate_of_return}>
+                                        {`${this.get_rate_of_return(
+                                            sid
+                                        ).toFixed(2)}%`}
+                                    </div>
+                                </div>
                             </div>
                         );
                     })}
@@ -159,7 +203,27 @@ class Details extends React.Component<PropsInterface, StateInterface> {
             return <div></div>;
         }
     }
-    // private get stock_info_
+    private get_card_class_name(fluct_price: number): string {
+        return (
+            styles.card +
+            " " +
+            (fluct_price > 0
+                ? styles.red
+                : fluct_price < 0
+                ? styles.green
+                : styles.gray)
+        );
+    }
+    private get_rate_of_return(sid: string): number {
+        return (
+            ((this.props.sid_market_value_map[sid] -
+                this.props.sid_cash_invested_map[sid] +
+                this.props.sid_gain_map[sid] -
+                this.props.sid_handling_fee_map[sid]) /
+                this.props.sid_cash_invested_map[sid]) *
+            100
+        );
+    }
 }
 
 export default connect(mapStateToProps)(withRouter(Details));

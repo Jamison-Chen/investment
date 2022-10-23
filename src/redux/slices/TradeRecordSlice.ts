@@ -259,4 +259,57 @@ export const get_sid_cash_invested_map = (
     return result;
 };
 
+export const get_sid_handling_fee_map = (sid_trade_records_map: {
+    [idx: string]: TradeRecord[];
+}): { [idx: string]: number } => {
+    let result: { [idx: string]: number } = {};
+    for (let sid in sid_trade_records_map) {
+        for (let record of sid_trade_records_map[sid]) {
+            if (result[sid] === undefined) result[sid] = record.handling_fee;
+            else result[sid] += record.handling_fee;
+        }
+    }
+    return result;
+};
+
+export const get_sid_gain_map = (sid_trade_records_map: {
+    [idx: string]: TradeRecord[];
+}): { [sid: string]: number } => {
+    let sid_gain_map: { [sid: string]: number } = {};
+
+    for (let sid in sid_trade_records_map) {
+        // `queue` can only contain elements with all positive q or all negative q
+        let queue: { q: number; p: number }[] = [];
+        sid_gain_map[sid] = 0;
+
+        for (let record of sid_trade_records_map[sid]) {
+            let q = record.deal_quantity;
+            let p = record.deal_price;
+            if (queue.length === 0) queue.push({ q: q, p: p });
+            else {
+                // Check if the last q in `queue` is of the same sign as the incoming q
+                if (queue[queue.length - 1].q * q > 0) {
+                    queue.push({ q: q, p: p });
+                } else {
+                    while (queue.length > 0 && q !== 0) {
+                        // Check if there's remaining q after eliminating the first
+                        // element in `queue` with the incoming q
+                        if ((queue[0].q + q) * queue[0].q > 0) {
+                            queue[0].q += q;
+                            sid_gain_map[sid] += (p - queue[0].p) * -q;
+                            q = 0;
+                        } else {
+                            q += queue[0].q;
+                            sid_gain_map[sid] += (p - queue[0].p) * queue[0].q;
+                            queue.shift();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return sid_gain_map;
+};
+
 export default trade_record_slice.reducer;
