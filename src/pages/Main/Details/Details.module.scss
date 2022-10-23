@@ -4,6 +4,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
+    align-items: center;
     height: 100%;
     padding: 10px 15px;
     & > .background {
@@ -35,6 +36,48 @@
             border-radius: 10px;
             color: _.$gray;
             margin: 5px 4px;
+        }
+    }
+    .subpage_outer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        overflow: auto;
+        & > .stock_list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: fit-content;
+            margin-bottom: 20px;
+            & > .card {
+                padding: 10px;
+                border-radius: 8px;
+                background-color: _.$transparent-white;
+                box-shadow: 0 3px 8px 0 _.$light-gray;
+                width: min(85vw, 320px);
+                & > .upper {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    & > .company {
+                        width: 33.4%;
+                        font-weight: bold;
+                        font-size: 0.9 * _.$base-font-size;
+                    }
+                    & > .mid {
+                        width: 30%;
+                        font-size: 0.7 * _.$base-font-size;
+                    }
+                    & > .price {
+                        flex-grow: 1;
+                        text-align: right;
+                        font-weight: bold;
+                        font-size: 1.2 * _.$base-font-size;
+                        font-family: monospace;
+                    }
+                }
+            }
         }
     }
 }

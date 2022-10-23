@@ -10,7 +10,6 @@ import {
     get_sid_trade_records_map,
     get_inventory_map,
     get_stock_warehouse,
-    get_sid_cash_invested_map,
     StockWarehouse,
     TradeRecord,
 } from "../../../redux/slices/TradeRecordSlice";
@@ -40,17 +39,13 @@ function mapStateToProps(root_state: RootState) {
             (a, b) => Date.parse(a.deal_time) - Date.parse(b.deal_time)
         )
     );
-    let sid_cash_invested_map = get_sid_cash_invested_map(stock_warehouse);
     return {
         trade_record_list,
         cash_dividend_record_list,
-        stock_info_list,
         sid_trade_records_map,
-        inventory_map,
         sid_market_value_map,
         total_market_value,
         stock_warehouse,
-        sid_cash_invested_map,
     };
 }
 

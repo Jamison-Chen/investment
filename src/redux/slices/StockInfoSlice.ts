@@ -52,6 +52,14 @@ export const stock_info_slice = createSlice({
     },
 });
 
+export const get_sid_stock_info_map = (
+    stock_info_list: StockInfo[]
+): { [idx: string]: StockInfo } => {
+    let result: { [idx: string]: StockInfo } = {};
+    stock_info_list.forEach((each) => (result[each.sid] = each));
+    return result;
+};
+
 export const get_sid_market_value_map = (
     stock_info_list: StockInfo[],
     inventory_map: { [idx: string]: number }

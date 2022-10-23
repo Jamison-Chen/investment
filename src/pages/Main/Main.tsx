@@ -21,6 +21,7 @@ import Footer from "../../components/Footer/Footer";
 import Utils from "../../util";
 import IconWatch from "../../components/Icons/IconWatch";
 import IconViewList from "../../components/Icons/IconViewList";
+import ErrorList from "../../components/ErrorList/ErrorList";
 
 function mapStateToProps(root_state: RootState) {
     let username = root_state.account.username;
@@ -95,6 +96,7 @@ class Main extends React.Component<PropsInterface, StateInterface> {
     public render(): React.ReactNode {
         return (
             <main className={styles.main}>
+                <ErrorList />
                 <MainFunctionBar
                     user_avatar_url={this.props.avatar_url || person_fill}
                     username={this.props.username}
