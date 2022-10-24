@@ -69,7 +69,7 @@ export interface RouterInterface {
         navigate: NavigateFunction;
         params: Params;
         search_params: URLSearchParams;
-        set_search_params: ReturnType<typeof useSearchParams>;
+        set_search_params: ReturnType<typeof useSearchParams>[1];
     };
 }
 

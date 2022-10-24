@@ -1,6 +1,7 @@
 @use "../../../global_variables" as _;
 
 .main {
+    $card-width: min(85vw, 320px);
     position: relative;
     display: flex;
     flex-direction: column;
@@ -38,87 +39,140 @@
             margin: 5px 4px;
         }
     }
-    // .subpage_outer {
-    //     display: flex;
-    //     flex-direction: column;
-    //     align-items: center;
-    //     width: 100%;
-    //     overflow: auto;
+    .card {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 85px;
+        padding: 10px 15px;
+        border-radius: 8px;
+        background-color: _.$transparent-white;
+        box-shadow: 0 3px 8px 0 _.$light-gray;
+        width: $card-width;
+        transition-duration: 100ms;
+        cursor: pointer;
+        @media (hover: hover) {
+            &:hover {
+                background-color: _.$white;
+                box-shadow: 0 8px 15px 0 _.$light-gray;
+            }
+        }
+        & > .upper {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            & > .company {
+                width: 33.4%;
+                font-weight: bold;
+                font-size: 0.9 * _.$base-font-size;
+            }
+            & > .mid {
+                width: 31%;
+                font-size: 0.7 * _.$base-font-size;
+            }
+            & > .price {
+                flex-grow: 1;
+                text-align: right;
+                font-weight: bold;
+                font-size: 1.2 * _.$base-font-size;
+                font-family: monospace;
+            }
+        }
+        & > .lower {
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+            font-size: 0.7 * _.$base-font-size;
+            & > .inventory {
+                width: 33.4%;
+            }
+            & > .average_cost {
+                width: 25%;
+            }
+            & > .rate_of_return {
+                flex-grow: 1;
+                text-align: right;
+            }
+        }
+        &.red {
+            .upper {
+                .mid,
+                .price {
+                    color: _.$red;
+                }
+            }
+        }
+        &.green {
+            .upper {
+                .mid,
+                .price {
+                    color: _.$green;
+                }
+            }
+        }
+    }
     & > .stock_list {
-        $card-width: min(85vw, 320px);
         display: grid;
         grid-template-columns: repeat(auto-fit, $card-width);
-        gap: 15px;
+        gap: 20px;
         justify-content: center;
         width: 100%;
         padding: 10px;
         margin-bottom: 10px;
         overflow: auto;
-        & > .card {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            padding: 10px 15px;
+    }
+    & > .details {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        width: 100%;
+        margin-bottom: 20px;
+        overflow: auto;
+        & > .menu {
+            padding: 5px;
+            outline: none;
             border-radius: 8px;
-            background-color: _.$transparent-white;
-            box-shadow: 0 3px 8px 0 _.$light-gray;
-            width: $card-width;
-            & > .upper {
+        }
+        & > .block {
+            width: fit-content;
+            & > .title {
+                font-weight: normal;
+                font-size: _.$base-font-size;
+            }
+            & > .body {
+                position: relative;
                 display: flex;
-                align-items: flex-start;
-                gap: 10px;
-                & > .company {
-                    width: 33.4%;
-                    font-weight: bold;
-                    font-size: 0.9 * _.$base-font-size;
+                flex-direction: column;
+                width: min(420px, 87vw);
+                border-radius: 15px;
+                overflow: hidden;
+                background-color: _.$transparent-white;
+                box-shadow: 0 0 5px 0 _.$noisy-white;
+                &.histogram {
+                    height: 280px;
                 }
-                & > .mid {
-                    width: 31%;
-                    font-size: 0.7 * _.$base-font-size;
-                }
-                & > .price {
-                    flex-grow: 1;
-                    text-align: right;
-                    font-weight: bold;
-                    font-size: 1.2 * _.$base-font-size;
-                    font-family: monospace;
-                }
-            }
-            & > .lower {
-                display: flex;
-                gap: 10px;
-                align-items: flex-end;
-                font-size: 0.7 * _.$base-font-size;
-                & > .inventory {
-                    width: 33.4%;
-                }
-                & > .average_cost {
-                    width: 31%;
-                }
-                & > .rate_of_return {
-                    flex-grow: 1;
-                    text-align: right;
-                }
-            }
-            &.red {
-                .upper {
-                    .mid,
-                    .price {
-                        color: _.$red;
-                    }
-                }
-            }
-            &.green {
-                .upper {
-                    .mid,
-                    .price {
-                        color: _.$green;
+                &.performance {
+                    .row {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        padding: 18px 15px;
+                        font-size: 0.85 * _.$base-font-size;
+                        color: _.$gray;
+                        &:not(:last-child) {
+                            border-bottom: 2px solid _.$noisy-white;
+                        }
+                        & > .number {
+                            font-family: monospace;
+                            font-size: 1.05 * _.$base-font-size;
+                            color: _.$black;
+                        }
                     }
                 }
             }
         }
     }
-    // }
 }
 
 @media screen and (max-width: _.$hide-function-bar-boundry) {

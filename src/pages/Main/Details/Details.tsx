@@ -1,6 +1,6 @@
 import styles from "./Details.module.scss";
 
-import React from "react";
+import React, { ChangeEvent } from "react";
 import { connect } from "react-redux";
 
 import { RouterInterface, withRouter } from "../../../router";
@@ -19,6 +19,7 @@ import {
     get_sid_trade_records_map,
     get_stock_warehouse,
 } from "../../../redux/slices/TradeRecordSlice";
+import Chart from "react-google-charts";
 
 function mapStateToProps(root_state: RootState) {
     let stock_info_list: StockInfo[] = root_state.stock_info.info_list;
@@ -118,6 +119,7 @@ class Details extends React.Component<PropsInterface, StateInterface> {
                                     this.props.sid_stock_info_map[sid]
                                         .fluct_price
                                 )}
+                                onClick={() => this.handle_click_card(sid)}
                             >
                                 <div className={styles.upper}>
                                     <div className={styles.company}>
@@ -168,7 +170,7 @@ class Details extends React.Component<PropsInterface, StateInterface> {
                                                                   sid
                                                               ].fluct_rate
                                                           ) * 100
-                                                      ).toFixed(2) +
+                                                      ).toFixed(1) +
                                                       "%)"
                                                     : ""
                                             }`}
@@ -189,7 +191,7 @@ class Details extends React.Component<PropsInterface, StateInterface> {
                                         this.props.inventory_map[sid]
                                     ).toFixed(2)}`}</div>
                                     <div className={styles.rate_of_return}>
-                                        {`${this.get_rate_of_return(
+                                        {`報酬率 ${this.get_rate_of_return(
                                             sid
                                         ).toFixed(2)}%`}
                                     </div>
@@ -200,7 +202,114 @@ class Details extends React.Component<PropsInterface, StateInterface> {
                 </div>
             );
         } else {
-            return <div></div>;
+            return (
+                <div className={styles.details}>
+                    <select
+                        className={styles.menu}
+                        value={this.props.router.search_params.get("sid") || ""}
+                        onChange={this.handle_change_selected_menu_item}
+                    >
+                        <option defaultChecked hidden>
+                            請選擇股票代號
+                        </option>
+                        {Object.keys(this.props.inventory_map).map(
+                            (sid, idx) => {
+                                return (
+                                    <option
+                                        key={idx}
+                                        value={sid}
+                                    >{`${sid} ${this.props.sid_stock_info_map[sid].name}`}</option>
+                                );
+                            }
+                        )}
+                    </select>
+                    {this.props.router.search_params.get("sid") ? (
+                        <>
+                            <div className={styles.block}>
+                                <h2 className={styles.title}>庫存成本</h2>
+                                <div
+                                    className={
+                                        styles.body + " " + styles.histogram
+                                    }
+                                >
+                                    <Chart
+                                        chartType="Histogram"
+                                        data={this.histogram_chart_data}
+                                        options={{
+                                            legend: { position: "none" },
+                                            colors: ["#444"],
+                                            chartArea: {
+                                                left: "15%",
+                                                top: "15%",
+                                                width: "70%",
+                                                height: "70%",
+                                            },
+                                        }}
+                                        width={"100%"}
+                                        height={"100%"}
+                                    />
+                                </div>
+                            </div>
+                            <div className={styles.block}>
+                                <h2 className={styles.title}>投資績效</h2>
+                                <div
+                                    className={
+                                        styles.body + " " + styles.performance
+                                    }
+                                >
+                                    <div className={styles.row}>
+                                        <span>報酬率</span>
+                                        <span className={styles.number}>
+                                            {this.get_rate_of_return().toFixed(
+                                                2
+                                            )}
+                                            %
+                                        </span>
+                                    </div>
+                                    <div className={styles.row}>
+                                        <span>現金投入</span>
+                                        <span className={styles.number}>
+                                            $
+                                            {Math.round(
+                                                this.props
+                                                    .sid_cash_invested_map[
+                                                    this.props.router.search_params.get(
+                                                        "sid"
+                                                    )!
+                                                ]
+                                            ).toLocaleString()}
+                                        </span>
+                                    </div>
+                                    <div className={styles.row}>
+                                        <span>實現損益</span>
+                                        <span className={styles.number}>
+                                            $
+                                            {Math.round(
+                                                this.props.sid_gain_map[
+                                                    this.props.router.search_params.get(
+                                                        "sid"
+                                                    )!
+                                                ]
+                                            ).toLocaleString()}
+                                        </span>
+                                    </div>
+                                    <div className={styles.row}>
+                                        <span>手續費用</span>
+                                        <span className={styles.number}>
+                                            $
+                                            {this.props.sid_handling_fee_map[
+                                                this.props.router.search_params.get(
+                                                    "sid"
+                                                )!
+                                            ].toLocaleString()}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                    ) : null}
+                </div>
+            );
         }
     }
     private get_card_class_name(fluct_price: number): string {
@@ -214,7 +323,9 @@ class Details extends React.Component<PropsInterface, StateInterface> {
                 : styles.gray)
         );
     }
-    private get_rate_of_return(sid: string): number {
+    private get_rate_of_return(
+        sid: string = this.props.router.search_params.get("sid")!
+    ): number {
         return (
             ((this.props.sid_market_value_map[sid] -
                 this.props.sid_cash_invested_map[sid] +
@@ -223,6 +334,31 @@ class Details extends React.Component<PropsInterface, StateInterface> {
                 this.props.sid_cash_invested_map[sid]) *
             100
         );
+    }
+    private handle_click_card = (sid: string) => {
+        this.setState({ active_subpage_name: "stock_details" });
+        this.props.router.set_search_params({ sid: sid });
+    };
+    private handle_change_selected_menu_item = (
+        e: ChangeEvent<HTMLSelectElement>
+    ) => {
+        this.props.router.set_search_params({ sid: e.target.value });
+    };
+    private get histogram_chart_data(): (string | number)[][] {
+        let result: (string | number)[][] = [];
+        let sid = this.props.router.search_params.get("sid");
+        if (sid) {
+            for (let record of this.props.sid_trade_records_map[sid]) {
+                let p = record.deal_price;
+                let q = record.deal_quantity;
+                let t = record.deal_time;
+                if (q >= 0) {
+                    for (let i = 0; i < q; i++) result.push([t, p]);
+                } else for (let i = 0; i < -q; i++) result.shift();
+            }
+        }
+        result.splice(0, 0, ["日期", "價格"]);
+        return result;
     }
 }
 
