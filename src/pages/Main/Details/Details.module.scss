@@ -1,7 +1,7 @@
 @use "../../../global_variables" as _;
 
 .main {
-    $card-width: min(85vw, 320px);
+    $card-width: min(87vw, 340px);
     position: relative;
     display: flex;
     flex-direction: column;
@@ -43,7 +43,7 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        height: 85px;
+        height: 95px;
         padding: 10px 15px;
         border-radius: 8px;
         background-color: _.$transparent-white;
