@@ -1,0 +1,76 @@
+@use "../../global_variables" as _;
+
+.card {
+    $card-width: min(87vw, 340px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 95px;
+    min-height: 95px;
+    padding: 10px 15px;
+    border-radius: 8px;
+    background-color: _.$transparent-white;
+    box-shadow: 0 3px 8px 0 _.$light-gray;
+    width: $card-width;
+    transition-duration: 100ms;
+    cursor: pointer;
+    @media (hover: hover) {
+        &:hover {
+            background-color: _.$white;
+            box-shadow: 0 8px 15px 0 _.$light-gray;
+        }
+    }
+    & > .upper {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        & > .company {
+            width: 33.4%;
+            font-weight: bold;
+            font-size: 0.9 * _.$base-font-size;
+        }
+        & > .mid {
+            width: 31%;
+            font-size: 0.7 * _.$base-font-size;
+        }
+        & > .price {
+            flex-grow: 1;
+            text-align: right;
+            font-weight: bold;
+            font-size: 1.2 * _.$base-font-size;
+            font-family: monospace;
+        }
+    }
+    & > .lower {
+        display: flex;
+        gap: 8px;
+        align-items: flex-end;
+        font-size: 0.7 * _.$base-font-size;
+        & > .inventory {
+            width: 33.4%;
+        }
+        & > .average_cost {
+            width: 25%;
+        }
+        & > .rate_of_return {
+            flex-grow: 1;
+            text-align: right;
+        }
+    }
+    &.red {
+        .upper {
+            .mid,
+            .price {
+                color: _.$red;
+            }
+        }
+    }
+    &.green {
+        .upper {
+            .mid,
+            .price {
+                color: _.$green;
+            }
+        }
+    }
+}

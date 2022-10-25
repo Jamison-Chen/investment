@@ -46,7 +46,7 @@ export const fetch_all_trade_records = createAsyncThunk(
             request_body
         );
         if (response && response.success) return response.data;
-        else throw Error("Failed to fetch trade record");
+        else throw Error("Failed to fetch trade records");
     }
 );
 
@@ -170,9 +170,7 @@ export const trade_record_slice = createSlice({
 
 export const get_sid_trade_records_map = (
     record_list: TradeRecord[]
-): {
-    [idx: string]: TradeRecord[];
-} => {
+): { [idx: string]: TradeRecord[] } => {
     let reversed_records = [...record_list].reverse();
     let result: { [idx: string]: TradeRecord[] } = {};
     for (let record of reversed_records) {

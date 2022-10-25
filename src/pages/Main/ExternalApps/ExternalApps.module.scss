@@ -4,8 +4,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     min-height: 100%;
     width: 100%;
+    padding: 10px;
+    background-color: _.$noisy-white;
     .app_list {
         display: flex;
         gap: 10px;
@@ -23,10 +26,10 @@
             border-radius: 8px;
             transition-duration: 200ms;
             padding: 0 5px 20px 5px;
-            border: 1px solid _.$light-gray;
+            background-color: _.$transparent-white;
             @media (hover: hover) {
                 &:hover {
-                    background-color: _.$transparent-blue;
+                    background-color: _.$white;
                 }
             }
             & > img {

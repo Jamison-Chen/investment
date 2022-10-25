@@ -22,6 +22,7 @@ import Account from "./pages/Main/Account/Account";
 import Overview from "./pages/Main/Overview/Overview";
 import Records from "./pages/Main/Records/Records";
 import Details from "./pages/Main/Details/Details";
+import Plans from "./pages/Main/Plans/Plans";
 import ExternalApps from "./pages/Main/ExternalApps/ExternalApps";
 
 // layer three
@@ -50,6 +51,7 @@ export default function MyRouter() {
                     <Route path="overview" element={<Overview />}></Route>
                     <Route path="records" element={<Records />}></Route>
                     <Route path="details" element={<Details />}></Route>
+                    <Route path="plans" element={<Plans />}></Route>
                     <Route
                         path="external-apps"
                         element={<ExternalApps />}
