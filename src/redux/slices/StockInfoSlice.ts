@@ -65,10 +65,9 @@ export const get_sid_market_value_map = (
     inventory_map: { [idx: string]: number }
 ) => {
     let result: { [idx: string]: number } = {};
-    for (let sid in inventory_map) {
+    for (const [sid, inventory] of Object.entries(inventory_map)) {
         result[sid] =
-            stock_info_list.find((info) => info.sid === sid)!.close *
-            inventory_map[sid];
+            stock_info_list.find((info) => info.sid === sid)!.close * inventory;
     }
     return result;
 };
@@ -78,10 +77,9 @@ export const get_total_market_value = (
     inventory_map: { [idx: string]: number }
 ): number => {
     let result = 0;
-    for (let sid in inventory_map) {
+    for (const [sid, inventory] of Object.entries(inventory_map)) {
         result +=
-            stock_info_list.find((info) => info.sid === sid)!.close *
-            inventory_map[sid];
+            stock_info_list.find((info) => info.sid === sid)!.close * inventory;
     }
     return result;
 };

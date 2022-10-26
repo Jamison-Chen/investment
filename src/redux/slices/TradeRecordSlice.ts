@@ -185,8 +185,10 @@ export const get_inventory_map = (sid_trade_records_map: {
     [idx: string]: TradeRecord[];
 }): { [idx: string]: number } => {
     let result: { [idx: string]: number } = {};
-    for (let sid in sid_trade_records_map) {
-        for (let record of sid_trade_records_map[sid]) {
+    for (const [sid, trade_record_list] of Object.entries(
+        sid_trade_records_map
+    )) {
+        for (let record of trade_record_list) {
             if (result[sid] === undefined) result[sid] = record.deal_quantity;
             else result[sid] += record.deal_quantity;
         }

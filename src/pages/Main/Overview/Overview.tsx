@@ -229,8 +229,10 @@ class Overview extends React.Component<PropsInterface, StateInterface> {
     }
     private get market_value_pie_chart_data(): (string | number)[][] {
         let result: (string | number)[][] = [];
-        for (let sid in this.props.sid_market_value_map) {
-            result.push([sid, this.props.sid_market_value_map[sid]]);
+        for (const [sid, market_value] of Object.entries(
+            this.props.sid_market_value_map
+        )) {
+            result.push([sid, market_value]);
         }
         result.sort(
             (row_a, row_b) => (row_b[1] as number) - (row_a[1] as number)
@@ -242,10 +244,10 @@ class Overview extends React.Component<PropsInterface, StateInterface> {
         stock_warehouse: StockWarehouse = this.props.stock_warehouse
     ): number => {
         let result = 0;
-        for (let sid in stock_warehouse) {
-            for (let t in stock_warehouse[sid]) {
-                for (let p in stock_warehouse[sid][t]) {
-                    result += stock_warehouse[sid][t][p] * parseFloat(p);
+        for (const t_map of Object.values(stock_warehouse)) {
+            for (const p_map of Object.values(t_map)) {
+                for (const [p, q] of Object.entries(p_map)) {
+                    result += q * parseFloat(p);
                 }
             }
         }
@@ -260,8 +262,8 @@ class Overview extends React.Component<PropsInterface, StateInterface> {
     }
     private get total_gain(): number {
         let result = 0;
-        for (let sid in this.props.sid_gain_map) {
-            result += this.props.sid_gain_map[sid];
+        for (const gain of Object.values(this.props.sid_gain_map)) {
+            result += gain;
         }
         return result + this.total_cash_dividend;
     }
