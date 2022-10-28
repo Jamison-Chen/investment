@@ -3,13 +3,14 @@
 .button {
     border: none;
     border-radius: 5px;
-    padding: 5px 15px;
+    padding: 5px 12px;
     width: max-content;
     min-width: max-content;
     opacity: 0.8;
     transition-duration: 200ms;
     display: flex;
     align-items: center;
+    letter-spacing: 1.2 * _.$base-letter-spacing;
     gap: 5px;
     cursor: pointer;
     &:hover:not(:disabled) {
@@ -89,11 +90,11 @@
     }
     &.s {
         font-size: 0.8 * _.$base-font-size;
-        padding: 5px 12px;
+        padding: 4px 10px;
     }
     &.xs {
         font-size: 0.7 * _.$base-font-size;
-        padding: 4px 10px;
+        padding: 3px 8px;
     }
     &.border {
         border: 1px solid _.$light-gray;

@@ -162,4 +162,16 @@ export const cash_dividend_record_slice = createSlice({
     },
 });
 
+export const get_sid_total_cash_dividend_map = (
+    record_list: CashDividendRecord[]
+): { [idx: string]: number } => {
+    let result: { [idx: string]: number } = {};
+    for (let record of record_list) {
+        let s = record.sid;
+        if (result[s] === undefined) result[s] = record.cash_dividend;
+        else result[s] += record.cash_dividend;
+    }
+    return result;
+};
+
 export default cash_dividend_record_slice.reducer;

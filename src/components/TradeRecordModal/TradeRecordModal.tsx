@@ -21,6 +21,7 @@ function mapStateToProps(root_state: RootState) {
 }
 
 interface PropsInterface extends ReturnType<typeof mapStateToProps> {
+    default_sid?: string;
     record?: TradeRecord;
     hide_modal: Function;
     dispatch: AppDispatch;
@@ -62,6 +63,8 @@ class TradeRecordModal extends React.Component<PropsInterface, StateInterface> {
                     abs_deal_quantity: Math.abs(props.record.deal_quantity),
                     handling_fee: props.record.handling_fee,
                 } as StateInterface;
+            } else if (props.default_sid) {
+                return { sid: props.default_sid } as StateInterface;
             }
             return {};
         });

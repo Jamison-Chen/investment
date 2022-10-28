@@ -20,6 +20,7 @@ function mapStateToProps(root_state: RootState) {
 }
 
 interface PropsInterface extends ReturnType<typeof mapStateToProps> {
+    default_sid?: string;
     record?: CashDividendRecord;
     hide_modal: Function;
     dispatch: AppDispatch;
@@ -55,6 +56,9 @@ class CashDividendRecordModal extends React.Component<
                     sid: props.record.sid,
                     cash_dividend: props.record.cash_dividend,
                 } as StateInterface;
+            }
+            if (props.default_sid) {
+                return { sid: props.default_sid } as StateInterface;
             }
             return {};
         });

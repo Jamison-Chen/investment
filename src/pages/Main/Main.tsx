@@ -22,6 +22,7 @@ import Utils from "../../util";
 import IconWatch from "../../components/Icons/IconWatch";
 import IconViewList from "../../components/Icons/IconViewList";
 import ErrorList from "../../components/ErrorList/ErrorList";
+import { fetch_all_trade_plans } from "../../redux/slices/TradePlanSlice";
 
 function mapStateToProps(root_state: RootState) {
     let username = root_state.account.username;
@@ -88,6 +89,7 @@ class Main extends React.Component<PropsInterface, StateInterface> {
                     this.props.dispatch(fetch_all_cash_dividend_records()),
                 ]);
                 Utils.remove_loading_screen();
+                this.props.dispatch(fetch_all_trade_plans());
             });
     }
     public async componentDidMount(): Promise<void> {

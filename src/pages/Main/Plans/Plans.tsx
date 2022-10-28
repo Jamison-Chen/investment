@@ -8,10 +8,7 @@ import { RouterInterface, withRouter } from "../../../router";
 import { RootState, AppDispatch } from "../../../redux/store";
 import Button from "../../../components/Button/Button";
 import SearchKeywordInput from "../../../components/SearchKeywordInput/SearchKeywordInput";
-import {
-    TradePlan,
-    fetch_all_trade_plans,
-} from "../../../redux/slices/TradePlanSlice";
+import { TradePlan } from "../../../redux/slices/TradePlanSlice";
 import {
     get_sid_stock_info_map,
     StockInfo,
@@ -45,7 +42,6 @@ class Plans extends React.Component<PropsInterface, StateInterface> {
             active_row_index: null,
             shown_record_number: 15,
         };
-        this.props.dispatch(fetch_all_trade_plans());
     }
     public async componentDidMount(): Promise<void> {}
     public render(): React.ReactNode {

@@ -7,7 +7,7 @@
     flex-direction: column;
     align-items: center;
     height: 100%;
-    padding: 10px 15px;
+    padding: 10px 0;
     & > .background {
         position: absolute;
         top: 0;
@@ -57,10 +57,20 @@
         width: 100%;
         padding-bottom: 50px;
         overflow: auto;
-        & > .menu {
-            padding: 5px;
-            outline: none;
-            border-radius: 8px;
+        & > .upper {
+            position: sticky;
+            top: 0;
+            display: flex;
+            gap: 10px;
+            width: 100%;
+            padding: 0 15px;
+            background-color: _.$white;
+            .menu {
+                padding: 5px;
+                outline: none;
+                width: 150px;
+                border-radius: 8px;
+            }
         }
         & > .block {
             width: fit-content;

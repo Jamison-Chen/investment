@@ -21,6 +21,14 @@ import {
 } from "../../../redux/slices/TradeRecordSlice";
 import Chart from "react-google-charts";
 import DetailCard from "../../../components/DetailCard/DetailCard";
+import RoundButton from "../../../components/RoundButton/RoundButton";
+import IconPencilSquare from "../../../components/Icons/IconPencilSquare";
+import IconWatch from "../../../components/Icons/IconWatch";
+import IconPiggyBank from "../../../components/Icons/IconPiggyBank";
+import Modal from "../../../components/Modal/Modal";
+import TradeRecordModal from "../../../components/TradeRecordModal/TradeRecordModal";
+import CashDividendRecordModal from "../../../components/CashDividendRecordModal/CashDividendRecordModal";
+import { get_sid_total_cash_dividend_map } from "../../../redux/slices/CashDividendRecordSlice";
 
 function mapStateToProps(root_state: RootState) {
     let stock_info_list: StockInfo[] = root_state.stock_info.info_list;
@@ -36,6 +44,9 @@ function mapStateToProps(root_state: RootState) {
     let sid_cash_invested_map = get_sid_cash_invested_map(stock_warehouse);
     let sid_handling_fee_map = get_sid_handling_fee_map(sid_trade_records_map);
     let sid_gain_map = get_sid_gain_map(sid_trade_records_map);
+    let cash_dividend_list = root_state.cash_dividend.record_list;
+    let sid_total_cash_dividend_map =
+        get_sid_total_cash_dividend_map(cash_dividend_list);
     let sid_market_value_map = get_sid_market_value_map(
         stock_info_list,
         inventory_map
@@ -47,6 +58,7 @@ function mapStateToProps(root_state: RootState) {
         sid_cash_invested_map,
         sid_handling_fee_map,
         sid_gain_map,
+        sid_total_cash_dividend_map,
         sid_market_value_map,
     };
 }
@@ -57,6 +69,11 @@ interface PropsInterface
 
 interface StateInterface {
     active_subpage_name: "stock_list" | "stock_details";
+    active_modal_name:
+        | "create_trade_record"
+        | "create_cash_dividend_record"
+        | "create_trade_plan"
+        | null;
 }
 
 class Details extends React.Component<PropsInterface, StateInterface> {
@@ -65,12 +82,14 @@ class Details extends React.Component<PropsInterface, StateInterface> {
         super(props);
         this.state = {
             active_subpage_name: "stock_list",
+            active_modal_name: null,
         };
     }
     public async componentDidMount(): Promise<void> {}
     public render(): React.ReactNode {
         return (
             <div className={styles.main}>
+                {this.active_modal}
                 <div className={styles.background} />
                 <div className={styles.switch_button_container}>
                     <Button
@@ -97,6 +116,30 @@ class Details extends React.Component<PropsInterface, StateInterface> {
             </div>
         );
     }
+    private get active_modal(): React.ReactElement<Modal> | null {
+        if (this.state.active_modal_name === "create_trade_record") {
+            return (
+                <TradeRecordModal
+                    default_sid={this.props.router.search_params.get("sid")!}
+                    hide_modal={this.hide_modal}
+                />
+            );
+        }
+        if (this.state.active_modal_name === "create_cash_dividend_record") {
+            return (
+                <CashDividendRecordModal
+                    default_sid={this.props.router.search_params.get("sid")!}
+                    hide_modal={this.hide_modal}
+                />
+            );
+        }
+        if (this.state.active_modal_name === "create_trade_plan") {
+        }
+        return null;
+    }
+    private hide_modal = (): void => {
+        this.setState({ active_modal_name: null });
+    };
     private get_switch_button_class(
         name: "stock_list" | "stock_details"
     ): string {
@@ -131,25 +174,69 @@ class Details extends React.Component<PropsInterface, StateInterface> {
         } else {
             return (
                 <div className={styles.details}>
-                    <select
-                        className={styles.menu}
-                        value={this.props.router.search_params.get("sid") || ""}
-                        onChange={this.handle_change_selected_menu_item}
-                    >
-                        <option defaultChecked hidden>
-                            請選擇股票代號
-                        </option>
-                        {Object.keys(this.props.inventory_map).map(
-                            (sid, idx) => {
-                                return (
-                                    <option
-                                        key={idx}
-                                        value={sid}
-                                    >{`${sid} ${this.props.sid_stock_info_map[sid].name}`}</option>
-                                );
+                    <div className={styles.upper}>
+                        <select
+                            className={styles.menu}
+                            value={
+                                this.props.router.search_params.get("sid") || ""
                             }
-                        )}
-                    </select>
+                            onChange={this.handle_change_selected_menu_item}
+                        >
+                            <option defaultChecked hidden>
+                                請選擇標的
+                            </option>
+                            {Object.keys(this.props.inventory_map).map(
+                                (sid, idx) => {
+                                    return (
+                                        <option
+                                            key={idx}
+                                            value={sid}
+                                        >{`${sid} ${this.props.sid_stock_info_map[sid].name}`}</option>
+                                    );
+                                }
+                            )}
+                        </select>
+                        {this.props.router.search_params.get("sid") ? (
+                            <>
+                                <RoundButton
+                                    className="p-8"
+                                    hint_text="新增交易紀錄"
+                                    onClick={() => {
+                                        this.setState({
+                                            active_modal_name:
+                                                "create_trade_record",
+                                        });
+                                    }}
+                                >
+                                    <IconPencilSquare side_length="16" />
+                                </RoundButton>
+                                <RoundButton
+                                    className="p-8"
+                                    hint_text="新增現金股利"
+                                    onClick={() => {
+                                        this.setState({
+                                            active_modal_name:
+                                                "create_cash_dividend_record",
+                                        });
+                                    }}
+                                >
+                                    <IconPiggyBank side_length="16" />
+                                </RoundButton>
+                                <RoundButton
+                                    className="p-8"
+                                    hint_text="新增買賣計畫"
+                                    onClick={() => {
+                                        this.setState({
+                                            active_modal_name:
+                                                "create_trade_plan",
+                                        });
+                                    }}
+                                >
+                                    <IconWatch side_length="16" />
+                                </RoundButton>
+                            </>
+                        ) : null}
+                    </div>
                     {this.props.router.search_params.get("sid") ? (
                         <>
                             <DetailCard
@@ -244,7 +331,13 @@ class Details extends React.Component<PropsInterface, StateInterface> {
                                                     this.props.router.search_params.get(
                                                         "sid"
                                                     )!
-                                                ]
+                                                ] +
+                                                    (this.props
+                                                        .sid_total_cash_dividend_map[
+                                                        this.props.router.search_params.get(
+                                                            "sid"
+                                                        )!
+                                                    ] || 0)
                                             ).toLocaleString()}
                                         </span>
                                     </div>
@@ -262,7 +355,8 @@ class Details extends React.Component<PropsInterface, StateInterface> {
         return (
             ((this.props.sid_market_value_map[sid] -
                 this.props.sid_cash_invested_map[sid] +
-                this.props.sid_gain_map[sid] -
+                this.props.sid_gain_map[sid] +
+                (this.props.sid_total_cash_dividend_map[sid] || 0) -
                 this.props.sid_handling_fee_map[sid]) /
                 this.props.sid_cash_invested_map[sid]) *
             100
