@@ -91,94 +91,28 @@ class Details extends React.Component<PropsInterface, StateInterface> {
             <div className={styles.main}>
                 {this.active_modal}
                 <div className={styles.background} />
-                <div className={styles.switch_button_outer}>
-                    <div className={styles.switch_button_container}>
-                        <Button
-                            className={this.get_switch_button_class(
-                                "stock_list"
-                            )}
-                            onClick={() =>
-                                this.handle_click_switch_button("stock_list")
-                            }
-                        >
-                            持股列表
-                        </Button>
-                        <hr />
-                        <Button
-                            className={this.get_switch_button_class(
-                                "stock_details"
-                            )}
-                            onClick={() =>
-                                this.handle_click_switch_button("stock_details")
-                            }
-                        >
-                            個股細節
-                        </Button>
-                    </div>
+                <div className={styles.switch_button_container}>
+                    <Button
+                        className={this.get_switch_button_class("stock_list")}
+                        onClick={() =>
+                            this.handle_click_switch_button("stock_list")
+                        }
+                    >
+                        持股列表
+                    </Button>
+                    <hr />
+                    <Button
+                        className={this.get_switch_button_class(
+                            "stock_details"
+                        )}
+                        onClick={() =>
+                            this.handle_click_switch_button("stock_details")
+                        }
+                    >
+                        個股細節
+                    </Button>
                 </div>
-
-                {this.active_subpage}
-            </div>
-        );
-    }
-    private get active_modal(): React.ReactElement<Modal> | null {
-        if (this.state.active_modal_name === "create_trade_record") {
-            return (
-                <TradeRecordModal
-                    default_sid={this.props.router.search_params.get("sid")!}
-                    hide_modal={this.hide_modal}
-                />
-            );
-        }
-        if (this.state.active_modal_name === "create_cash_dividend_record") {
-            return (
-                <CashDividendRecordModal
-                    default_sid={this.props.router.search_params.get("sid")!}
-                    hide_modal={this.hide_modal}
-                />
-            );
-        }
-        if (this.state.active_modal_name === "create_trade_plan") {
-        }
-        return null;
-    }
-    private hide_modal = (): void => {
-        this.setState({ active_modal_name: null });
-    };
-    private get_switch_button_class(
-        name: "stock_list" | "stock_details"
-    ): string {
-        if (this.state.active_subpage_name === name) return "white xs";
-        return "transparent xs";
-    }
-    private handle_click_switch_button = (
-        name: "stock_list" | "stock_details"
-    ): void => {
-        this.setState({ active_subpage_name: name });
-    };
-    private get active_subpage(): React.ReactNode {
-        if (this.state.active_subpage_name === "stock_list") {
-            return (
-                <div className={styles.stock_list}>
-                    {Object.keys(this.props.inventory_map).map((sid, idx) => {
-                        return (
-                            <DetailCard
-                                key={idx}
-                                stock_info={this.props.sid_stock_info_map[sid]}
-                                inventory={this.props.inventory_map[sid]}
-                                cash_invested={
-                                    this.props.sid_cash_invested_map[sid]
-                                }
-                                rate_of_return={this.get_rate_of_return(sid)}
-                                onClick={this.handle_click_card}
-                            />
-                        );
-                    })}
-                </div>
-            );
-        } else {
-            return (
-                <div className={styles.details}>
+                {this.state.active_subpage_name === "stock_details" ? (
                     <div className={styles.upper}>
                         <select
                             className={styles.menu}
@@ -242,6 +176,69 @@ class Details extends React.Component<PropsInterface, StateInterface> {
                             </>
                         ) : null}
                     </div>
+                ) : null}
+                {this.active_subpage}
+            </div>
+        );
+    }
+    private get active_modal(): React.ReactElement<Modal> | null {
+        if (this.state.active_modal_name === "create_trade_record") {
+            return (
+                <TradeRecordModal
+                    default_sid={this.props.router.search_params.get("sid")!}
+                    hide_modal={this.hide_modal}
+                />
+            );
+        }
+        if (this.state.active_modal_name === "create_cash_dividend_record") {
+            return (
+                <CashDividendRecordModal
+                    default_sid={this.props.router.search_params.get("sid")!}
+                    hide_modal={this.hide_modal}
+                />
+            );
+        }
+        if (this.state.active_modal_name === "create_trade_plan") {
+        }
+        return null;
+    }
+    private hide_modal = (): void => {
+        this.setState({ active_modal_name: null });
+    };
+    private get_switch_button_class(
+        name: "stock_list" | "stock_details"
+    ): string {
+        if (this.state.active_subpage_name === name) return "white xs";
+        return "transparent xs";
+    }
+    private handle_click_switch_button = (
+        name: "stock_list" | "stock_details"
+    ): void => {
+        this.setState({ active_subpage_name: name });
+    };
+    private get active_subpage(): React.ReactNode {
+        if (this.state.active_subpage_name === "stock_list") {
+            return (
+                <div className={styles.stock_list}>
+                    {Object.keys(this.props.inventory_map).map((sid, idx) => {
+                        return (
+                            <DetailCard
+                                key={idx}
+                                stock_info={this.props.sid_stock_info_map[sid]}
+                                inventory={this.props.inventory_map[sid]}
+                                cash_invested={
+                                    this.props.sid_cash_invested_map[sid]
+                                }
+                                rate_of_return={this.get_rate_of_return(sid)}
+                                onClick={this.handle_click_card}
+                            />
+                        );
+                    })}
+                </div>
+            );
+        } else {
+            return (
+                <div className={styles.details}>
                     {this.props.router.search_params.get("sid") ? (
                         <>
                             <DetailCard
