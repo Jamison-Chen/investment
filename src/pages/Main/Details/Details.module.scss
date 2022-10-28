@@ -23,20 +23,24 @@
         background-attachment: fixed;
         background-image: url("../../../assets/unnamed.jpg");
     }
-    .switch_button_container {
-        display: flex;
-        width: fit-content;
-        padding: 3px;
-        border-radius: 8px;
-        background-color: _.$light-gray;
-        margin: 0 auto;
-        margin-bottom: 10px;
-        & > hr {
-            border: none;
-            border-left: 2px solid;
-            border-radius: 10px;
-            color: _.$gray;
-            margin: 5px 4px;
+    .switch_button_outer {
+        width: 100%;
+        background-color: _.$white;
+        .switch_button_container {
+            display: flex;
+            width: fit-content;
+            padding: 3px;
+            border-radius: 8px;
+            background-color: _.$light-gray;
+            margin: 0 auto;
+            margin-bottom: 10px;
+            & > hr {
+                border: none;
+                border-left: 2px solid;
+                border-radius: 10px;
+                color: _.$gray;
+                margin: 5px 4px;
+            }
         }
     }
     & > .stock_list {
@@ -65,6 +69,7 @@
             width: 100%;
             padding: 0 15px;
             background-color: _.$white;
+            z-index: 1;
             .menu {
                 padding: 5px;
                 outline: none;

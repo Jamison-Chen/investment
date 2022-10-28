@@ -3,7 +3,6 @@ import styles from "./Plans.module.scss";
 import React from "react";
 import { connect } from "react-redux";
 
-import StretchableButton from "../../../components/StretchableButton/StretchableButton";
 import { RouterInterface, withRouter } from "../../../router";
 import { RootState, AppDispatch } from "../../../redux/store";
 import Button from "../../../components/Button/Button";
@@ -54,7 +53,6 @@ class Plans extends React.Component<PropsInterface, StateInterface> {
                     keyword={this.state.search_keyword || ""}
                     onChange={this.handle_input_change}
                 />
-                <StretchableButton />
                 <div className={styles.record_list}>
                     {this.plan_divs}
                     <div className={styles.show_more_button_outer}>

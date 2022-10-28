@@ -91,27 +91,32 @@ class Details extends React.Component<PropsInterface, StateInterface> {
             <div className={styles.main}>
                 {this.active_modal}
                 <div className={styles.background} />
-                <div className={styles.switch_button_container}>
-                    <Button
-                        className={this.get_switch_button_class("stock_list")}
-                        onClick={() =>
-                            this.handle_click_switch_button("stock_list")
-                        }
-                    >
-                        持股列表
-                    </Button>
-                    <hr />
-                    <Button
-                        className={this.get_switch_button_class(
-                            "stock_details"
-                        )}
-                        onClick={() =>
-                            this.handle_click_switch_button("stock_details")
-                        }
-                    >
-                        個股細節
-                    </Button>
+                <div className={styles.switch_button_outer}>
+                    <div className={styles.switch_button_container}>
+                        <Button
+                            className={this.get_switch_button_class(
+                                "stock_list"
+                            )}
+                            onClick={() =>
+                                this.handle_click_switch_button("stock_list")
+                            }
+                        >
+                            持股列表
+                        </Button>
+                        <hr />
+                        <Button
+                            className={this.get_switch_button_class(
+                                "stock_details"
+                            )}
+                            onClick={() =>
+                                this.handle_click_switch_button("stock_details")
+                            }
+                        >
+                            個股細節
+                        </Button>
+                    </div>
                 </div>
+
                 {this.active_subpage}
             </div>
         );
@@ -342,6 +347,9 @@ class Details extends React.Component<PropsInterface, StateInterface> {
                                         </span>
                                     </div>
                                 </div>
+                            </div>
+                            <div className={styles.block}>
+                                <h2 className={styles.title}>基本資訊</h2>
                             </div>
                         </>
                     ) : null}
