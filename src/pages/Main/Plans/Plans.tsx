@@ -12,6 +12,8 @@ import {
     get_sid_stock_info_map,
     StockInfo,
 } from "../../../redux/slices/StockInfoSlice";
+import TradePlanActionBar from "../../../components/TradePlanActionBar/TradePlanActionBar";
+import StretchableButton from "../../../components/StretchableButton/StretchableButton";
 
 function mapStateToProps(root_state: RootState) {
     let stock_info_list: StockInfo[] = root_state.stock_info.info_list;
@@ -53,6 +55,7 @@ class Plans extends React.Component<PropsInterface, StateInterface> {
                     keyword={this.state.search_keyword || ""}
                     onChange={this.handle_input_change}
                 />
+                <StretchableButton />
                 <div className={styles.record_list}>
                     {this.plan_divs}
                     <div className={styles.show_more_button_outer}>
@@ -130,7 +133,7 @@ class Plans extends React.Component<PropsInterface, StateInterface> {
                             {plan.target_quantity} 股
                         </span>
                         <span className={this.get_action_bar_outer_class(idx)}>
-                            {/* <TradeRecordActionBar record={plan} /> */}
+                            <TradePlanActionBar plan={plan} />
                         </span>
                     </div>
                 );

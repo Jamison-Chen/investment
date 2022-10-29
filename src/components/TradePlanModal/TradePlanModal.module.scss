@@ -1,0 +1,31 @@
+@use "../../global_variables" as _;
+
+.modal_inner {
+    width: min(90vw, 300px);
+    .row {
+        display: flex;
+        gap: 10px;
+        .buy_or_sell {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            span {
+                font-size: 0.9 * _.$base-font-size;
+            }
+            .toggle_outer {
+                display: flex;
+                align-items: center;
+                color: _.$blue;
+                cursor: pointer;
+                &.buy {
+                    transform: rotate(180deg);
+                }
+            }
+        }
+    }
+}
+
+.waiting {
+    height: 24.5px;
+    aspect-ratio: 1;
+}

@@ -8,6 +8,8 @@ import IconPiggyBank from "../Icons/IconPiggyBank";
 import Modal from "../Modal/Modal";
 import TradeRecordModal from "../TradeRecordModal/TradeRecordModal";
 import CashDividendRecordModal from "../CashDividendRecordModal/CashDividendRecordModal";
+import IconWatch from "../Icons/IconWatch";
+import TradePlanModal from "../TradePlanModal/TradePlanModal";
 
 interface PropsInterface {}
 
@@ -16,6 +18,7 @@ interface StateInterface {
     active_modal_name:
         | "create_trade_record"
         | "create_cash_dividend_record"
+        | "create_trade_plan"
         | null;
 }
 
@@ -65,6 +68,17 @@ export default class StretchableButton extends React.Component<
                         <IconPiggyBank side_length="23" />
                         <div className={styles.hint_text}>現金股利</div>
                     </div>
+                    <div
+                        className={styles.button}
+                        onClick={() =>
+                            this.setState({
+                                active_modal_name: "create_trade_plan",
+                            })
+                        }
+                    >
+                        <IconWatch side_length="20" />
+                        <div className={styles.hint_text}>買賣計畫</div>
+                    </div>
                 </div>
             </div>
         );
@@ -79,6 +93,8 @@ export default class StretchableButton extends React.Component<
             this.state.active_modal_name === "create_cash_dividend_record"
         ) {
             return <CashDividendRecordModal hide_modal={this.hide_modal} />;
+        } else if (this.state.active_modal_name === "create_trade_plan") {
+            return <TradePlanModal hide_modal={this.hide_modal} />;
         }
         return null;
     }

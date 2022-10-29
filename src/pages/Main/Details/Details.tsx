@@ -29,6 +29,7 @@ import Modal from "../../../components/Modal/Modal";
 import TradeRecordModal from "../../../components/TradeRecordModal/TradeRecordModal";
 import CashDividendRecordModal from "../../../components/CashDividendRecordModal/CashDividendRecordModal";
 import { get_sid_total_cash_dividend_map } from "../../../redux/slices/CashDividendRecordSlice";
+import TradePlanModal from "../../../components/TradePlanModal/TradePlanModal";
 
 function mapStateToProps(root_state: RootState) {
     let stock_info_list: StockInfo[] = root_state.stock_info.info_list;
@@ -199,6 +200,12 @@ class Details extends React.Component<PropsInterface, StateInterface> {
             );
         }
         if (this.state.active_modal_name === "create_trade_plan") {
+            return (
+                <TradePlanModal
+                    default_sid={this.props.router.search_params.get("sid")!}
+                    hide_modal={this.hide_modal}
+                />
+            );
         }
         return null;
     }
