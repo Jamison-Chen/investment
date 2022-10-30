@@ -30,6 +30,8 @@ import TradeRecordModal from "../../../components/TradeRecordModal/TradeRecordMo
 import CashDividendRecordModal from "../../../components/CashDividendRecordModal/CashDividendRecordModal";
 import { get_sid_total_cash_dividend_map } from "../../../redux/slices/CashDividendRecordSlice";
 import TradePlanModal from "../../../components/TradePlanModal/TradePlanModal";
+import BeautifulRow from "../../../components/BeautifulRow/BeautifulRow";
+import { Link } from "react-router-dom";
 
 function mapStateToProps(root_state: RootState) {
     let stock_info_list: StockInfo[] = root_state.stock_info.info_list;
@@ -52,6 +54,7 @@ function mapStateToProps(root_state: RootState) {
         stock_info_list,
         inventory_map
     );
+    let sid_memo_map = root_state.memo.sid_memo_map;
     return {
         sid_stock_info_map,
         sid_trade_records_map,
@@ -61,6 +64,7 @@ function mapStateToProps(root_state: RootState) {
         sid_gain_map,
         sid_total_cash_dividend_map,
         sid_market_value_map,
+        sid_memo_map,
     };
 }
 
@@ -74,6 +78,9 @@ interface StateInterface {
         | "create_trade_record"
         | "create_cash_dividend_record"
         | "create_trade_plan"
+        | "create_or_update_business"
+        | "create_or_update_strategy"
+        | "create_or_update_note"
         | null;
 }
 
@@ -117,9 +124,7 @@ class Details extends React.Component<PropsInterface, StateInterface> {
                     <div className={styles.upper}>
                         <select
                             className={styles.menu}
-                            value={
-                                this.props.router.search_params.get("sid") || ""
-                            }
+                            value={this.sid || ""}
                             onChange={this.handle_change_selected_menu_item}
                         >
                             <option defaultChecked hidden>
@@ -136,7 +141,7 @@ class Details extends React.Component<PropsInterface, StateInterface> {
                                 }
                             )}
                         </select>
-                        {this.props.router.search_params.get("sid") ? (
+                        {this.sid ? (
                             <>
                                 <RoundButton
                                     className="p-8"
@@ -186,7 +191,7 @@ class Details extends React.Component<PropsInterface, StateInterface> {
         if (this.state.active_modal_name === "create_trade_record") {
             return (
                 <TradeRecordModal
-                    default_sid={this.props.router.search_params.get("sid")!}
+                    default_sid={this.sid!}
                     hide_modal={this.hide_modal}
                 />
             );
@@ -194,7 +199,7 @@ class Details extends React.Component<PropsInterface, StateInterface> {
         if (this.state.active_modal_name === "create_cash_dividend_record") {
             return (
                 <CashDividendRecordModal
-                    default_sid={this.props.router.search_params.get("sid")!}
+                    default_sid={this.sid!}
                     hide_modal={this.hide_modal}
                 />
             );
@@ -202,10 +207,19 @@ class Details extends React.Component<PropsInterface, StateInterface> {
         if (this.state.active_modal_name === "create_trade_plan") {
             return (
                 <TradePlanModal
-                    default_sid={this.props.router.search_params.get("sid")!}
+                    default_sid={this.sid!}
                     hide_modal={this.hide_modal}
                 />
             );
+        }
+        if (this.state.active_modal_name === "create_or_update_business") {
+            return null;
+        }
+        if (this.state.active_modal_name === "create_or_update_strategy") {
+            return null;
+        }
+        if (this.state.active_modal_name === "create_or_update_note") {
+            return null;
         }
         return null;
     }
@@ -246,36 +260,31 @@ class Details extends React.Component<PropsInterface, StateInterface> {
         } else {
             return (
                 <div className={styles.details}>
-                    {this.props.router.search_params.get("sid") ? (
+                    {this.sid ? (
                         <>
                             <DetailCard
                                 stock_info={
-                                    this.props.sid_stock_info_map[
-                                        this.props.router.search_params.get(
-                                            "sid"
-                                        )!
-                                    ]
+                                    this.props.sid_stock_info_map[this.sid]
                                 }
-                                inventory={
-                                    this.props.inventory_map[
-                                        this.props.router.search_params.get(
-                                            "sid"
-                                        )!
-                                    ]
-                                }
+                                inventory={this.props.inventory_map[this.sid]}
                                 cash_invested={
-                                    this.props.sid_cash_invested_map[
-                                        this.props.router.search_params.get(
-                                            "sid"
-                                        )!
-                                    ]
+                                    this.props.sid_cash_invested_map[this.sid]
                                 }
                                 rate_of_return={this.get_rate_of_return(
-                                    this.props.router.search_params.get("sid")!
+                                    this.sid
                                 )}
                             />
                             <div className={styles.block}>
-                                <h2 className={styles.title}>庫存成本</h2>
+                                <h2 className={styles.title}>
+                                    庫存成本
+                                    <Link
+                                        to={`/investment/records?sid=${this.sid}`}
+                                    >
+                                        <Button className="transparent xs">
+                                            查看交易紀錄
+                                        </Button>
+                                    </Link>
+                                </h2>
                                 <div
                                     className={
                                         styles.body + " " + styles.histogram
@@ -313,9 +322,7 @@ class Details extends React.Component<PropsInterface, StateInterface> {
                                             {Math.round(
                                                 this.props
                                                     .sid_cash_invested_map[
-                                                    this.props.router.search_params.get(
-                                                        "sid"
-                                                    )!
+                                                    this.sid
                                                 ]
                                             ).toLocaleString()}
                                         </span>
@@ -325,9 +332,7 @@ class Details extends React.Component<PropsInterface, StateInterface> {
                                         <span className={styles.number}>
                                             $
                                             {this.props.sid_market_value_map[
-                                                this.props.router.search_params.get(
-                                                    "sid"
-                                                )!
+                                                this.sid
                                             ].toLocaleString()}
                                         </span>
                                     </div>
@@ -337,15 +342,11 @@ class Details extends React.Component<PropsInterface, StateInterface> {
                                             $
                                             {Math.round(
                                                 this.props.sid_gain_map[
-                                                    this.props.router.search_params.get(
-                                                        "sid"
-                                                    )!
+                                                    this.sid
                                                 ] +
                                                     (this.props
                                                         .sid_total_cash_dividend_map[
-                                                        this.props.router.search_params.get(
-                                                            "sid"
-                                                        )!
+                                                        this.sid
                                                     ] || 0)
                                             ).toLocaleString()}
                                         </span>
@@ -354,6 +355,47 @@ class Details extends React.Component<PropsInterface, StateInterface> {
                             </div>
                             <div className={styles.block}>
                                 <h2 className={styles.title}>基本資訊</h2>
+                                <div className={styles.body}>
+                                    <BeautifulRow
+                                        label="主要業務"
+                                        value={
+                                            this.props.sid_memo_map[this.sid]
+                                                ?.business
+                                        }
+                                        onClick={() => {
+                                            this.setState({
+                                                active_modal_name:
+                                                    "create_or_update_business",
+                                            });
+                                        }}
+                                    />
+                                    <BeautifulRow
+                                        label="投資策略"
+                                        value={
+                                            this.props.sid_memo_map[this.sid]
+                                                ?.strategy
+                                        }
+                                        onClick={() => {
+                                            this.setState({
+                                                active_modal_name:
+                                                    "create_or_update_strategy",
+                                            });
+                                        }}
+                                    />
+                                    <BeautifulRow
+                                        label="備註"
+                                        value={
+                                            this.props.sid_memo_map[this.sid]
+                                                ?.note
+                                        }
+                                        onClick={() => {
+                                            this.setState({
+                                                active_modal_name:
+                                                    "create_or_update_note",
+                                            });
+                                        }}
+                                    />
+                                </div>
                             </div>
                         </>
                     ) : null}
@@ -361,9 +403,10 @@ class Details extends React.Component<PropsInterface, StateInterface> {
             );
         }
     }
-    private get_rate_of_return(
-        sid: string = this.props.router.search_params.get("sid")!
-    ): number {
+    private get sid(): string | null {
+        return this.props.router.search_params.get("sid");
+    }
+    private get_rate_of_return(sid: string = this.sid!): number {
         return (
             ((this.props.sid_market_value_map[sid] -
                 this.props.sid_cash_invested_map[sid] +
@@ -385,9 +428,8 @@ class Details extends React.Component<PropsInterface, StateInterface> {
     };
     private get histogram_chart_data(): (string | number)[][] {
         let result: (string | number)[][] = [];
-        let sid = this.props.router.search_params.get("sid");
-        if (sid) {
-            for (let record of this.props.sid_trade_records_map[sid]) {
+        if (this.sid) {
+            for (let record of this.props.sid_trade_records_map[this.sid]) {
                 let p = record.deal_price;
                 let q = record.deal_quantity;
                 let t = record.deal_time;

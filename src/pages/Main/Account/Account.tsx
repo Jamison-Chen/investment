@@ -47,40 +47,39 @@ class Account extends React.Component<PropsInterface, StateInterface> {
                 <BeautifulBlock>
                     <BeautifulRow
                         label="相片"
+                        value={
+                            this.props.avatar_url ? (
+                                <img
+                                    className={styles.avatar}
+                                    src={this.props.avatar_url}
+                                    alt=""
+                                />
+                            ) : null
+                        }
                         onClick={() =>
                             this.props.router.navigate(
                                 "/investment/account/avatar"
                             )
                         }
-                    >
-                        {this.props.avatar_url ? (
-                            <img
-                                className={styles.avatar}
-                                src={this.props.avatar_url}
-                                alt=""
-                            />
-                        ) : null}
-                    </BeautifulRow>
+                    />
                     <BeautifulRow
                         label="姓名"
+                        value={this.props.username}
                         onClick={() =>
                             this.props.router.navigate(
                                 "/investment/account/username"
                             )
                         }
-                    >
-                        {this.props.username}
-                    </BeautifulRow>
+                    />
                     <BeautifulRow
                         label="Email"
+                        value={this.props.email}
                         onClick={() =>
                             this.props.router.navigate(
                                 "/investment/account/email"
                             )
                         }
-                    >
-                        {this.props.email}
-                    </BeautifulRow>
+                    />
                 </BeautifulBlock>
                 <div className={styles.header}>
                     <h1>安全性</h1>
@@ -88,14 +87,13 @@ class Account extends React.Component<PropsInterface, StateInterface> {
                 <BeautifulBlock>
                     <BeautifulRow
                         label="密碼"
+                        value="********"
                         onClick={() =>
                             this.props.router.navigate(
                                 "/investment/account/password"
                             )
                         }
-                    >
-                        ********
-                    </BeautifulRow>
+                    />
                 </BeautifulBlock>
             </div>
         );

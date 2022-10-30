@@ -32,7 +32,7 @@ class Login extends React.Component<PropsInterface, StateInterface> {
     public async componentDidMount(): Promise<void> {
         // Go home if already login
         let response: any = await Utils.check_login();
-        if (response && response.success) {
+        if (response?.success) {
             this.props.router.navigate("/investment");
         }
         window.addEventListener("keypress", this.handle_hit_enter);
@@ -88,7 +88,7 @@ class Login extends React.Component<PropsInterface, StateInterface> {
             "post",
             request_body
         );
-        if (response.success) {
+        if (response?.success) {
             let from = this.props.router.search_params.get("from");
             this.props.router.navigate(from || `/investment`);
         } else {

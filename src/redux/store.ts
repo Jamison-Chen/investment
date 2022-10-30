@@ -5,6 +5,7 @@ import trade_record_reducer from "./slices/TradeRecordSlice";
 import fetch_all_cash_dividend_reducer from "./slices/CashDividendRecordSlice";
 import stock_info_reducer from "./slices/StockInfoSlice";
 import trade_plan_reducer from "./slices/TradePlanSlice";
+import memo_reducer from "./slices/MemoSlice";
 import error_reducer from "./slices/ErrorSlice";
 
 export const store = configureStore({
@@ -14,6 +15,7 @@ export const store = configureStore({
         cash_dividend: fetch_all_cash_dividend_reducer,
         stock_info: stock_info_reducer,
         trade_plan: trade_plan_reducer,
+        memo: memo_reducer,
         error: error_reducer,
     },
 });

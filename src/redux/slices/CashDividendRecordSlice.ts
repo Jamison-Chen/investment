@@ -35,7 +35,7 @@ export const fetch_all_cash_dividend_records = createAsyncThunk(
             "post",
             request_body
         );
-        if (response && response.success) return response.data;
+        if (response?.success) return response.data;
         else throw Error("Failed to fetch cash dividend record");
     }
 );
@@ -55,7 +55,7 @@ export const create_record = createAsyncThunk(
             "post",
             request_body
         );
-        if (response && response.success) return response.data;
+        if (response?.success) return response.data;
         else throw Error("Failed to create cash dividend record");
     }
 );
@@ -76,7 +76,7 @@ export const update_record = createAsyncThunk(
             "post",
             request_body
         );
-        if (response && response.success) return response.data;
+        if (response?.success) return response.data;
         else throw Error("Failed to update cash dividend record");
     }
 );
@@ -93,7 +93,7 @@ export const delete_record = createAsyncThunk(
             "post",
             request_body
         );
-        if (response && response.success) return id;
+        if (response?.success) return id;
         else throw Error("Failed to delete cash dividend record");
     }
 );

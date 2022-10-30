@@ -33,7 +33,19 @@ export const fetch_all_stock_info = createAsyncThunk(
             }`,
             "get"
         );
-        if (response && response.success) return response.data;
+        if (response?.success) return response.data;
+        else throw Error("Failed to fetch stock info");
+    }
+);
+
+export const fetch_single_stock_info = createAsyncThunk(
+    "stock_info/fetch_single_stock_info",
+    async (sid: string): Promise<StockInfo> => {
+        let response = await Utils.send_request(
+            `stock/info?sid-list=${sid}`,
+            "get"
+        );
+        if (response?.success) return response.data;
         else throw Error("Failed to fetch stock info");
     }
 );
@@ -48,7 +60,18 @@ export const stock_info_slice = createSlice({
             .addCase(fetch_all_stock_info.fulfilled, (state, action) => {
                 state.info_list = [...action.payload];
             })
-            .addCase(fetch_all_stock_info.rejected, (state) => {});
+            .addCase(fetch_all_stock_info.rejected, (state) => {})
+
+            .addCase(fetch_single_stock_info.pending, (state) => {})
+            .addCase(fetch_single_stock_info.fulfilled, (state, action) => {
+                state.info_list = [
+                    action.payload,
+                    ...state.info_list.filter(
+                        (each) => each.sid !== action.payload.sid
+                    ),
+                ];
+            })
+            .addCase(fetch_single_stock_info.rejected, (state) => {});
     },
 });
 

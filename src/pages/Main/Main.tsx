@@ -23,6 +23,7 @@ import IconWatch from "../../components/Icons/IconWatch";
 import IconViewList from "../../components/Icons/IconViewList";
 import ErrorList from "../../components/ErrorList/ErrorList";
 import { fetch_all_trade_plans } from "../../redux/slices/TradePlanSlice";
+import { fetch_all_memo } from "../../redux/slices/MemoSlice";
 
 function mapStateToProps(root_state: RootState) {
     let username = root_state.account.username;
@@ -90,6 +91,7 @@ class Main extends React.Component<PropsInterface, StateInterface> {
                 ]);
                 Utils.remove_loading_screen();
                 this.props.dispatch(fetch_all_trade_plans());
+                this.props.dispatch(fetch_all_memo());
             });
     }
     public async componentDidMount(): Promise<void> {

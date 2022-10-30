@@ -36,7 +36,7 @@ export const fetch_all_trade_plans = createAsyncThunk(
             "post",
             request_body
         );
-        if (response && response.success) return response.data;
+        if (response?.success) return response.data;
         else throw Error("Failed to fetch trade plans");
     }
 );
@@ -55,7 +55,7 @@ export const create_plan = createAsyncThunk(
             "post",
             request_body
         );
-        if (response && response.success) return response.data;
+        if (response?.success) return response.data;
         else throw Error("Failed to create trade plan");
     }
 );
@@ -75,7 +75,7 @@ export const update_plan = createAsyncThunk(
             "post",
             request_body
         );
-        if (response && response.success) return response.data;
+        if (response?.success) return response.data;
         else throw Error("Failed to update trade plan");
     }
 );
@@ -92,7 +92,7 @@ export const delete_plan = createAsyncThunk(
             "post",
             request_body
         );
-        if (response && response.success) return id;
+        if (response?.success) return id;
         else throw Error("Failed to delete trade plan");
     }
 );

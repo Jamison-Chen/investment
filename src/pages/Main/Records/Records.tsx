@@ -36,7 +36,7 @@ class Records extends React.Component<PropsInterface, StateInterface> {
         super(props);
         this.state = {
             active_subpage_name: "trade",
-            search_keyword: null,
+            search_keyword: this.props.router.search_params.get("sid"),
             active_row_index: null,
             shown_record_number: 15,
         };

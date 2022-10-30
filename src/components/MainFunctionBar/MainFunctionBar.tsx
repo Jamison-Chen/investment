@@ -132,7 +132,7 @@ export default class MainFunctionBar extends React.Component<
             "post",
             new URLSearchParams()
         );
-        if (response && response.success) Utils.go_to_login_page();
+        if (response?.success) Utils.go_to_login_page();
         else throw Error("Failed to sign out.");
     };
 }

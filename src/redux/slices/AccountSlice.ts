@@ -26,7 +26,7 @@ export const fetch_account_info = createAsyncThunk(
         avatar_url: string | null;
     }> => {
         let response = await Utils.check_login();
-        if (response && response.success) return response.data;
+        if (response?.success) return response.data;
         else throw Error("Failed to fetch info");
     }
 );
@@ -46,7 +46,7 @@ export const update_account_info = createAsyncThunk(
             "post",
             JSON.stringify(request_body)
         );
-        if (response && response.success) return response.data;
+        if (response?.success) return response.data;
         else throw Error("Failed to update info");
     }
 );

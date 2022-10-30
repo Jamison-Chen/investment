@@ -83,7 +83,7 @@ class Register extends React.Component<PropsInterface, StateInterface> {
             "post",
             request_body
         );
-        if (response && response.success) {
+        if (response?.success) {
             this.props.router.navigate("/investment/login");
         }
     };

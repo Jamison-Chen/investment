@@ -45,7 +45,7 @@ export const fetch_all_trade_records = createAsyncThunk(
             "post",
             request_body
         );
-        if (response && response.success) return response.data;
+        if (response?.success) return response.data;
         else throw Error("Failed to fetch trade records");
     }
 );
@@ -65,7 +65,7 @@ export const create_record = createAsyncThunk(
             "post",
             request_body
         );
-        if (response && response.success) return response.data;
+        if (response?.success) return response.data;
         else throw Error("Failed to create trade record");
     }
 );
@@ -86,7 +86,7 @@ export const update_record = createAsyncThunk(
             "post",
             request_body
         );
-        if (response && response.success) return response.data;
+        if (response?.success) return response.data;
         else throw Error("Failed to update trade record");
     }
 );
@@ -103,7 +103,7 @@ export const delete_record = createAsyncThunk(
             "post",
             request_body
         );
-        if (response && response.success) return id;
+        if (response?.success) return id;
         else throw Error("Failed to delete trade record");
     }
 );

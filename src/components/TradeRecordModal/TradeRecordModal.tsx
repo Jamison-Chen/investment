@@ -14,6 +14,7 @@ import {
     TradeRecord,
 } from "../../redux/slices/TradeRecordSlice";
 import { RootState, AppDispatch } from "../../redux/store";
+import { fetch_single_stock_info } from "../../redux/slices/StockInfoSlice";
 
 function mapStateToProps(root_state: RootState) {
     let is_waiting = root_state.trade_record.is_waiting;
@@ -274,6 +275,7 @@ class TradeRecordModal extends React.Component<PropsInterface, StateInterface> {
                     .then((response) => {
                         if (response) this.props.hide_modal();
                     });
+                this.props.dispatch(fetch_single_stock_info(this.state.sid));
             }
         }
     };
