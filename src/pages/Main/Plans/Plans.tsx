@@ -39,7 +39,7 @@ class Plans extends React.Component<PropsInterface, StateInterface> {
     public constructor(props: PropsInterface) {
         super(props);
         this.state = {
-            search_keyword: null,
+            search_keyword: this.props.router.search_params.get("sid"),
             active_row_index: null,
             shown_record_number: 15,
         };

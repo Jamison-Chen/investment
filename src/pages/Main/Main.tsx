@@ -61,7 +61,7 @@ class Main extends React.Component<PropsInterface, StateInterface> {
                 {
                     tab_icon: <IconViewList side_length="100%" />,
                     tab_name: "持倉細況",
-                    path: "/investment/details",
+                    path: "/investment/stock-list",
                 },
                 {
                     tab_icon: <IconJournalText side_length="95%" />,

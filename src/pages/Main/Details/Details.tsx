@@ -2,6 +2,7 @@ import styles from "./Details.module.scss";
 
 import React, { ChangeEvent } from "react";
 import { connect } from "react-redux";
+import { Chart } from "react-google-charts";
 
 import { RouterInterface, withRouter } from "../../../router";
 import { RootState } from "../../../redux/store";
@@ -15,11 +16,10 @@ import {
     get_inventory_map,
     get_sid_cash_invested_map,
     get_sid_gain_map,
-    get_sid_handling_fee_map,
     get_sid_trade_records_map,
     get_stock_warehouse,
+    TradeRecord,
 } from "../../../redux/slices/TradeRecordSlice";
-import Chart from "react-google-charts";
 import DetailCard from "../../../components/DetailCard/DetailCard";
 import RoundButton from "../../../components/RoundButton/RoundButton";
 import IconPencilSquare from "../../../components/Icons/IconPencilSquare";
@@ -45,7 +45,6 @@ function mapStateToProps(root_state: RootState) {
         )
     );
     let sid_cash_invested_map = get_sid_cash_invested_map(stock_warehouse);
-    let sid_handling_fee_map = get_sid_handling_fee_map(sid_trade_records_map);
     let sid_gain_map = get_sid_gain_map(sid_trade_records_map);
     let cash_dividend_list = root_state.cash_dividend.record_list;
     let sid_total_cash_dividend_map =
@@ -60,7 +59,6 @@ function mapStateToProps(root_state: RootState) {
         sid_trade_records_map,
         inventory_map,
         sid_cash_invested_map,
-        sid_handling_fee_map,
         sid_gain_map,
         sid_total_cash_dividend_map,
         sid_market_value_map,
@@ -73,7 +71,6 @@ interface PropsInterface
         ReturnType<typeof mapStateToProps> {}
 
 interface StateInterface {
-    active_subpage_name: "stock_list" | "stock_details";
     active_modal_name:
         | "create_trade_record"
         | "create_cash_dividend_record"
@@ -89,7 +86,6 @@ class Details extends React.Component<PropsInterface, StateInterface> {
     public constructor(props: PropsInterface) {
         super(props);
         this.state = {
-            active_subpage_name: "stock_list",
             active_modal_name: null,
         };
     }
@@ -99,91 +95,173 @@ class Details extends React.Component<PropsInterface, StateInterface> {
             <div className={styles.main}>
                 {this.active_modal}
                 <div className={styles.background} />
-                <div className={styles.switch_button_container}>
-                    <Button
-                        className={this.get_switch_button_class("stock_list")}
-                        onClick={() =>
-                            this.handle_click_switch_button("stock_list")
-                        }
+                <div className={styles.upper}>
+                    <select
+                        className={styles.menu}
+                        value={this.sid}
+                        onChange={this.handle_change_selected_menu_item}
                     >
-                        持股列表
-                    </Button>
-                    <hr />
-                    <Button
-                        className={this.get_switch_button_class(
-                            "stock_details"
+                        {Object.keys(this.props.inventory_map).map(
+                            (sid, idx) => {
+                                return (
+                                    <option
+                                        key={idx}
+                                        value={sid}
+                                    >{`${sid} ${this.props.sid_stock_info_map[sid].name}`}</option>
+                                );
+                            }
                         )}
-                        onClick={() =>
-                            this.handle_click_switch_button("stock_details")
-                        }
+                    </select>
+                    <RoundButton
+                        className="p-8"
+                        hint_text="新增交易紀錄"
+                        onClick={() => {
+                            this.setState({
+                                active_modal_name: "create_trade_record",
+                            });
+                        }}
                     >
-                        個股細節
-                    </Button>
+                        <IconPencilSquare side_length="16" />
+                    </RoundButton>
+                    <RoundButton
+                        className="p-8"
+                        hint_text="新增現金股利"
+                        onClick={() => {
+                            this.setState({
+                                active_modal_name:
+                                    "create_cash_dividend_record",
+                            });
+                        }}
+                    >
+                        <IconPiggyBank side_length="16" />
+                    </RoundButton>
+                    <RoundButton
+                        className="p-8"
+                        hint_text="新增買賣計畫"
+                        onClick={() => {
+                            this.setState({
+                                active_modal_name: "create_trade_plan",
+                            });
+                        }}
+                    >
+                        <IconWatch side_length="16" />
+                    </RoundButton>
                 </div>
-                {this.state.active_subpage_name === "stock_details" ? (
-                    <div className={styles.upper}>
-                        <select
-                            className={styles.menu}
-                            value={this.sid || ""}
-                            onChange={this.handle_change_selected_menu_item}
-                        >
-                            <option defaultChecked hidden>
-                                請選擇標的
-                            </option>
-                            {Object.keys(this.props.inventory_map).map(
-                                (sid, idx) => {
-                                    return (
-                                        <option
-                                            key={idx}
-                                            value={sid}
-                                        >{`${sid} ${this.props.sid_stock_info_map[sid].name}`}</option>
-                                    );
-                                }
-                            )}
-                        </select>
-                        {this.sid ? (
-                            <>
-                                <RoundButton
-                                    className="p-8"
-                                    hint_text="新增交易紀錄"
-                                    onClick={() => {
-                                        this.setState({
-                                            active_modal_name:
-                                                "create_trade_record",
-                                        });
-                                    }}
-                                >
-                                    <IconPencilSquare side_length="16" />
-                                </RoundButton>
-                                <RoundButton
-                                    className="p-8"
-                                    hint_text="新增現金股利"
-                                    onClick={() => {
-                                        this.setState({
-                                            active_modal_name:
-                                                "create_cash_dividend_record",
-                                        });
-                                    }}
-                                >
-                                    <IconPiggyBank side_length="16" />
-                                </RoundButton>
-                                <RoundButton
-                                    className="p-8"
-                                    hint_text="新增買賣計畫"
-                                    onClick={() => {
-                                        this.setState({
-                                            active_modal_name:
-                                                "create_trade_plan",
-                                        });
-                                    }}
-                                >
-                                    <IconWatch side_length="16" />
-                                </RoundButton>
-                            </>
-                        ) : null}
+                <div className={styles.details}>
+                    <DetailCard sid={this.sid} />
+                    <div className={styles.block}>
+                        <h2 className={styles.title}>
+                            庫存成本
+                            <Link to={`/investment/records?sid=${this.sid}`}>
+                                <Button className="transparent xs">
+                                    查看交易紀錄
+                                </Button>
+                            </Link>
+                        </h2>
+                        <div className={styles.body + " " + styles.histogram}>
+                            <Chart
+                                chartType="Histogram"
+                                data={this.histogram_chart_data}
+                                options={{
+                                    legend: { position: "none" },
+                                    colors: ["#444"],
+                                    chartArea: {
+                                        left: "10%",
+                                        top: "15%",
+                                        width: "85%",
+                                        height: "70%",
+                                    },
+                                }}
+                                width={"100%"}
+                                height={"100%"}
+                            />
+                        </div>
                     </div>
-                ) : null}
-                {this.active_subpage}
+                    <div className={styles.block}>
+                        <h2 className={styles.title}>投資績效</h2>
+                        <div className={styles.body + " " + styles.performance}>
+                            <div className={styles.row}>
+                                <span>現金投入</span>
+                                <span className={styles.number}>
+                                    $
+                                    {Math.round(
+                                        this.props.sid_cash_invested_map[
+                                            this.sid
+                                        ]
+                                    ).toLocaleString()}
+                                </span>
+                            </div>
+                            <div className={styles.row}>
+                                <span>證券市值</span>
+                                <span className={styles.number}>
+                                    $
+                                    {this.props.sid_market_value_map[
+                                        this.sid
+                                    ]?.toLocaleString()}
+                                </span>
+                            </div>
+                            <div className={styles.row}>
+                                <span>實現損益</span>
+                                <span className={styles.number}>
+                                    $
+                                    {Math.round(
+                                        this.props.sid_gain_map[this.sid] +
+                                            (this.props
+                                                .sid_total_cash_dividend_map[
+                                                this.sid
+                                            ] || 0)
+                                    ).toLocaleString()}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div className={styles.block}>
+                        <h2 className={styles.title}>
+                            我的筆記
+                            <Link to={`/investment/plans?sid=${this.sid}`}>
+                                <Button className="transparent xs">
+                                    查看買賣計畫
+                                </Button>
+                            </Link>
+                        </h2>
+                        <div className={styles.body}>
+                            <BeautifulRow
+                                label="主要業務"
+                                value={
+                                    this.props.sid_memo_map[this.sid]?.business
+                                }
+                                onClick={() => {
+                                    this.setState({
+                                        active_modal_name:
+                                            "create_or_update_business",
+                                    });
+                                }}
+                            />
+                            <BeautifulRow
+                                label="投資策略"
+                                value={
+                                    this.props.sid_memo_map[this.sid]?.strategy
+                                }
+                                onClick={() => {
+                                    this.setState({
+                                        active_modal_name:
+                                            "create_or_update_strategy",
+                                    });
+                                }}
+                            />
+                            <BeautifulRow
+                                label="備註"
+                                value={this.props.sid_memo_map[this.sid]?.note}
+                                onClick={() => {
+                                    this.setState({
+                                        active_modal_name:
+                                            "create_or_update_note",
+                                    });
+                                }}
+                            />
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
@@ -226,217 +304,25 @@ class Details extends React.Component<PropsInterface, StateInterface> {
     private hide_modal = (): void => {
         this.setState({ active_modal_name: null });
     };
-    private get_switch_button_class(
-        name: "stock_list" | "stock_details"
-    ): string {
-        if (this.state.active_subpage_name === name) return "white xs";
-        return "transparent xs";
+    private get sid(): string {
+        return this.props.router.params.sid!;
     }
-    private handle_click_switch_button = (
-        name: "stock_list" | "stock_details"
-    ): void => {
-        this.setState({ active_subpage_name: name });
-    };
-    private get active_subpage(): React.ReactNode {
-        if (this.state.active_subpage_name === "stock_list") {
-            return (
-                <div className={styles.stock_list}>
-                    {Object.keys(this.props.inventory_map).map((sid, idx) => {
-                        return (
-                            <DetailCard
-                                key={idx}
-                                stock_info={this.props.sid_stock_info_map[sid]}
-                                inventory={this.props.inventory_map[sid]}
-                                cash_invested={
-                                    this.props.sid_cash_invested_map[sid]
-                                }
-                                rate_of_return={this.get_rate_of_return(sid)}
-                                onClick={this.handle_click_card}
-                            />
-                        );
-                    })}
-                </div>
-            );
-        } else {
-            return (
-                <div className={styles.details}>
-                    {this.sid ? (
-                        <>
-                            <DetailCard
-                                stock_info={
-                                    this.props.sid_stock_info_map[this.sid]
-                                }
-                                inventory={this.props.inventory_map[this.sid]}
-                                cash_invested={
-                                    this.props.sid_cash_invested_map[this.sid]
-                                }
-                                rate_of_return={this.get_rate_of_return(
-                                    this.sid
-                                )}
-                            />
-                            <div className={styles.block}>
-                                <h2 className={styles.title}>
-                                    庫存成本
-                                    <Link
-                                        to={`/investment/records?sid=${this.sid}`}
-                                    >
-                                        <Button className="transparent xs">
-                                            查看交易紀錄
-                                        </Button>
-                                    </Link>
-                                </h2>
-                                <div
-                                    className={
-                                        styles.body + " " + styles.histogram
-                                    }
-                                >
-                                    <Chart
-                                        chartType="Histogram"
-                                        data={this.histogram_chart_data}
-                                        options={{
-                                            legend: { position: "none" },
-                                            colors: ["#444"],
-                                            chartArea: {
-                                                left: "10%",
-                                                top: "15%",
-                                                width: "85%",
-                                                height: "70%",
-                                            },
-                                        }}
-                                        width={"100%"}
-                                        height={"100%"}
-                                    />
-                                </div>
-                            </div>
-                            <div className={styles.block}>
-                                <h2 className={styles.title}>投資績效</h2>
-                                <div
-                                    className={
-                                        styles.body + " " + styles.performance
-                                    }
-                                >
-                                    <div className={styles.row}>
-                                        <span>現金投入</span>
-                                        <span className={styles.number}>
-                                            $
-                                            {Math.round(
-                                                this.props
-                                                    .sid_cash_invested_map[
-                                                    this.sid
-                                                ]
-                                            ).toLocaleString()}
-                                        </span>
-                                    </div>
-                                    <div className={styles.row}>
-                                        <span>證券市值</span>
-                                        <span className={styles.number}>
-                                            $
-                                            {this.props.sid_market_value_map[
-                                                this.sid
-                                            ].toLocaleString()}
-                                        </span>
-                                    </div>
-                                    <div className={styles.row}>
-                                        <span>實現損益</span>
-                                        <span className={styles.number}>
-                                            $
-                                            {Math.round(
-                                                this.props.sid_gain_map[
-                                                    this.sid
-                                                ] +
-                                                    (this.props
-                                                        .sid_total_cash_dividend_map[
-                                                        this.sid
-                                                    ] || 0)
-                                            ).toLocaleString()}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className={styles.block}>
-                                <h2 className={styles.title}>基本資訊</h2>
-                                <div className={styles.body}>
-                                    <BeautifulRow
-                                        label="主要業務"
-                                        value={
-                                            this.props.sid_memo_map[this.sid]
-                                                ?.business
-                                        }
-                                        onClick={() => {
-                                            this.setState({
-                                                active_modal_name:
-                                                    "create_or_update_business",
-                                            });
-                                        }}
-                                    />
-                                    <BeautifulRow
-                                        label="投資策略"
-                                        value={
-                                            this.props.sid_memo_map[this.sid]
-                                                ?.strategy
-                                        }
-                                        onClick={() => {
-                                            this.setState({
-                                                active_modal_name:
-                                                    "create_or_update_strategy",
-                                            });
-                                        }}
-                                    />
-                                    <BeautifulRow
-                                        label="備註"
-                                        value={
-                                            this.props.sid_memo_map[this.sid]
-                                                ?.note
-                                        }
-                                        onClick={() => {
-                                            this.setState({
-                                                active_modal_name:
-                                                    "create_or_update_note",
-                                            });
-                                        }}
-                                    />
-                                </div>
-                            </div>
-                        </>
-                    ) : null}
-                </div>
-            );
-        }
+    private get trade_record_list(): TradeRecord[] {
+        return this.props.sid_trade_records_map[this.sid] || [];
     }
-    private get sid(): string | null {
-        return this.props.router.search_params.get("sid");
-    }
-    private get_rate_of_return(sid: string = this.sid!): number {
-        return (
-            ((this.props.sid_market_value_map[sid] -
-                this.props.sid_cash_invested_map[sid] +
-                this.props.sid_gain_map[sid] +
-                (this.props.sid_total_cash_dividend_map[sid] || 0) -
-                this.props.sid_handling_fee_map[sid]) /
-                this.props.sid_cash_invested_map[sid]) *
-            100
-        );
-    }
-    private handle_click_card = (sid: string) => {
-        this.setState({ active_subpage_name: "stock_details" });
-        this.props.router.set_search_params({ sid: sid });
-    };
     private handle_change_selected_menu_item = (
         e: ChangeEvent<HTMLSelectElement>
     ) => {
-        this.props.router.set_search_params({ sid: e.target.value });
+        this.props.router.navigate(`/investment/details/${e.target.value}`);
     };
     private get histogram_chart_data(): (string | number)[][] {
         let result: (string | number)[][] = [];
-        if (this.sid) {
-            for (let record of this.props.sid_trade_records_map[this.sid]) {
-                let p = record.deal_price;
-                let q = record.deal_quantity;
-                let t = record.deal_time;
-                if (q >= 0) {
-                    for (let i = 0; i < q; i++) result.push([t, p]);
-                } else for (let i = 0; i < -q; i++) result.shift();
-            }
+        for (let record of this.trade_record_list) {
+            let p = record.deal_price;
+            let q = record.deal_quantity;
+            let t = record.deal_time;
+            if (q >= 0) for (let i = 0; i < q; i++) result.push([t, p]);
+            else for (let i = 0; i < -q; i++) result.shift();
         }
         result.splice(0, 0, ["日期", "價格"]);
         return result;

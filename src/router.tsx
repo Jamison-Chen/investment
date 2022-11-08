@@ -21,6 +21,7 @@ import Register from "./pages/Register/Register";
 import Account from "./pages/Main/Account/Account";
 import Overview from "./pages/Main/Overview/Overview";
 import Records from "./pages/Main/Records/Records";
+import StockList from "./pages/Main/StockList/StockList";
 import Details from "./pages/Main/Details/Details";
 import Plans from "./pages/Main/Plans/Plans";
 import ExternalApps from "./pages/Main/ExternalApps/ExternalApps";
@@ -50,7 +51,8 @@ export default function MyRouter() {
                     ></Route>
                     <Route path="overview" element={<Overview />}></Route>
                     <Route path="records" element={<Records />}></Route>
-                    <Route path="details" element={<Details />}></Route>
+                    <Route path="stock-list" element={<StockList />}></Route>
+                    <Route path="details/:sid" element={<Details />}></Route>
                     <Route path="plans" element={<Plans />}></Route>
                     <Route
                         path="external-apps"

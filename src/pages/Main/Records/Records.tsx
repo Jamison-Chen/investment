@@ -96,7 +96,6 @@ class Records extends React.Component<PropsInterface, StateInterface> {
     ): void => {
         this.setState({
             active_subpage_name: name,
-            search_keyword: null,
             shown_record_number: 15,
         });
     };
