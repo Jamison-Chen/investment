@@ -105,7 +105,7 @@ class Main extends React.Component<PropsInterface, StateInterface> {
                     user_avatar_url={this.props.avatar_url || person_fill}
                     username={this.props.username}
                     is_active_in_short_screen={this.state.is_hidden_bar_active}
-                    toggle={this.toggle_main_function_bar}
+                    hide={this.hide_main_function_bar}
                 >
                     {this.state.subpage_list.map((each, idx) => {
                         return (
@@ -113,7 +113,7 @@ class Main extends React.Component<PropsInterface, StateInterface> {
                                 tab_icon={each.tab_icon}
                                 tab_name={each.tab_name}
                                 to={`${each.path}`}
-                                onClick={this.toggle_main_function_bar}
+                                onClick={this.hide_main_function_bar}
                                 key={idx}
                             />
                         );
@@ -122,7 +122,7 @@ class Main extends React.Component<PropsInterface, StateInterface> {
                 <div className={styles.body}>
                     <Header
                         avatar_url={this.props.avatar_url || person_fill}
-                        handle_click_list_button={this.toggle_main_function_bar}
+                        handle_click_list_button={this.show_main_function_bar}
                     />
                     <Outlet />
                     <Footer subpage_list={this.state.subpage_list} />
@@ -130,10 +130,11 @@ class Main extends React.Component<PropsInterface, StateInterface> {
             </main>
         );
     }
-    private toggle_main_function_bar = (): void => {
-        this.setState((state, props) => {
-            return { is_hidden_bar_active: !state.is_hidden_bar_active };
-        });
+    private show_main_function_bar = (): void => {
+        this.setState({ is_hidden_bar_active: true });
+    };
+    private hide_main_function_bar = (): void => {
+        this.setState({ is_hidden_bar_active: false });
     };
 }
 

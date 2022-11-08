@@ -13,7 +13,7 @@ interface PropsInterface {
     username: string;
     children: React.ReactNode[];
     is_active_in_short_screen: boolean;
-    toggle: () => void;
+    hide: () => void;
 }
 
 interface StateInterface {
@@ -43,7 +43,7 @@ export default class MainFunctionBar extends React.Component<
                     }
                 >
                     {this.active_modal}
-                    <NavLink to="/investment/account" onClick={this.toggle}>
+                    <NavLink to="/investment/account" onClick={this.props.hide}>
                         <div className={styles.user_info}>
                             <img src={this.props.user_avatar_url} alt="" />
                             <div className={styles.middle}>
@@ -65,7 +65,7 @@ export default class MainFunctionBar extends React.Component<
                         <NavLink
                             to={"/investment/setting"}
                             className={styles.setting}
-                            onClick={this.toggle}
+                            onClick={this.props.hide}
                         >
                             <IconGearFill side_length="14" />
                             <span>設定</span>
@@ -79,7 +79,7 @@ export default class MainFunctionBar extends React.Component<
                             ? " " + styles.active
                             : "")
                     }
-                    onClick={this.toggle}
+                    onClick={this.props.hide}
                 ></div>
             </>
         );
@@ -116,14 +116,11 @@ export default class MainFunctionBar extends React.Component<
         }
         return null;
     }
-    private toggle = (): void => {
-        this.props.toggle();
-    };
     private hide_modal = (): void => {
         this.setState({ active_modal_name: null });
     };
     private handle_click_logout_button = (): void => {
-        this.toggle();
+        this.props.hide();
         this.setState({ active_modal_name: "check_logout" });
     };
     private handle_click_check_logout = async (): Promise<void> => {
