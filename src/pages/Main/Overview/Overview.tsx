@@ -21,7 +21,6 @@ import {
 } from "../../../redux/slices/StockInfoSlice";
 import StretchableButton from "../../../components/StretchableButton/StretchableButton";
 import Utils from "../../../util";
-import { each } from "immer/dist/internal";
 
 function mapStateToProps(root_state: RootState) {
     let trade_record_list = root_state.trade_record.record_list;
