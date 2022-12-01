@@ -103,8 +103,8 @@ class Plans extends React.Component<PropsInterface, StateInterface> {
                     pb = this.props.sid_stock_info_map[b.sid].close;
                 }
                 return (
-                    Math.abs(a.target_price - pa) -
-                    Math.abs(b.target_price - pb)
+                    Math.abs(a.target_price - pa) / pa -
+                    Math.abs(b.target_price - pb) / pb
                 );
             });
     }

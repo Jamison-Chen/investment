@@ -10,6 +10,7 @@ import {
     get_sid_trade_records_map,
     get_inventory_map,
     get_stock_warehouse,
+    update_stock_warehouse,
     StockWarehouse,
     TradeRecord,
     get_sid_gain_map,
@@ -20,6 +21,7 @@ import {
 } from "../../../redux/slices/StockInfoSlice";
 import StretchableButton from "../../../components/StretchableButton/StretchableButton";
 import Utils from "../../../util";
+import { each } from "immer/dist/internal";
 
 function mapStateToProps(root_state: RootState) {
     let trade_record_list = root_state.trade_record.record_list;
@@ -158,6 +160,12 @@ class Overview extends React.Component<PropsInterface, StateInterface> {
                                             color: "none",
                                         },
                                     },
+                                    series: {
+                                        1: {
+                                            lineWidth: "0.5",
+                                            color: "#888",
+                                        },
+                                    },
                                     chartArea: {
                                         left: "0%",
                                         top: "0%",
@@ -195,6 +203,12 @@ class Overview extends React.Component<PropsInterface, StateInterface> {
                                                             color: "none",
                                                         },
                                                         baselineColor: "none",
+                                                    },
+                                                    series: {
+                                                        1: {
+                                                            lineWidth: "0.5",
+                                                            color: "#888",
+                                                        },
                                                     },
                                                 },
                                             },
@@ -241,13 +255,19 @@ class Overview extends React.Component<PropsInterface, StateInterface> {
         return result;
     }
     private get_total_cash_invested = (
-        stock_warehouse: StockWarehouse = this.props.stock_warehouse
+        stock_warehouse: StockWarehouse = this.props.stock_warehouse,
+        end_date?: Date
     ): number => {
+        end_date?.setHours(0, 0, 0, 0);
         let result = 0;
         for (const t_map of Object.values(stock_warehouse)) {
-            for (const p_map of Object.values(t_map)) {
-                for (const [p, q] of Object.entries(p_map)) {
-                    result += q * parseFloat(p);
+            for (const [t, p_map] of Object.entries(t_map)) {
+                let each_date = new Date(t);
+                each_date.setHours(0, 0, 0, 0);
+                if (each_date <= (end_date || new Date())) {
+                    for (const [p, q] of Object.entries(p_map)) {
+                        result += q * parseFloat(p);
+                    }
                 }
             }
         }
@@ -274,20 +294,34 @@ class Overview extends React.Component<PropsInterface, StateInterface> {
         }
         return result;
     }
-    private get rate_of_return(): number {
-        let num_of_days = 0;
+    private get_average_cash_invested(end_date?: Date): number {
+        let min_date = new Date(
+            Math.min(
+                ...this.props.trade_record_list.map((record) =>
+                    Date.parse(record.deal_time)
+                )
+            )
+        );
+        let date_string_list = Utils.get_date_string_list(
+            min_date,
+            end_date || new Date()
+        );
+        let num_of_days = date_string_list.length;
+
         let cumulative_cash_invested = 0;
         this.cash_invested_chart_data.slice(1).forEach((row) => {
-            num_of_days++;
             cumulative_cash_invested += row[1] as number;
         });
-        let average_cash_invested = cumulative_cash_invested / num_of_days;
+
+        return cumulative_cash_invested / num_of_days;
+    }
+    private get rate_of_return(): number {
         return (
             ((this.props.total_market_value -
                 this.get_total_cash_invested() +
                 this.total_gain -
                 this.total_handling_fee) /
-                average_cash_invested) *
+                this.get_average_cash_invested()) *
             100
         );
     }
@@ -303,27 +337,39 @@ class Overview extends React.Component<PropsInterface, StateInterface> {
         ) {
             return result;
         } else if (date_string_list.length === 0) {
-            date_string_list = Utils.get_date_string_list(
-                new Date(ascending_trade_record_list[0].deal_time),
-                new Date()
-            );
+            if (
+                new Date(ascending_trade_record_list[0].deal_time) <= new Date()
+            ) {
+                date_string_list = Utils.get_date_string_list(
+                    new Date(ascending_trade_record_list[0].deal_time),
+                    new Date()
+                );
+            } else {
+                return result;
+            }
         }
+
         let solving_date_string = date_string_list.shift();
         let solving_date: Date = new Date(
             solving_date_string!.split("-").map((e) => parseInt(e)) as any
         );
-
+        solving_date.setHours(0, 0, 0, 0);
         let solving_list = ascending_trade_record_list.filter(
             (record) => record.deal_time === solving_date_string
         );
+
         ascending_trade_record_list = ascending_trade_record_list.filter(
             (record) => record.deal_time !== solving_date_string
         );
-        stock_warehouse = get_stock_warehouse(solving_list, stock_warehouse);
+        stock_warehouse = update_stock_warehouse(solving_list, stock_warehouse);
+
         result.push([
             solving_date,
-            Math.round(this.get_total_cash_invested(stock_warehouse)),
+            Math.round(
+                this.get_total_cash_invested(stock_warehouse, solving_date)
+            ),
         ]);
+
         return this.get_cash_invested_chart_data(
             ascending_trade_record_list,
             date_string_list,
@@ -332,11 +378,25 @@ class Overview extends React.Component<PropsInterface, StateInterface> {
         );
     };
     private get cash_invested_chart_data(): (Date | string | number)[][] {
-        return this.get_cash_invested_chart_data(
+        let result = this.get_cash_invested_chart_data(
             [...this.props.trade_record_list].sort(
                 (a, b) => Date.parse(a.deal_time) - Date.parse(b.deal_time)
             )
         );
+        result.forEach((row, idx) => {
+            if (idx === 0) row.push("平均投入");
+            else {
+                row.push(
+                    Math.round(
+                        result
+                            .slice(1, idx + 1)
+                            .map((row) => row[1] as number)
+                            .reduce((a, b) => a + b) / idx
+                    )
+                );
+            }
+        });
+        return result;
     }
 }
 

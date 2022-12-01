@@ -198,6 +198,12 @@ export const get_inventory_map = (sid_trade_records_map: {
 };
 
 export const get_stock_warehouse = (
+    ascending_trade_record_list: TradeRecord[]
+): StockWarehouse => {
+    return update_stock_warehouse(ascending_trade_record_list, {});
+};
+
+export const update_stock_warehouse = (
     ascending_trade_record_list: TradeRecord[],
     result: StockWarehouse = {}
 ): StockWarehouse => {

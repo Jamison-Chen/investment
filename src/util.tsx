@@ -123,13 +123,13 @@ export default class Utils {
         return a1.length === a2.length && a1.every((e) => a2.includes(e));
     }
     public static get_date_string_list(
-        startDate: Date,
-        endDate: Date
+        start_date: Date,
+        end_date: Date
     ): string[] {
         let result = [];
         for (
-            let date = new Date(startDate);
-            date <= endDate;
+            let date = new Date(start_date);
+            date <= end_date;
             date.setDate(date.getDate() + 1)
         ) {
             // Do not drop weekend because sometimes the market would open on weekend
