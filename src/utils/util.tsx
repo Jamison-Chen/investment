@@ -23,20 +23,25 @@ export default class Util {
         }
     }
     public static render_loading_screen(): void {
-        let loading_root = document.getElementById("loading-root")!;
+        if (!document.getElementById("loading_screen")) {
+            let root = document.getElementById("root") as HTMLElement;
+            let loading_screen = document.createElement("div");
+            loading_screen.id = "loading_screen";
 
-        if (!document.getElementById("loading_img")) {
-            let loading_img = document.createElement("img");
-            loading_img.id = "loading_img";
-            loading_img.src = logo;
+            let loading_img_outer = document.createElement("img");
+            loading_img_outer.id = "loading_img_outer";
 
-            loading_root.appendChild(loading_img);
+            loading_img_outer.src = logo;
+            loading_screen.appendChild(loading_img_outer);
+
+            root.appendChild(loading_screen);
         }
-
-        loading_root.className = "active";
     }
     public static remove_loading_screen(): void {
-        document.getElementById("loading-root")!.className = "hidden";
+        let loading_screen = document.getElementById(
+            "loading_screen"
+        ) as HTMLElement;
+        if (loading_screen) loading_screen.remove();
     }
     public static get_date_string_list(
         start_date: Date,
