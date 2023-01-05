@@ -4,7 +4,7 @@ import React, { ReactElement } from "react";
 import { NavLink } from "react-router-dom";
 
 import { IconGearFill } from "../../icons";
-import { Modal, Button } from "../../components";
+import { Modal, Button, FullLogo } from "../../components";
 import Nav from "../../utils/nav";
 import Api from "../../utils/api";
 
@@ -59,14 +59,17 @@ export default class MainFunctionBar extends React.Component<Props, State> {
                         >
                             登出
                         </div>
-                        <NavLink
+                        <div className={styles.logo_outer}>
+                            <FullLogo size="s" />
+                        </div>
+                        {/* <NavLink
                             to={"/investment/setting"}
                             className={styles.setting}
                             onClick={this.props.hide}
                         >
                             <IconGearFill side_length="14" />
                             <span>設定</span>
-                        </NavLink>
+                        </NavLink> */}
                     </div>
                 </div>
                 <div

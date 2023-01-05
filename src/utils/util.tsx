@@ -1,4 +1,4 @@
-import quill_pen from "../assets/quill_pen.png";
+import logo from "../assets/logo.png";
 
 export default class Util {
     public static get_cookie(key: string): string | null {
@@ -23,26 +23,20 @@ export default class Util {
         }
     }
     public static render_loading_screen(): void {
-        if (!document.getElementById("loading_screen")) {
-            let root = document.getElementById("root") as HTMLElement;
-            let loading_screen = document.createElement("div");
-            loading_screen.id = "loading_screen";
+        let loading_root = document.getElementById("loading-root")!;
 
-            let loading_img_outer = document.createElement("img");
-            loading_img_outer.id = "loading_img_outer";
+        if (!document.getElementById("loading_img")) {
+            let loading_img = document.createElement("img");
+            loading_img.id = "loading_img";
+            loading_img.src = logo;
 
-            let loading_img = quill_pen;
-            loading_img_outer.src = loading_img;
-            loading_screen.appendChild(loading_img_outer);
-
-            root.appendChild(loading_screen);
+            loading_root.appendChild(loading_img);
         }
+
+        loading_root.className = "active";
     }
     public static remove_loading_screen(): void {
-        let loading_screen = document.getElementById(
-            "loading_screen"
-        ) as HTMLElement;
-        if (loading_screen) loading_screen.remove();
+        document.getElementById("loading-root")!.className = "hidden";
     }
     public static get_date_string_list(
         start_date: Date,

@@ -34,6 +34,7 @@
             flex-direction: column;
             gap: 5px;
             flex-grow: 1;
+            overflow: hidden;
             & > .username {
                 font-size: 0.9 * _.$base-font-size;
                 font-weight: bold;
@@ -67,8 +68,13 @@
                 }
             }
         }
+        & > .logo_outer {
+            display: flex;
+            justify-content: center;
+            margin: 15px;
+        }
         & > .setting {
-            padding: 10px 15px;
+            padding: 15px;
             border-top: 1px solid _.$light-gray;
             color: _.$gray;
             font-size: 0.9 * _.$base-font-size;
