@@ -2,7 +2,7 @@ import styles from "./LabeledInput.module.scss";
 
 import React, { ChangeEvent } from "react";
 
-interface PropsInterface {
+interface Props {
     title: string;
     name: string | number;
     type?: "number" | "text" | "password" | "email" | "date" | "hidden";
@@ -11,14 +11,11 @@ interface PropsInterface {
     onChange?: (name: any, value: string) => void;
 }
 
-interface StateInterface {}
+interface State {}
 
-export default class LabeledInput extends React.Component<
-    PropsInterface,
-    StateInterface
-> {
-    public state: StateInterface;
-    public constructor(props: PropsInterface) {
+export default class LabeledInput extends React.Component<Props, State> {
+    public state: State;
+    public constructor(props: Props) {
         super(props);
         this.state = {};
     }

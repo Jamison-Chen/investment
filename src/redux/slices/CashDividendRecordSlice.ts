@@ -1,18 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {
+
+import type {
     CreateCashDividendRecordRequestBody,
     UpdateCashDividendRecordRequestBody,
-} from "../../api/CashDividendRecordApi";
-
-import Utils from "../../util";
-
-export type CashDividendRecord = {
-    id: number;
-    deal_time: string;
-    sid: string;
-    company_name: string;
-    cash_dividend: number;
-};
+    CashDividendRecord,
+} from "../../types";
+import Api from "../../utils/api";
 
 export interface TradeRecordState {
     record_list: CashDividendRecord[];
@@ -30,7 +23,7 @@ export const fetch_all_cash_dividend_records = createAsyncThunk(
         let request_body = new URLSearchParams();
         request_body.append("mode", "read");
 
-        let response = await Utils.send_request(
+        let response = await Api.send_request(
             "stock/dividend",
             "post",
             request_body
@@ -50,7 +43,7 @@ export const create_record = createAsyncThunk(
         request_body.append("sid", data.sid);
         request_body.append("deal_time", data.deal_time);
         request_body.append("cash_dividend", data.cash_dividend);
-        let response = await Utils.send_request(
+        let response = await Api.send_request(
             "stock/dividend",
             "post",
             request_body
@@ -71,7 +64,7 @@ export const update_record = createAsyncThunk(
         request_body.append("sid", data.sid);
         request_body.append("deal_time", data.deal_time);
         request_body.append("cash_dividend", data.cash_dividend);
-        let response = await Utils.send_request(
+        let response = await Api.send_request(
             "stock/dividend",
             "post",
             request_body
@@ -88,7 +81,7 @@ export const delete_record = createAsyncThunk(
         request_body.append("mode", "delete");
         request_body.append("id", id.toString());
 
-        let response = await Utils.send_request(
+        let response = await Api.send_request(
             "stock/dividend",
             "post",
             request_body

@@ -1,8 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export type Error = {
-    message: string;
-};
+import type { Error } from "../../types";
 
 export interface ErrorState {
     error_list: Error[];

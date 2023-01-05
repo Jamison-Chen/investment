@@ -4,16 +4,11 @@ import waiting_spinner from "../../assets/loading.svg";
 import React, { MouseEvent } from "react";
 import { connect } from "react-redux";
 
-import IconPencilSquare from "../Icons/IconPencilSquare";
-import Modal from "../Modal/Modal";
-import RoundButton from "../RoundButton/RoundButton";
-import IconTrash from "../Icons/IconTrash";
-import Button from "../Button/Button";
-import { RootState, AppDispatch } from "../../redux/store";
-import {
-    delete_record,
-    CashDividendRecord,
-} from "../../redux/slices/CashDividendRecordSlice";
+import { IconPencilSquare, IconTrash } from "../../icons";
+import { Modal, RoundButton, Button } from "../../components";
+import type { CashDividendRecord } from "../../types";
+import type { RootState, AppDispatch } from "../../redux/store";
+import { delete_record } from "../../redux/slices/CashDividendRecordSlice";
 import CashDividendRecordModal from "../CashDividendRecordModal/CashDividendRecordModal";
 
 function mapStateToProps(root_state: RootState) {
@@ -21,21 +16,18 @@ function mapStateToProps(root_state: RootState) {
     return { is_waiting };
 }
 
-interface PropsInterface extends ReturnType<typeof mapStateToProps> {
+interface Props extends ReturnType<typeof mapStateToProps> {
     record: CashDividendRecord;
     dispatch: AppDispatch;
 }
 
-interface StateInterface {
+interface State {
     active_modal_name: "edit" | "check_delete" | null;
 }
 
-class CashDividendRecordActionBar extends React.Component<
-    PropsInterface,
-    StateInterface
-> {
-    public state: StateInterface;
-    public constructor(props: PropsInterface) {
+class CashDividendRecordActionBar extends React.Component<Props, State> {
+    public state: State;
+    public constructor(props: Props) {
         super(props);
         this.state = {
             active_modal_name: null,

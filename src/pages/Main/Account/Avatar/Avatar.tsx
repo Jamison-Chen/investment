@@ -4,12 +4,14 @@ import React from "react";
 import { connect } from "react-redux";
 
 import { RouterInterface, withRouter } from "../../../../router";
-import Form from "../../../../components/Form/Form";
-import RoundButton from "../../../../components/RoundButton/RoundButton";
-import IconArrowLeft from "../../../../components/Icons/IconArrowLeft";
-import Button from "../../../../components/Button/Button";
-import LabeledInput from "../../../../components/LabeledInput/LabeledInput";
-import { RootState, AppDispatch } from "../../../../redux/store";
+import {
+    Form,
+    RoundButton,
+    Button,
+    LabeledInput,
+} from "../../../../components";
+import { IconArrowLeft } from "../../../../icons";
+import type { RootState, AppDispatch } from "../../../../redux/store";
 import {
     update_account_info,
     fetch_account_info,
@@ -21,19 +23,17 @@ function mapStateToProps(root_state: RootState) {
     return { user_id, avatar_url };
 }
 
-interface PropsInterface
-    extends RouterInterface,
-        ReturnType<typeof mapStateToProps> {
+interface Props extends RouterInterface, ReturnType<typeof mapStateToProps> {
     dispatch: AppDispatch;
 }
 
-interface StateInterface {
+interface State {
     avatar_url: string;
 }
 
-class Avatar extends React.Component<PropsInterface, StateInterface> {
-    public state: StateInterface;
-    public constructor(props: PropsInterface) {
+class Avatar extends React.Component<Props, State> {
+    public state: State;
+    public constructor(props: Props) {
         super(props);
         this.state = { avatar_url: "" };
     }

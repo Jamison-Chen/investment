@@ -3,21 +3,18 @@ import styles from "./MainFunctionTab.module.scss";
 import React, { MouseEventHandler } from "react";
 import { NavLink } from "react-router-dom";
 
-interface PropsInterface {
+interface Props {
     tab_icon?: any;
     tab_name: string;
     to: string;
     onClick: MouseEventHandler;
 }
 
-interface StateInterface {}
+interface State {}
 
-export default class MainFunctionTab extends React.Component<
-    PropsInterface,
-    StateInterface
-> {
-    public state: StateInterface;
-    public constructor(props: PropsInterface) {
+export default class MainFunctionTab extends React.Component<Props, State> {
+    public state: State;
+    public constructor(props: Props) {
         super(props);
         this.state = {};
     }

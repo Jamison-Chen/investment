@@ -7,13 +7,13 @@ import { Link } from "react-router-dom";
 
 import { RouterInterface, withRouter } from "../../../router";
 
-interface PropsInterface extends RouterInterface {}
+interface Props extends RouterInterface {}
 
-interface StateInterface {}
+interface State {}
 
-class ExternalApps extends React.Component<PropsInterface, StateInterface> {
-    public state: StateInterface;
-    public constructor(props: PropsInterface) {
+class ExternalApps extends React.Component<Props, State> {
+    public state: State;
+    public constructor(props: Props) {
         super(props);
         this.state = {};
     }

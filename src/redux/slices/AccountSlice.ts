@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import Utils from "../../util";
-import { UpdateAccountInfoRequestBody } from "../../api/AccountApi";
+import type { UpdateAccountInfoRequestBody } from "../../types";
+import Api from "../../utils/api";
 
 export interface AccountState {
     user_id: string;
@@ -25,7 +25,7 @@ export const fetch_account_info = createAsyncThunk(
         username: string;
         avatar_url: string | null;
     }> => {
-        let response = await Utils.check_login();
+        let response = await Api.check_login();
         if (response?.success) return response.data;
         else throw Error("Failed to fetch info");
     }
@@ -41,7 +41,7 @@ export const update_account_info = createAsyncThunk(
         username: string;
         avatar_url: string | null;
     }> => {
-        let response = await Utils.send_request(
+        let response = await Api.send_request(
             "account/update",
             "post",
             JSON.stringify(request_body)

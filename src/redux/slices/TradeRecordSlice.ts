@@ -1,20 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import Utils from "../../util";
-import {
+import type {
     CreateTradeRecordRequestBody,
     UpdateTradeRecordRequestBody,
-} from "../../api/TradeRecordApi";
-
-export type TradeRecord = {
-    id: number;
-    deal_time: string;
-    sid: string;
-    company_name: string;
-    deal_price: number;
-    deal_quantity: number;
-    handling_fee: number;
-};
+    TradeRecord,
+} from "../../types";
+import Api from "../../utils/api";
 
 export interface StockWarehouse {
     [sid: string]: {
@@ -40,7 +31,7 @@ export const fetch_all_trade_records = createAsyncThunk(
         let request_body = new URLSearchParams();
         request_body.append("mode", "read");
 
-        let response = await Utils.send_request(
+        let response = await Api.send_request(
             "stock/trade",
             "post",
             request_body
@@ -60,7 +51,7 @@ export const create_record = createAsyncThunk(
         request_body.append("deal_price", data.deal_price);
         request_body.append("deal_quantity", data.deal_quantity);
         request_body.append("handling_fee", data.handling_fee);
-        let response = await Utils.send_request(
+        let response = await Api.send_request(
             "stock/trade",
             "post",
             request_body
@@ -81,7 +72,7 @@ export const update_record = createAsyncThunk(
         request_body.append("deal_price", data.deal_price);
         request_body.append("deal_quantity", data.deal_quantity);
         request_body.append("handling_fee", data.handling_fee);
-        let response = await Utils.send_request(
+        let response = await Api.send_request(
             "stock/trade",
             "post",
             request_body
@@ -98,7 +89,7 @@ export const delete_record = createAsyncThunk(
         request_body.append("mode", "delete");
         request_body.append("id", id.toString());
 
-        let response = await Utils.send_request(
+        let response = await Api.send_request(
             "stock/trade",
             "post",
             request_body

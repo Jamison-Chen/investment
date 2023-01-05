@@ -4,12 +4,12 @@ import React from "react";
 import { connect } from "react-redux";
 
 import { RouterInterface, withRouter } from "../../../router";
-import { RootState } from "../../../redux/store";
+import type { RootState } from "../../../redux/store";
 import {
     get_inventory_map,
     get_sid_trade_records_map,
 } from "../../../redux/slices/TradeRecordSlice";
-import DetailCard from "../../../components/DetailCard/DetailCard";
+import { DetailCard } from "../../../components";
 
 function mapStateToProps(root_state: RootState) {
     let trade_record_list = root_state.trade_record.record_list;
@@ -20,15 +20,13 @@ function mapStateToProps(root_state: RootState) {
     };
 }
 
-interface PropsInterface
-    extends RouterInterface,
-        ReturnType<typeof mapStateToProps> {}
+interface Props extends RouterInterface, ReturnType<typeof mapStateToProps> {}
 
-interface StateInterface {}
+interface State {}
 
-class StockList extends React.Component<PropsInterface, StateInterface> {
-    public state: StateInterface;
-    public constructor(props: PropsInterface) {
+class StockList extends React.Component<Props, State> {
+    public state: State;
+    public constructor(props: Props) {
         super(props);
         this.state = {};
     }

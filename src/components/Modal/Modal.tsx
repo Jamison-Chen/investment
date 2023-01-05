@@ -3,10 +3,10 @@ import styles from "./Modal.module.scss";
 import React, { MouseEvent } from "react";
 import ReactDOM from "react-dom";
 
-import IconXLarge from "../Icons/IconXLarge";
-import RoundButton from "../RoundButton/RoundButton";
+import { IconXLarge } from "../../icons";
+import { RoundButton } from "../../components";
 
-interface PropsInterface {
+interface Props {
     header_title?: React.ReactNode;
     description?: string;
     children?: React.ReactNode;
@@ -16,15 +16,12 @@ interface PropsInterface {
     no_x?: boolean;
 }
 
-interface StateInterface {}
+interface State {}
 
-export default class Modal extends React.Component<
-    PropsInterface,
-    StateInterface
-> {
-    public state: StateInterface;
+export default class Modal extends React.Component<Props, State> {
+    public state: State;
     private modal_root: HTMLElement;
-    public constructor(props: PropsInterface) {
+    public constructor(props: Props) {
         super(props);
         this.state = {};
         this.modal_root = document.getElementById("modal-root")!;

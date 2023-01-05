@@ -1,19 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {
+
+import type {
     CreateTradePlanRequestBody,
     UpdateTradePlanRequestBody,
-} from "../../api/TradePlanApi";
-
-import Utils from "../../util";
-
-export type TradePlan = {
-    id: string;
-    sid: string;
-    company_name: string;
-    plan_type: "buy" | "sell";
-    target_price: number;
-    target_quantity: number;
-};
+    TradePlan,
+} from "../../types";
+import Api from "../../utils/api";
 
 export interface TradePlanState {
     trade_plan_list: TradePlan[];
@@ -31,7 +23,7 @@ export const fetch_all_trade_plans = createAsyncThunk(
         let request_body = new URLSearchParams();
         request_body.append("mode", "read");
 
-        let response = await Utils.send_request(
+        let response = await Api.send_request(
             "stock/plan",
             "post",
             request_body
@@ -50,7 +42,7 @@ export const create_plan = createAsyncThunk(
         request_body.append("plan_type", data.plan_type);
         request_body.append("target_price", data.target_price);
         request_body.append("target_quantity", data.target_quantity);
-        let response = await Utils.send_request(
+        let response = await Api.send_request(
             "stock/plan",
             "post",
             request_body
@@ -70,7 +62,7 @@ export const update_plan = createAsyncThunk(
         request_body.append("plan_type", data.plan_type);
         request_body.append("target_price", data.target_price);
         request_body.append("target_quantity", data.target_quantity);
-        let response = await Utils.send_request(
+        let response = await Api.send_request(
             "stock/plan",
             "post",
             request_body
@@ -87,7 +79,7 @@ export const delete_plan = createAsyncThunk(
         request_body.append("mode", "delete");
         request_body.append("id", id.toString());
 
-        let response = await Utils.send_request(
+        let response = await Api.send_request(
             "stock/plan",
             "post",
             request_body

@@ -1,20 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import Utils from "../../util";
-
-export type StockInfo = {
-    date: string;
-    sid: string;
-    name: string;
-    trade_type: string;
-    quantity: number;
-    open: number;
-    close: number;
-    highest: number;
-    lowest: number;
-    fluct_price: number;
-    fluct_rate: number;
-};
+import type { StockInfo } from "../../types";
+import Api from "../../utils/api";
 
 export interface StockInfoState {
     info_list: StockInfo[];
@@ -27,7 +14,7 @@ const initialState: StockInfoState = {
 export const fetch_all_stock_info = createAsyncThunk(
     "stock_info/fetch_all_stock_info",
     async (sid_list: string[] = []): Promise<StockInfo[]> => {
-        let response = await Utils.send_request(
+        let response = await Api.send_request(
             `stock/info${
                 sid_list.length > 0 ? `?sid-list=${sid_list.join(",")}` : ""
             }`,
@@ -41,7 +28,7 @@ export const fetch_all_stock_info = createAsyncThunk(
 export const fetch_single_stock_info = createAsyncThunk(
     "stock_info/fetch_single_stock_info",
     async (sid: string): Promise<StockInfo> => {
-        let response = await Utils.send_request(
+        let response = await Api.send_request(
             `stock/info?sid-list=${sid}`,
             "get"
         );

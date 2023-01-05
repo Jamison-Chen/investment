@@ -4,16 +4,15 @@ import React from "react";
 import { connect } from "react-redux";
 
 import { RouterInterface, withRouter } from "../../../router";
-import { RootState, AppDispatch } from "../../../redux/store";
-import Button from "../../../components/Button/Button";
-import SearchKeywordInput from "../../../components/SearchKeywordInput/SearchKeywordInput";
-import { TradePlan } from "../../../redux/slices/TradePlanSlice";
+import type { RootState, AppDispatch } from "../../../redux/store";
 import {
-    get_sid_stock_info_map,
-    StockInfo,
-} from "../../../redux/slices/StockInfoSlice";
-import TradePlanActionBar from "../../../components/TradePlanActionBar/TradePlanActionBar";
-import StretchableButton from "../../../components/StretchableButton/StretchableButton";
+    Button,
+    SearchKeywordInput,
+    TradePlanActionBar,
+    StretchableButton,
+} from "../../../components";
+import type { TradePlan, StockInfo } from "../../../types";
+import { get_sid_stock_info_map } from "../../../redux/slices/StockInfoSlice";
 
 function mapStateToProps(root_state: RootState) {
     let stock_info_list: StockInfo[] = root_state.stock_info.info_list;
@@ -22,21 +21,19 @@ function mapStateToProps(root_state: RootState) {
     return { trade_plan_list, sid_stock_info_map };
 }
 
-interface PropsInterface
-    extends RouterInterface,
-        ReturnType<typeof mapStateToProps> {
+interface Props extends RouterInterface, ReturnType<typeof mapStateToProps> {
     dispatch: AppDispatch;
 }
 
-interface StateInterface {
+interface State {
     search_keyword: string | null;
     active_row_index: number | null;
     shown_record_number: number;
 }
 
-class Plans extends React.Component<PropsInterface, StateInterface> {
-    public state: StateInterface;
-    public constructor(props: PropsInterface) {
+class Plans extends React.Component<Props, State> {
+    public state: State;
+    public constructor(props: Props) {
         super(props);
         this.state = {
             search_keyword: this.props.router.search_params.get("sid"),

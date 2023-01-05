@@ -3,18 +3,15 @@ import logo from "../../assets/logo.png";
 
 import React from "react";
 
-interface PropsInterface {
+interface Props {
     size: "s" | "m" | "l";
 }
 
-interface StateInterface {}
+interface State {}
 
-export default class FullLogo extends React.Component<
-    PropsInterface,
-    StateInterface
-> {
-    public state: StateInterface;
-    public constructor(props: PropsInterface) {
+export default class FullLogo extends React.Component<Props, State> {
+    public state: State;
+    public constructor(props: Props) {
         super(props);
         this.state = {};
     }

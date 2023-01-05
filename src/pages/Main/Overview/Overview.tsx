@@ -5,22 +5,22 @@ import { connect } from "react-redux";
 import { Chart } from "react-google-charts";
 
 import { RouterInterface, withRouter } from "../../../router";
-import { RootState } from "../../../redux/store";
+import type { RootState } from "../../../redux/store";
 import {
     get_sid_trade_records_map,
     get_inventory_map,
     get_stock_warehouse,
     update_stock_warehouse,
     StockWarehouse,
-    TradeRecord,
     get_sid_gain_map,
 } from "../../../redux/slices/TradeRecordSlice";
 import {
     get_sid_market_value_map,
     get_total_market_value,
 } from "../../../redux/slices/StockInfoSlice";
-import StretchableButton from "../../../components/StretchableButton/StretchableButton";
-import Utils from "../../../util";
+import { StretchableButton } from "../../../components";
+import type { TradeRecord } from "../../../types";
+import Util from "../../../utils/util";
 
 function mapStateToProps(root_state: RootState) {
     let trade_record_list = root_state.trade_record.record_list;
@@ -53,15 +53,13 @@ function mapStateToProps(root_state: RootState) {
     };
 }
 
-interface PropsInterface
-    extends RouterInterface,
-        ReturnType<typeof mapStateToProps> {}
+interface Props extends RouterInterface, ReturnType<typeof mapStateToProps> {}
 
-interface StateInterface {}
+interface State {}
 
-class Overview extends React.Component<PropsInterface, StateInterface> {
-    public state: StateInterface;
-    public constructor(props: PropsInterface) {
+class Overview extends React.Component<Props, State> {
+    public state: State;
+    public constructor(props: Props) {
         super(props);
         this.state = {};
     }
@@ -301,7 +299,7 @@ class Overview extends React.Component<PropsInterface, StateInterface> {
                 )
             )
         );
-        let date_string_list = Utils.get_date_string_list(
+        let date_string_list = Util.get_date_string_list(
             min_date,
             end_date || new Date()
         );
@@ -339,7 +337,7 @@ class Overview extends React.Component<PropsInterface, StateInterface> {
             if (
                 new Date(ascending_trade_record_list[0].deal_time) <= new Date()
             ) {
-                date_string_list = Utils.get_date_string_list(
+                date_string_list = Util.get_date_string_list(
                     new Date(ascending_trade_record_list[0].deal_time),
                     new Date()
                 );

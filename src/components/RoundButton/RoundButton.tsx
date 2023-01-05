@@ -3,7 +3,7 @@ import "./RoundButton.scss";
 
 import React, { MouseEventHandler } from "react";
 
-interface PropsInterface {
+interface Props {
     children: any;
     onClick?: MouseEventHandler;
     className?: string;
@@ -11,14 +11,11 @@ interface PropsInterface {
     hint_text?: string;
 }
 
-interface StateInterface {}
+interface State {}
 
-export default class RoundButton extends React.Component<
-    PropsInterface,
-    StateInterface
-> {
-    public state: StateInterface;
-    public constructor(props: PropsInterface) {
+export default class RoundButton extends React.Component<Props, State> {
+    public state: State;
+    public constructor(props: Props) {
         super(props);
         this.state = {};
     }

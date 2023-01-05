@@ -3,11 +3,9 @@ import styles from "./Account.module.scss";
 import React from "react";
 import { connect } from "react-redux";
 
-import { RootState } from "../../../redux/store";
-import BeautifulBlock from "../../../components/BeautifulBlock/BeautifulBlock";
-import BeautifulRow from "../../../components/BeautifulRow/BeautifulRow";
-import RoundButton from "../../../components/RoundButton/RoundButton";
-import IconArrowLeft from "../../../components/Icons/IconArrowLeft";
+import type { RootState } from "../../../redux/store";
+import { BeautifulBlock, BeautifulRow, RoundButton } from "../../../components";
+import { IconArrowLeft } from "../../../icons";
 import { RouterInterface, withRouter } from "../../../router";
 
 function mapStateToProps(root_state: RootState) {
@@ -17,15 +15,13 @@ function mapStateToProps(root_state: RootState) {
     return { email, username, avatar_url };
 }
 
-interface PropsInterface
-    extends RouterInterface,
-        ReturnType<typeof mapStateToProps> {}
+interface Props extends RouterInterface, ReturnType<typeof mapStateToProps> {}
 
-interface StateInterface {}
+interface State {}
 
-class Account extends React.Component<PropsInterface, StateInterface> {
-    public state: StateInterface;
-    public constructor(props: PropsInterface) {
+class Account extends React.Component<Props, State> {
+    public state: State;
+    public constructor(props: Props) {
         super(props);
         this.state = {};
     }

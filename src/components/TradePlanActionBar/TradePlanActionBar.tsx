@@ -4,35 +4,29 @@ import waiting_spinner from "../../assets/loading.svg";
 import React, { MouseEvent } from "react";
 import { connect } from "react-redux";
 
-import IconPencilSquare from "../Icons/IconPencilSquare";
-import Modal from "../Modal/Modal";
-import RoundButton from "../RoundButton/RoundButton";
-import IconTrash from "../Icons/IconTrash";
-import Button from "../Button/Button";
-import { RootState, AppDispatch } from "../../redux/store";
-import { TradePlan, delete_plan } from "../../redux/slices/TradePlanSlice";
-import TradePlanModal from "../TradePlanModal/TradePlanModal";
+import { IconPencilSquare, IconTrash } from "../../icons";
+import { Modal, RoundButton, Button, TradePlanModal } from "../../components";
+import type { TradePlan } from "../../types";
+import type { RootState, AppDispatch } from "../../redux/store";
+import { delete_plan } from "../../redux/slices/TradePlanSlice";
 
 function mapStateToProps(root_state: RootState) {
     let is_waiting = root_state.trade_plan.is_waiting;
     return { is_waiting };
 }
 
-interface PropsInterface extends ReturnType<typeof mapStateToProps> {
+interface Props extends ReturnType<typeof mapStateToProps> {
     plan: TradePlan;
     dispatch: AppDispatch;
 }
 
-interface StateInterface {
+interface State {
     active_modal_name: "edit" | "check_delete" | null;
 }
 
-class TradePlanActionBar extends React.Component<
-    PropsInterface,
-    StateInterface
-> {
-    public state: StateInterface;
-    public constructor(props: PropsInterface) {
+class TradePlanActionBar extends React.Component<Props, State> {
+    public state: State;
+    public constructor(props: Props) {
         super(props);
         this.state = {
             active_modal_name: null,

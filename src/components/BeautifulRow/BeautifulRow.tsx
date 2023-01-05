@@ -2,22 +2,19 @@ import styles from "./BeautifulRow.module.scss";
 
 import React, { MouseEventHandler } from "react";
 
-import IconChevronRight from "../Icons/IconChevronRight";
+import { IconChevronRight } from "../../icons";
 
-interface PropsInterface {
+interface Props {
     label: string;
     value: any;
     onClick?: MouseEventHandler;
 }
 
-interface StateInterface {}
+interface State {}
 
-export default class BeautifulRow extends React.Component<
-    PropsInterface,
-    StateInterface
-> {
-    public state: StateInterface;
-    public constructor(props: PropsInterface) {
+export default class BeautifulRow extends React.Component<Props, State> {
+    public state: State;
+    public constructor(props: Props) {
         super(props);
         this.state = {};
     }

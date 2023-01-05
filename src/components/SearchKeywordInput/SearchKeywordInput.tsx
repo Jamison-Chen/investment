@@ -1,23 +1,21 @@
 import styles from "./SearchKeywordInput.module.scss";
 
 import React, { ChangeEvent } from "react";
-import IconSearch from "../Icons/IconSearch";
 
-interface PropsInterface {
+import { IconSearch } from "../../icons";
+
+interface Props {
     placeholder: string;
     name: string;
     keyword: string;
     onChange?: (name: string, value: string) => void;
 }
 
-interface StateInterface {}
+interface State {}
 
-export default class SearchKeywordInput extends React.Component<
-    PropsInterface,
-    StateInterface
-> {
-    public state: StateInterface;
-    public constructor(props: PropsInterface) {
+export default class SearchKeywordInput extends React.Component<Props, State> {
+    public state: State;
+    public constructor(props: Props) {
         super(props);
         this.state = {};
     }

@@ -2,16 +2,13 @@ import styles from "./NotFound.module.scss";
 
 import React from "react";
 
-interface PropsInterface {}
+interface Props {}
 
-interface StateInterface {}
+interface State {}
 
-export default class NotFound extends React.Component<
-    PropsInterface,
-    StateInterface
-> {
-    public state: StateInterface;
-    public constructor(props: PropsInterface) {
+export default class NotFound extends React.Component<Props, State> {
+    public state: State;
+    public constructor(props: Props) {
         super(props);
         this.state = {};
     }

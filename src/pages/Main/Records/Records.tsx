@@ -3,15 +3,16 @@ import styles from "./Records.module.scss";
 import React from "react";
 import { connect } from "react-redux";
 
-import StretchableButton from "../../../components/StretchableButton/StretchableButton";
+import {
+    StretchableButton,
+    Button,
+    SearchKeywordInput,
+    TradeRecordActionBar,
+    CashDividendRecordActionBar,
+} from "../../../components";
 import { RouterInterface, withRouter } from "../../../router";
-import { RootState } from "../../../redux/store";
-import Button from "../../../components/Button/Button";
-import SearchKeywordInput from "../../../components/SearchKeywordInput/SearchKeywordInput";
-import { TradeRecord } from "../../../redux/slices/TradeRecordSlice";
-import TradeRecordActionBar from "../../../components/TradeRecordActionBar/TradeRecordActionBar";
-import { CashDividendRecord } from "../../../redux/slices/CashDividendRecordSlice";
-import CashDividendRecordActionBar from "../../../components/CashDividendRecordActionBar/CashDividendRecordActionBar";
+import type { RootState } from "../../../redux/store";
+import type { CashDividendRecord, TradeRecord } from "../../../types";
 
 function mapStateToProps(root_state: RootState) {
     let trade_record_list = root_state.trade_record.record_list;
@@ -19,20 +20,18 @@ function mapStateToProps(root_state: RootState) {
     return { trade_record_list, cash_dividend_record_list };
 }
 
-interface PropsInterface
-    extends RouterInterface,
-        ReturnType<typeof mapStateToProps> {}
+interface Props extends RouterInterface, ReturnType<typeof mapStateToProps> {}
 
-interface StateInterface {
+interface State {
     active_subpage_name: "trade" | "cash_dividend";
     search_keyword: string | null;
     active_row_index: number | null;
     shown_record_number: number;
 }
 
-class Records extends React.Component<PropsInterface, StateInterface> {
-    public state: StateInterface;
-    public constructor(props: PropsInterface) {
+class Records extends React.Component<Props, State> {
+    public state: State;
+    public constructor(props: Props) {
         super(props);
         this.state = {
             active_subpage_name: "trade",

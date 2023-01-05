@@ -1,21 +1,18 @@
 import React from "react";
 
-interface PropsInterface {
+interface Props {
     side_length: string;
     color?: string;
 }
 
-interface StateInterface {
+interface State {
     [key: string]: any;
 }
 
-export default class IconArrowLeft extends React.Component<
-    PropsInterface,
-    StateInterface
-> {
-    public state: StateInterface;
+export default class IconArrowRight extends React.Component<Props, State> {
+    public state: State;
 
-    public constructor(props: PropsInterface) {
+    public constructor(props: Props) {
         super(props);
         this.state = {};
     }
@@ -27,12 +24,12 @@ export default class IconArrowLeft extends React.Component<
                 width={this.props.side_length}
                 height={this.props.side_length}
                 fill={this.props.color || "currentColor"}
-                className="bi bi-arrow-left"
+                className="bi bi-arrow-right"
                 viewBox="0 0 16 16"
             >
                 <path
                     fillRule="evenodd"
-                    d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"
+                    d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"
                 />
             </svg>
         );

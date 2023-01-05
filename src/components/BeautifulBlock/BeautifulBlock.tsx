@@ -2,20 +2,17 @@ import styles from "./BeautifulBlock.module.scss";
 
 import React from "react";
 
-interface PropsInterface {
+interface Props {
     title?: string;
     description?: string;
     children: any;
 }
 
-interface StateInterface {}
+interface State {}
 
-export default class BeautifulBlock extends React.Component<
-    PropsInterface,
-    StateInterface
-> {
-    public state: StateInterface;
-    public constructor(props: PropsInterface) {
+export default class BeautifulBlock extends React.Component<Props, State> {
+    public state: State;
+    public constructor(props: Props) {
         super(props);
         this.state = {};
     }

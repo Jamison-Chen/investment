@@ -1,21 +1,18 @@
 import React from "react";
 
-interface PropsInterface {
+interface Props {
     side_length: string;
     color?: string;
 }
 
-interface StateInterface {
+interface State {
     [key: string]: any;
 }
 
-export default class IconApp extends React.Component<
-    PropsInterface,
-    StateInterface
-> {
-    public state: StateInterface;
+export default class IconApp extends React.Component<Props, State> {
+    public state: State;
 
-    public constructor(props: PropsInterface) {
+    public constructor(props: Props) {
         super(props);
         this.state = {};
     }

@@ -3,35 +3,34 @@ import styles from "./Details.module.scss";
 import React, { ChangeEvent } from "react";
 import { connect } from "react-redux";
 import { Chart } from "react-google-charts";
+import { Link } from "react-router-dom";
 
 import { RouterInterface, withRouter } from "../../../router";
-import { RootState } from "../../../redux/store";
+import type { RootState } from "../../../redux/store";
+import type { StockInfo, TradeRecord } from "../../../types";
 import {
     get_sid_market_value_map,
     get_sid_stock_info_map,
-    StockInfo,
 } from "../../../redux/slices/StockInfoSlice";
-import Button from "../../../components/Button/Button";
+import {
+    Button,
+    DetailCard,
+    RoundButton,
+    Modal,
+    TradeRecordModal,
+    CashDividendRecordModal,
+    TradePlanModal,
+    BeautifulRow,
+} from "../../../components";
 import {
     get_inventory_map,
     get_sid_cash_invested_map,
     get_sid_gain_map,
     get_sid_trade_records_map,
     get_stock_warehouse,
-    TradeRecord,
 } from "../../../redux/slices/TradeRecordSlice";
-import DetailCard from "../../../components/DetailCard/DetailCard";
-import RoundButton from "../../../components/RoundButton/RoundButton";
-import IconPencilSquare from "../../../components/Icons/IconPencilSquare";
-import IconWatch from "../../../components/Icons/IconWatch";
-import IconPiggyBank from "../../../components/Icons/IconPiggyBank";
-import Modal from "../../../components/Modal/Modal";
-import TradeRecordModal from "../../../components/TradeRecordModal/TradeRecordModal";
-import CashDividendRecordModal from "../../../components/CashDividendRecordModal/CashDividendRecordModal";
+import { IconPencilSquare, IconWatch, IconPiggyBank } from "../../../icons";
 import { get_sid_total_cash_dividend_map } from "../../../redux/slices/CashDividendRecordSlice";
-import TradePlanModal from "../../../components/TradePlanModal/TradePlanModal";
-import BeautifulRow from "../../../components/BeautifulRow/BeautifulRow";
-import { Link } from "react-router-dom";
 
 function mapStateToProps(root_state: RootState) {
     let stock_info_list: StockInfo[] = root_state.stock_info.info_list;
@@ -66,11 +65,9 @@ function mapStateToProps(root_state: RootState) {
     };
 }
 
-interface PropsInterface
-    extends RouterInterface,
-        ReturnType<typeof mapStateToProps> {}
+interface Props extends RouterInterface, ReturnType<typeof mapStateToProps> {}
 
-interface StateInterface {
+interface State {
     active_modal_name:
         | "create_trade_record"
         | "create_cash_dividend_record"
@@ -81,9 +78,9 @@ interface StateInterface {
         | null;
 }
 
-class Details extends React.Component<PropsInterface, StateInterface> {
-    public state: StateInterface;
-    public constructor(props: PropsInterface) {
+class Details extends React.Component<Props, State> {
+    public state: State;
+    public constructor(props: Props) {
         super(props);
         this.state = {
             active_modal_name: null,

@@ -3,12 +3,12 @@ import styles from "./MainFunctionBar.module.scss";
 import React, { ReactElement } from "react";
 import { NavLink } from "react-router-dom";
 
-import Utils from "../../util";
-import IconGearFill from "../Icons/IconGearFill";
-import Modal from "../Modal/Modal";
-import Button from "../Button/Button";
+import { IconGearFill } from "../../icons";
+import { Modal, Button } from "../../components";
+import Nav from "../../utils/nav";
+import Api from "../../utils/api";
 
-interface PropsInterface {
+interface Props {
     user_avatar_url: string;
     username: string;
     children: React.ReactNode[];
@@ -16,16 +16,13 @@ interface PropsInterface {
     hide: () => void;
 }
 
-interface StateInterface {
+interface State {
     active_modal_name: "check_logout" | null;
 }
 
-export default class MainFunctionBar extends React.Component<
-    PropsInterface,
-    StateInterface
-> {
-    public state: StateInterface;
-    public constructor(props: PropsInterface) {
+export default class MainFunctionBar extends React.Component<Props, State> {
+    public state: State;
+    public constructor(props: Props) {
         super(props);
         this.state = {
             active_modal_name: null,
@@ -124,12 +121,12 @@ export default class MainFunctionBar extends React.Component<
         this.setState({ active_modal_name: "check_logout" });
     };
     private handle_click_check_logout = async (): Promise<void> => {
-        let response: any = await Utils.send_request(
+        let response: any = await Api.send_request(
             "account/logout",
             "post",
             new URLSearchParams()
         );
-        if (response?.success) Utils.go_to_login_page();
+        if (response?.success) Nav.go_to_login_page();
         else throw Error("Failed to sign out.");
     };
 }

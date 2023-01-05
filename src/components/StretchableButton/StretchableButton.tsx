@@ -3,17 +3,17 @@ import quill_pen from "../../assets/quill_pen.png";
 
 import React, { MouseEvent } from "react";
 
-import IconPencilSquare from "../Icons/IconPencilSquare";
-import IconPiggyBank from "../Icons/IconPiggyBank";
-import Modal from "../Modal/Modal";
-import TradeRecordModal from "../TradeRecordModal/TradeRecordModal";
-import CashDividendRecordModal from "../CashDividendRecordModal/CashDividendRecordModal";
-import IconWatch from "../Icons/IconWatch";
-import TradePlanModal from "../TradePlanModal/TradePlanModal";
+import { IconPencilSquare, IconPiggyBank, IconWatch } from "../../icons";
+import {
+    Modal,
+    TradeRecordModal,
+    CashDividendRecordModal,
+    TradePlanModal,
+} from "../../components";
 
-interface PropsInterface {}
+interface Props {}
 
-interface StateInterface {
+interface State {
     is_active: boolean;
     active_modal_name:
         | "create_trade_record"
@@ -22,12 +22,9 @@ interface StateInterface {
         | null;
 }
 
-export default class StretchableButton extends React.Component<
-    PropsInterface,
-    StateInterface
-> {
-    public state: StateInterface;
-    public constructor(props: PropsInterface) {
+export default class StretchableButton extends React.Component<Props, State> {
+    public state: State;
+    public constructor(props: Props) {
         super(props);
         this.state = {
             is_active: false,

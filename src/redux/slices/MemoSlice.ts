@@ -1,19 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {
+
+import type {
     CreateMemoRequestBody,
     UpdateMemoRequestBody,
-} from "../../api/MemoApi";
-
-import Utils from "../../util";
-
-export type Memo = {
-    id: string;
-    sid: string;
-    company_name: string;
-    business: string;
-    strategy: string;
-    note: string;
-};
+    Memo,
+} from "../../types";
+import Api from "../../utils/api";
 
 export interface MemoState {
     sid_memo_map: { [sid: string]: Memo };
@@ -31,7 +23,7 @@ export const fetch_all_memo = createAsyncThunk(
         let request_body = new URLSearchParams();
         request_body.append("mode", "read");
 
-        let response = await Utils.send_request(
+        let response = await Api.send_request(
             "stock/memo",
             "post",
             request_body
@@ -50,7 +42,7 @@ export const create_memo = createAsyncThunk(
         request_body.append("business", data.business);
         request_body.append("strategy", data.strategy);
         request_body.append("note", data.note);
-        let response = await Utils.send_request(
+        let response = await Api.send_request(
             "stock/memo",
             "post",
             request_body
@@ -69,7 +61,7 @@ export const update_memo = createAsyncThunk(
         request_body.append("business", data.business);
         request_body.append("strategy", data.strategy);
         request_body.append("note", data.note);
-        let response = await Utils.send_request(
+        let response = await Api.send_request(
             "stock/memo",
             "post",
             request_body
@@ -86,7 +78,7 @@ export const delete_memo = createAsyncThunk(
         request_body.append("mode", "delete");
         request_body.append("id", id.toString());
 
-        let response = await Utils.send_request(
+        let response = await Api.send_request(
             "stock/memo",
             "post",
             request_body

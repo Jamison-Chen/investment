@@ -2,23 +2,20 @@ import "./Button.scss";
 
 import React, { MouseEventHandler } from "react";
 
-interface PropsInterface {
+interface Props {
     children: any;
     onClick?: MouseEventHandler;
     className: string;
     disabled?: boolean;
 }
 
-interface StateInterface {
+interface State {
     [key: string]: any;
 }
 
-export default class Button extends React.Component<
-    PropsInterface,
-    StateInterface
-> {
-    public state: StateInterface;
-    public constructor(props: PropsInterface) {
+export default class Button extends React.Component<Props, State> {
+    public state: State;
+    public constructor(props: Props) {
         super(props);
         this.state = {};
     }

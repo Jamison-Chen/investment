@@ -4,30 +4,25 @@ import waiting_spinner from "../../assets/loading.svg";
 import React from "react";
 import { connect } from "react-redux";
 
-import Modal from "../Modal/Modal";
-import Button from "../Button/Button";
-import LabeledInput from "../LabeledInput/LabeledInput";
-import IconToggleOn from "../Icons/IconToggleOn";
-import { RootState, AppDispatch } from "../../redux/store";
-import {
-    create_plan,
-    TradePlan,
-    update_plan,
-} from "../../redux/slices/TradePlanSlice";
+import { Modal, Button, LabeledInput } from "../../components";
+import { IconToggleOn } from "../../icons";
+import type { TradePlan } from "../../types";
+import type { RootState, AppDispatch } from "../../redux/store";
+import { create_plan, update_plan } from "../../redux/slices/TradePlanSlice";
 
 function mapStateToProps(root_state: RootState) {
     let is_waiting = root_state.trade_plan.is_waiting;
     return { is_waiting };
 }
 
-interface PropsInterface extends ReturnType<typeof mapStateToProps> {
+interface Props extends ReturnType<typeof mapStateToProps> {
     default_sid?: string;
     plan?: TradePlan;
     hide_modal: Function;
     dispatch: AppDispatch;
 }
 
-interface StateInterface {
+interface State {
     plan_id: string | null;
     sid: string;
     target_price: number;
@@ -35,9 +30,9 @@ interface StateInterface {
     target_quantity: number;
 }
 
-class TradePlanModal extends React.Component<PropsInterface, StateInterface> {
-    public state: StateInterface;
-    public constructor(props: PropsInterface) {
+class TradePlanModal extends React.Component<Props, State> {
+    public state: State;
+    public constructor(props: Props) {
         super(props);
         this.state = {
             plan_id: null,
@@ -56,9 +51,9 @@ class TradePlanModal extends React.Component<PropsInterface, StateInterface> {
                     target_price: props.plan.target_price,
                     plan_type: props.plan.plan_type,
                     target_quantity: props.plan.target_quantity,
-                } as StateInterface;
+                } as State;
             } else if (props.default_sid) {
-                return { sid: props.default_sid } as StateInterface;
+                return { sid: props.default_sid } as State;
             }
             return {};
         });

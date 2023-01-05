@@ -1,12 +1,12 @@
 import styles from "./DetailCard.module.scss";
 
 import { connect } from "react-redux";
-
 import React from "react";
+
+import type { StockInfo } from "../../types";
 import {
     get_sid_market_value_map,
     get_sid_stock_info_map,
-    StockInfo,
 } from "../../redux/slices/StockInfoSlice";
 import {
     get_inventory_map,
@@ -16,7 +16,7 @@ import {
     get_sid_trade_records_map,
     get_stock_warehouse,
 } from "../../redux/slices/TradeRecordSlice";
-import { RootState } from "../../redux/store";
+import type { RootState } from "../../redux/store";
 import { get_sid_total_cash_dividend_map } from "../../redux/slices/CashDividendRecordSlice";
 
 function mapStateToProps(root_state: RootState) {
@@ -51,16 +51,16 @@ function mapStateToProps(root_state: RootState) {
     };
 }
 
-interface PropsInterface extends ReturnType<typeof mapStateToProps> {
+interface Props extends ReturnType<typeof mapStateToProps> {
     sid: string;
     onClick?: (sid: string) => void;
 }
 
-interface StateInterface {}
+interface State {}
 
-class DetailCard extends React.Component<PropsInterface, StateInterface> {
-    public state: StateInterface;
-    public constructor(props: PropsInterface) {
+class DetailCard extends React.Component<Props, State> {
+    public state: State;
+    public constructor(props: Props) {
         super(props);
         this.state = {};
     }

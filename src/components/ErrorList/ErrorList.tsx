@@ -4,9 +4,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { connect } from "react-redux";
 
-import IconXLarge from "../Icons/IconXLarge";
-import RoundButton from "../RoundButton/RoundButton";
-import { RootState, AppDispatch } from "../../redux/store";
+import { IconXLarge } from "../../icons";
+import { RoundButton } from "../../components";
+import type { RootState, AppDispatch } from "../../redux/store";
 import { remove_error } from "../../redux/slices/ErrorSlice";
 
 function mapStateToProps(root_state: RootState) {
@@ -14,16 +14,16 @@ function mapStateToProps(root_state: RootState) {
     return { error_list };
 }
 
-interface PropsInterface extends ReturnType<typeof mapStateToProps> {
+interface Props extends ReturnType<typeof mapStateToProps> {
     dispatch: AppDispatch;
 }
 
-interface StateInterface {}
+interface State {}
 
-class ErrorList extends React.Component<PropsInterface, StateInterface> {
-    public state: StateInterface;
+class ErrorList extends React.Component<Props, State> {
+    public state: State;
     private error_root: HTMLElement;
-    public constructor(props: PropsInterface) {
+    public constructor(props: Props) {
         super(props);
         this.state = {};
         this.error_root = document.getElementById("error-root")!;

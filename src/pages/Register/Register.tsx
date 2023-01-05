@@ -3,24 +3,21 @@ import styles from "./Register.module.scss";
 import React from "react";
 import { Link } from "react-router-dom";
 
-import Form from "../../components/Form/Form";
-import Utils from "../../util";
-import Button from "../../components/Button/Button";
-import LabeledInput from "../../components/LabeledInput/LabeledInput";
-import FullLogo from "../../components/FullLogo/FullLogo";
+import { Form, Button, LabeledInput, FullLogo } from "../../components";
 import { RouterInterface, withRouter } from "../../router";
+import Api from "../../utils/api";
 
-interface PropsInterface extends RouterInterface {}
+interface Props extends RouterInterface {}
 
-interface StateInterface {
+interface State {
     email: string;
     username: string;
     password: string;
 }
 
-class Register extends React.Component<PropsInterface, StateInterface> {
-    public state: StateInterface;
-    public constructor(props: PropsInterface) {
+class Register extends React.Component<Props, State> {
+    public state: State;
+    public constructor(props: Props) {
         super(props);
         this.state = { email: "", username: "", password: "" };
     }
@@ -78,7 +75,7 @@ class Register extends React.Component<PropsInterface, StateInterface> {
         request_body.append("email", this.state.email);
         request_body.append("username", this.state.username);
         request_body.append("password", this.state.password);
-        let response = await Utils.send_request(
+        let response = await Api.send_request(
             "account/register",
             "post",
             request_body

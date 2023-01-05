@@ -5,25 +5,29 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import { connect } from "react-redux";
 
-import { RootState, AppDispatch } from "../../redux/store";
+import type { RootState, AppDispatch } from "../../redux/store";
 import { fetch_account_info } from "../../redux/slices/AccountSlice";
 import { fetch_all_trade_records } from "../../redux/slices/TradeRecordSlice";
 import { fetch_all_cash_dividend_records } from "../../redux/slices/CashDividendRecordSlice";
 import { fetch_all_stock_info } from "../../redux/slices/StockInfoSlice";
-import Header from "../../components/Header/Header";
-import MainFunctionBar from "../../components/MainFunctionBar/MainFunctionBar";
-import MainFunctionTab from "../../components/MainFunctionTab/MainFunctionTab";
-import IconHouseDoorFill from "../../components/Icons/IconHouseDoorFill";
-import IconJournalText from "../../components/Icons/IconJournalText";
-import IconColumnsGap from "../../components/Icons/IconPersonCircle";
+import {
+    Header,
+    MainFunctionBar,
+    MainFunctionTab,
+    Footer,
+    ErrorList,
+} from "../../components";
+import {
+    IconHouseDoorFill,
+    IconJournalText,
+    IconColumnsGap,
+    IconWatch,
+    IconViewList,
+} from "../../icons";
 import { RouterInterface, withRouter } from "../../router";
-import Footer from "../../components/Footer/Footer";
-import Utils from "../../util";
-import IconWatch from "../../components/Icons/IconWatch";
-import IconViewList from "../../components/Icons/IconViewList";
-import ErrorList from "../../components/ErrorList/ErrorList";
 import { fetch_all_trade_plans } from "../../redux/slices/TradePlanSlice";
 import { fetch_all_memo } from "../../redux/slices/MemoSlice";
+import Util from "../../utils/util";
 
 function mapStateToProps(root_state: RootState) {
     let username = root_state.account.username;
@@ -31,13 +35,11 @@ function mapStateToProps(root_state: RootState) {
     return { username, avatar_url };
 }
 
-interface PropsInterface
-    extends RouterInterface,
-        ReturnType<typeof mapStateToProps> {
+interface Props extends RouterInterface, ReturnType<typeof mapStateToProps> {
     dispatch: AppDispatch;
 }
 
-interface StateInterface {
+interface State {
     is_hidden_bar_active: boolean;
     subpage_list: {
         tab_icon: any;
@@ -46,9 +48,9 @@ interface StateInterface {
     }[];
 }
 
-class Main extends React.Component<PropsInterface, StateInterface> {
-    public state: StateInterface;
-    public constructor(props: PropsInterface) {
+class Main extends React.Component<Props, State> {
+    public state: State;
+    public constructor(props: Props) {
         super(props);
         this.state = {
             is_hidden_bar_active: false,
@@ -89,13 +91,13 @@ class Main extends React.Component<PropsInterface, StateInterface> {
                     this.props.dispatch(fetch_all_stock_info()),
                     this.props.dispatch(fetch_all_cash_dividend_records()),
                 ]);
-                Utils.remove_loading_screen();
+                Util.remove_loading_screen();
                 this.props.dispatch(fetch_all_trade_plans());
                 this.props.dispatch(fetch_all_memo());
             });
     }
     public async componentDidMount(): Promise<void> {
-        Utils.render_loading_screen();
+        Util.render_loading_screen();
     }
     public render(): React.ReactNode {
         return (

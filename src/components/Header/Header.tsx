@@ -2,22 +2,18 @@ import styles from "./Header.module.scss";
 
 import React from "react";
 
-import RoundButton from "../RoundButton/RoundButton";
-import FullLogo from "../FullLogo/FullLogo";
+import { RoundButton, FullLogo } from "../../components";
 
-interface PropsInterface {
+interface Props {
     avatar_url: string;
     handle_click_list_button: Function;
 }
 
-interface StateInterface {}
+interface State {}
 
-export default class Header extends React.Component<
-    PropsInterface,
-    StateInterface
-> {
-    public state: StateInterface;
-    public constructor(props: PropsInterface) {
+export default class Header extends React.Component<Props, State> {
+    public state: State;
+    public constructor(props: Props) {
         super(props);
         this.state = {};
     }

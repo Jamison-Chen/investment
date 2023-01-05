@@ -4,16 +4,14 @@ import waiting_spinner from "../../assets/loading.svg";
 import React from "react";
 import { connect } from "react-redux";
 
-import Modal from "../Modal/Modal";
-import Button from "../Button/Button";
-import LabeledInput from "../LabeledInput/LabeledInput";
-import IconToggleOn from "../Icons/IconToggleOn";
+import { Modal, Button, LabeledInput } from "../../components";
+import { IconToggleOn } from "../../icons";
 import {
     create_record,
     update_record,
-    TradeRecord,
 } from "../../redux/slices/TradeRecordSlice";
-import { RootState, AppDispatch } from "../../redux/store";
+import type { TradeRecord } from "../../types";
+import type { RootState, AppDispatch } from "../../redux/store";
 import { fetch_single_stock_info } from "../../redux/slices/StockInfoSlice";
 
 function mapStateToProps(root_state: RootState) {
@@ -21,14 +19,14 @@ function mapStateToProps(root_state: RootState) {
     return { is_waiting };
 }
 
-interface PropsInterface extends ReturnType<typeof mapStateToProps> {
+interface Props extends ReturnType<typeof mapStateToProps> {
     default_sid?: string;
     record?: TradeRecord;
     hide_modal: Function;
     dispatch: AppDispatch;
 }
 
-interface StateInterface {
+interface State {
     record_id: string | null;
     deal_time: string;
     sid: string;
@@ -38,9 +36,9 @@ interface StateInterface {
     handling_fee: number;
 }
 
-class TradeRecordModal extends React.Component<PropsInterface, StateInterface> {
-    public state: StateInterface;
-    public constructor(props: PropsInterface) {
+class TradeRecordModal extends React.Component<Props, State> {
+    public state: State;
+    public constructor(props: Props) {
         super(props);
         this.state = {
             record_id: null,
@@ -63,9 +61,9 @@ class TradeRecordModal extends React.Component<PropsInterface, StateInterface> {
                     is_buying: props.record.deal_quantity > 0 ? true : false,
                     abs_deal_quantity: Math.abs(props.record.deal_quantity),
                     handling_fee: props.record.handling_fee,
-                } as StateInterface;
+                } as State;
             } else if (props.default_sid) {
-                return { sid: props.default_sid } as StateInterface;
+                return { sid: props.default_sid } as State;
             }
             return {};
         });

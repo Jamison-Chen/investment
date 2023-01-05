@@ -4,34 +4,36 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
-import Form from "../../components/Form/Form";
-import Utils from "../../util";
-import Button from "../../components/Button/Button";
-import LabeledInput from "../../components/LabeledInput/LabeledInput";
-import FullLogo from "../../components/FullLogo/FullLogo";
+import {
+    Form,
+    Button,
+    LabeledInput,
+    FullLogo,
+    ErrorList,
+} from "../../components";
 import { RouterInterface, withRouter } from "../../router";
 import { AppDispatch } from "../../redux/store";
-import ErrorList from "../../components/ErrorList/ErrorList";
 import { push_error } from "../../redux/slices/ErrorSlice";
+import Api from "../../utils/api";
 
-interface PropsInterface extends RouterInterface {
+interface Props extends RouterInterface {
     dispatch: AppDispatch;
 }
 
-interface StateInterface {
+interface State {
     email: string;
     password: string;
 }
 
-class Login extends React.Component<PropsInterface, StateInterface> {
-    public state: StateInterface;
-    public constructor(props: PropsInterface) {
+class Login extends React.Component<Props, State> {
+    public state: State;
+    public constructor(props: Props) {
         super(props);
         this.state = { email: "", password: "" };
     }
     public async componentDidMount(): Promise<void> {
         // Go home if already login
-        let response: any = await Utils.check_login();
+        let response: any = await Api.check_login();
         if (response?.success) {
             this.props.router.navigate("/investment");
         }
@@ -83,7 +85,7 @@ class Login extends React.Component<PropsInterface, StateInterface> {
         let request_body = new URLSearchParams();
         request_body.append("email", this.state.email);
         request_body.append("password", this.state.password);
-        let response = await Utils.send_request(
+        let response = await Api.send_request(
             "account/login",
             "post",
             request_body

@@ -2,21 +2,18 @@ import styles from "./Form.module.scss";
 
 import React from "react";
 
-interface PropsInterface {
+interface Props {
     header_img?: React.ReactElement<HTMLImageElement>;
     header_content?: React.ReactNode;
     children: any;
     footer_buttons: React.ReactElement;
 }
 
-interface StateInterface {}
+interface State {}
 
-export default class SignUpForm extends React.Component<
-    PropsInterface,
-    StateInterface
-> {
-    public state: StateInterface;
-    public constructor(props: PropsInterface) {
+export default class SignUpForm extends React.Component<Props, State> {
+    public state: State;
+    public constructor(props: Props) {
         super(props);
         this.state = {};
     }

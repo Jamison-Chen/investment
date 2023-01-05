@@ -3,7 +3,7 @@ import styles from "./Footer.module.scss";
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-interface PropsInterface {
+interface Props {
     subpage_list: {
         tab_icon: any;
         tab_name: string;
@@ -11,14 +11,11 @@ interface PropsInterface {
     }[];
 }
 
-interface StateInterface {}
+interface State {}
 
-export default class Footer extends React.Component<
-    PropsInterface,
-    StateInterface
-> {
-    public state: StateInterface;
-    public constructor(props: PropsInterface) {
+export default class Footer extends React.Component<Props, State> {
+    public state: State;
+    public constructor(props: Props) {
         super(props);
         this.state = {};
     }
