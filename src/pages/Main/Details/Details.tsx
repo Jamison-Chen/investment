@@ -310,7 +310,7 @@ class Details extends React.Component<Props, State> {
     private handle_change_selected_menu_item = (
         e: ChangeEvent<HTMLSelectElement>
     ) => {
-        this.props.router.navigate(`/investment/details/${e.target.value}`);
+        this.props.router.navigate(`/investment/stock-list/${e.target.value}`);
     };
     private get histogram_chart_data(): (string | number)[][] {
         let result: (string | number)[][] = [];

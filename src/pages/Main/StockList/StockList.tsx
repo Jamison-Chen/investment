@@ -50,7 +50,7 @@ class StockList extends React.Component<Props, State> {
         );
     }
     private handle_click_card = (sid: string) => {
-        this.props.router.navigate(`/investment/details/${sid}`);
+        this.props.router.navigate(`/investment/stock-list/${sid}`);
     };
 }
 

@@ -21,10 +21,9 @@ export const fetch_all_memo = createAsyncThunk(
     "memo/fetch_all_memo",
     async (): Promise<Memo[]> => {
         let request_body = new URLSearchParams();
-        request_body.append("mode", "read");
 
         let response = await Api.send_request(
-            "stock/memo",
+            "memo/stock-memo/read",
             "post",
             request_body
         );
@@ -37,13 +36,12 @@ export const create_memo = createAsyncThunk(
     "memo/create_memo",
     async (data: CreateMemoRequestBody): Promise<Memo> => {
         let request_body = new URLSearchParams();
-        request_body.append("mode", "create");
         request_body.append("sid", data.sid);
         request_body.append("business", data.business);
         request_body.append("strategy", data.strategy);
         request_body.append("note", data.note);
         let response = await Api.send_request(
-            "stock/memo",
+            "memo/stock-memo/create",
             "post",
             request_body
         );
@@ -56,13 +54,12 @@ export const update_memo = createAsyncThunk(
     "memo/update_memo",
     async (data: UpdateMemoRequestBody): Promise<Memo> => {
         let request_body = new URLSearchParams();
-        request_body.append("mode", "update");
         request_body.append("id", data.id);
         request_body.append("business", data.business);
         request_body.append("strategy", data.strategy);
         request_body.append("note", data.note);
         let response = await Api.send_request(
-            "stock/memo",
+            "memo/stock-memo/update",
             "post",
             request_body
         );
@@ -75,11 +72,10 @@ export const delete_memo = createAsyncThunk(
     "memo/delete_memo",
     async (id: string | number): Promise<string | number> => {
         let request_body = new URLSearchParams();
-        request_body.append("mode", "delete");
         request_body.append("id", id.toString());
 
         let response = await Api.send_request(
-            "stock/memo",
+            "memo/stock-memo/delete",
             "post",
             request_body
         );

@@ -52,7 +52,7 @@ export default function MyRouter() {
                     <Route path="overview" element={<Overview />}></Route>
                     <Route path="records" element={<Records />}></Route>
                     <Route path="stock-list" element={<StockList />}></Route>
-                    <Route path="details/:sid" element={<Details />}></Route>
+                    <Route path="stock-list/:sid" element={<Details />}></Route>
                     <Route path="plans" element={<Plans />}></Route>
                     <Route
                         path="external-apps"

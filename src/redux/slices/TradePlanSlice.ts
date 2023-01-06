@@ -21,10 +21,9 @@ export const fetch_all_trade_plans = createAsyncThunk(
     "trade_plan/fetch_all_trade_plans",
     async (): Promise<TradePlan[]> => {
         let request_body = new URLSearchParams();
-        request_body.append("mode", "read");
 
         let response = await Api.send_request(
-            "stock/plan",
+            "memo/trade-plan/read",
             "post",
             request_body
         );
@@ -37,13 +36,12 @@ export const create_plan = createAsyncThunk(
     "trade_plan/create_plan",
     async (data: CreateTradePlanRequestBody): Promise<TradePlan> => {
         let request_body = new URLSearchParams();
-        request_body.append("mode", "create");
         request_body.append("sid", data.sid);
         request_body.append("plan_type", data.plan_type);
         request_body.append("target_price", data.target_price);
         request_body.append("target_quantity", data.target_quantity);
         let response = await Api.send_request(
-            "stock/plan",
+            "memo/trade-plan/create",
             "post",
             request_body
         );
@@ -56,14 +54,13 @@ export const update_plan = createAsyncThunk(
     "trade_plan/update_plan",
     async (data: UpdateTradePlanRequestBody): Promise<TradePlan> => {
         let request_body = new URLSearchParams();
-        request_body.append("mode", "update");
         request_body.append("id", data.id);
         request_body.append("sid", data.sid);
         request_body.append("plan_type", data.plan_type);
         request_body.append("target_price", data.target_price);
         request_body.append("target_quantity", data.target_quantity);
         let response = await Api.send_request(
-            "stock/plan",
+            "memo/trade-plan/update",
             "post",
             request_body
         );
@@ -76,11 +73,10 @@ export const delete_plan = createAsyncThunk(
     "trade_plan/delete_plan",
     async (id: string | number): Promise<string | number> => {
         let request_body = new URLSearchParams();
-        request_body.append("mode", "delete");
         request_body.append("id", id.toString());
 
         let response = await Api.send_request(
-            "stock/plan",
+            "memo/trade-plan/delete",
             "post",
             request_body
         );
