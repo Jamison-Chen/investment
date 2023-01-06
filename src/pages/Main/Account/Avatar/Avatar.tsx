@@ -70,13 +70,13 @@ class Avatar extends React.Component<Props, State> {
                                         "/investment/account"
                                     )
                                 }
-                                className="light border"
+                                className="light border l"
                             >
                                 捨棄
                             </Button>
                             <Button
                                 onClick={this.handle_click_save_button}
-                                className="primary_fill"
+                                className="primary_fill l"
                             >
                                 儲存
                             </Button>

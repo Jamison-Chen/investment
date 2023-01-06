@@ -2,12 +2,23 @@ import styles from "./Register.module.scss";
 
 import React from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
-import { Form, Button, LabeledInput, FullLogo } from "../../components";
+import {
+    Form,
+    Button,
+    LabeledInput,
+    FullLogo,
+    ErrorList,
+} from "../../components";
 import { RouterInterface, withRouter } from "../../router";
+import { AppDispatch } from "../../redux/store";
+import { push_error } from "../../redux/slices/ErrorSlice";
 import Api from "../../utils/api";
 
-interface Props extends RouterInterface {}
+interface Props extends RouterInterface {
+    dispatch: AppDispatch;
+}
 
 interface State {
     email: string;
@@ -25,6 +36,7 @@ class Register extends React.Component<Props, State> {
     public render(): React.ReactNode {
         return (
             <div className={styles.main}>
+                <ErrorList />
                 <Form
                     header_img={<FullLogo size="m" />}
                     footer_buttons={
@@ -81,9 +93,36 @@ class Register extends React.Component<Props, State> {
             request_body
         );
         if (response?.success) {
-            this.props.router.navigate("/investment/login");
+            await this.login(this.state.email, this.state.password);
+        } else {
+            this.props.dispatch(
+                push_error({ message: response?.error || "Failed to sign up." })
+            );
+        }
+    };
+    private login = async (email: string, password: string): Promise<any> => {
+        let request_body = new URLSearchParams();
+        request_body.append("email", email);
+        request_body.append("password", password);
+        let response = await Api.send_request(
+            "account/login",
+            "post",
+            request_body
+        );
+        if (response?.success) {
+            let path_and_query_string = window.localStorage.getItem(
+                "path_and_query_string"
+            );
+            if (path_and_query_string) {
+                window.localStorage.removeItem("path_and_query_string");
+                this.props.router.navigate(path_and_query_string);
+            } else this.props.router.navigate(`/investment`);
+        } else {
+            this.props.dispatch(
+                push_error({ message: response?.error || "Failed to login." })
+            );
         }
     };
 }
 
-export default withRouter(Register);
+export default connect()(withRouter(Register));

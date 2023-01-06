@@ -18,17 +18,34 @@ interface Props extends ReturnType<typeof mapStateToProps> {
     dispatch: AppDispatch;
 }
 
-interface State {}
+interface State {
+    timer: NodeJS.Timer | null;
+}
 
 class ErrorList extends React.Component<Props, State> {
     public state: State;
     private error_root: HTMLElement;
     public constructor(props: Props) {
         super(props);
-        this.state = {};
+        this.state = {
+            timer: null,
+        };
         this.error_root = document.getElementById("error-root")!;
     }
-    public componentDidMount(): void {}
+    public componentDidMount(): void {
+        this.setState((state, props) => {
+            return {
+                timer: setInterval(
+                    () => props.dispatch(remove_error(0)),
+                    10000
+                ),
+            };
+        });
+    }
+    public componentWillUnmount(): void {
+        clearInterval(this.state.timer!);
+        this.setState({ timer: null });
+    }
     public render(): React.ReactNode {
         return ReactDOM.createPortal(
             <div className={styles.main}>

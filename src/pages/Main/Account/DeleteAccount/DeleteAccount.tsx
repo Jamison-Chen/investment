@@ -1,4 +1,4 @@
-import styles from "./Password.module.scss";
+import styles from "./DeleteAccount.module.scss";
 
 import React from "react";
 import { connect } from "react-redux";
@@ -12,11 +12,12 @@ import {
 import { IconArrowLeft } from "../../../../icons";
 import { RouterInterface, withRouter } from "../../../../router";
 import type { RootState, AppDispatch } from "../../../../redux/store";
-import { update_account_info } from "../../../../redux/slices/AccountSlice";
+import { delete_account } from "../../../../redux/slices/AccountSlice";
 
 function mapStateToProps(root_state: RootState) {
     let user_id = root_state.account.user_id;
-    return { user_id };
+    let username = root_state.account.username;
+    return { user_id, username };
 }
 
 interface Props extends RouterInterface, ReturnType<typeof mapStateToProps> {
@@ -24,15 +25,14 @@ interface Props extends RouterInterface, ReturnType<typeof mapStateToProps> {
 }
 
 interface State {
-    old_password: string;
-    new_password: string;
+    password: string;
 }
 
-class Password extends React.Component<Props, State> {
+class DeleteAccount extends React.Component<Props, State> {
     public state: State;
     public constructor(props: Props) {
         super(props);
-        this.state = { old_password: "", new_password: "" };
+        this.state = { password: "" };
     }
     public async componentDidMount(): Promise<void> {}
     public render(): React.ReactNode {
@@ -51,7 +51,7 @@ class Password extends React.Component<Props, State> {
                             >
                                 <IconArrowLeft side_length="20" />
                             </RoundButton>
-                            <h1>更新密碼</h1>
+                            <h1>刪除帳號</h1>
                         </div>
                     }
                     footer_buttons={
@@ -67,26 +67,22 @@ class Password extends React.Component<Props, State> {
                                 捨棄
                             </Button>
                             <Button
-                                onClick={this.handle_click_save_button}
-                                className="primary_fill l"
+                                onClick={this.handle_click_delete}
+                                className="dangerous_fill l"
                             >
-                                更新密碼
+                                確認刪除
                             </Button>
                         </>
                     }
                 >
+                    <div className={styles.description}>
+                        提醒您，帳號刪除後即無法復原。
+                    </div>
                     <LabeledInput
-                        title="原密碼"
-                        name="old_password"
+                        title="密碼"
+                        name="password"
                         type="password"
-                        value={this.state.old_password}
-                        onChange={this.hadle_input_change}
-                    />
-                    <LabeledInput
-                        title="新密碼"
-                        name="new_password"
-                        type="password"
-                        value={this.state.new_password}
+                        value={this.state.password}
                         onChange={this.hadle_input_change}
                     />
                 </Form>
@@ -96,22 +92,20 @@ class Password extends React.Component<Props, State> {
     private hadle_input_change = (name: string, value: string): void => {
         if (name in this.state) this.setState({ [name]: value } as any);
     };
-    private handle_click_save_button = async (): Promise<void> => {
+    private handle_click_delete = async (): Promise<void> => {
         try {
             await this.props
                 .dispatch(
-                    update_account_info({
-                        id: this.props.user_id,
-                        old_password: this.state.old_password,
-                        new_password: this.state.new_password,
+                    delete_account({
+                        password: this.state.password,
                     })
                 )
                 .unwrap();
-            this.props.router.navigate("/investment/account");
+            this.props.router.navigate("/investment/login");
         } catch (rejectedValueOrSerializedError) {
             console.log(rejectedValueOrSerializedError);
         }
     };
 }
 
-export default connect(mapStateToProps)(withRouter(Password));
+export default connect(mapStateToProps)(withRouter(DeleteAccount));

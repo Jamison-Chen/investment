@@ -91,10 +91,17 @@ class Login extends React.Component<Props, State> {
             request_body
         );
         if (response?.success) {
-            let from = this.props.router.search_params.get("from");
-            this.props.router.navigate(from || `/investment`);
+            let path_and_query_string = window.localStorage.getItem(
+                "path_and_query_string"
+            );
+            if (path_and_query_string) {
+                window.localStorage.removeItem("path_and_query_string");
+                this.props.router.navigate(path_and_query_string);
+            } else this.props.router.navigate(`/investment`);
         } else {
-            this.props.dispatch(push_error({ message: response.error }));
+            this.props.dispatch(
+                push_error({ message: response?.error || "Failed to login." })
+            );
         }
     };
     private handle_hit_enter = (e: KeyboardEvent): void => {

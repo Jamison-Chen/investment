@@ -51,6 +51,20 @@ export const update_account_info = createAsyncThunk(
     }
 );
 
+export const delete_account = createAsyncThunk(
+    "account/delete_account",
+    async (request_body: { password: string }): Promise<void> => {
+        let response = await Api.send_request(
+            "account/delete",
+            "post",
+            JSON.stringify(request_body)
+        );
+        if (!response?.success) {
+            throw Error(response?.error || "Failed to update info");
+        }
+    }
+);
+
 export const account_slice = createSlice({
     name: "account",
     initialState,
@@ -73,7 +87,11 @@ export const account_slice = createSlice({
                 state.username = action.payload.username;
                 state.avatar_url = action.payload.avatar_url;
             })
-            .addCase(update_account_info.rejected, (state) => {});
+            .addCase(update_account_info.rejected, (state) => {})
+
+            .addCase(delete_account.pending, (state) => {})
+            .addCase(delete_account.fulfilled, (state, action) => {})
+            .addCase(delete_account.rejected, (state) => {});
     },
 });
 

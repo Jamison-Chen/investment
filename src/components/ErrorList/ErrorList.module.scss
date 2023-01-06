@@ -14,7 +14,9 @@
     font-size: 0.9 * _.$base-font-size;
     z-index: 5;
     user-select: none;
-    .box {
+    & > .box {
+        display: flex;
+        align-items: center;
         animation: popout 0.3s ease;
         border-radius: 3px;
         background-color: _.$red;

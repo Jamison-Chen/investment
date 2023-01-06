@@ -13,7 +13,7 @@
     @media (hover: hover) {
         &.reactive:hover {
             cursor: pointer;
-            background-color: _.$noisy-white;
+            background-color: _.$transparent-black;
         }
     }
     & > .label {

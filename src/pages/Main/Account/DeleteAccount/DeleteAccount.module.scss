@@ -1,0 +1,34 @@
+@use "../../../../global_variables" as _;
+
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 15vh;
+    min-height: 100%;
+    width: 100%;
+    .header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        & > h1 {
+            font-size: 1.25 * _.$base-font-size;
+            font-weight: normal;
+        }
+    }
+    .description {
+        margin-bottom: 20px;
+        font-size: 0.9 * _.$base-font-size;
+        color: _.$gray;
+    }
+}
+
+@media screen and (max-width: _.$hide-function-bar-boundry) {
+    .main {
+        min-height: calc(
+            100% - _.$header-height - _.$footer-height -
+                _.$show-header-border-boundry
+        );
+    }
+}

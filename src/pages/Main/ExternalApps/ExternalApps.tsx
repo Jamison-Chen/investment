@@ -21,6 +21,7 @@ class ExternalApps extends React.Component<Props, State> {
     public render(): React.ReactNode {
         return (
             <div className={styles.main}>
+                <h2>外部應用程式</h2>
                 <div className={styles.app_list}>
                     <Link className={styles.app} to={`/investment/simulator`}>
                         <img src={simulator_icon} alt="" />

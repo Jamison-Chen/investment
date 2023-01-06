@@ -3,25 +3,24 @@
 .main {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100%;
+    height: 100%;
     width: 100%;
-    padding: 10px;
+    padding: 10px 30px;
     background-color: _.$noisy-white;
-    .app_list {
+    & > h2 {
+        color: _.$black;
+    }
+    & > .app_list {
         display: flex;
-        gap: 10px;
-        align-items: center;
-        justify-content: center;
-        height: 100%;
-        .app {
+        gap: 20px;
+        & > .app {
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
             align-items: center;
             height: 110px;
             width: 110px;
+            box-shadow: 0 0 5px 5px _.$transparent-black;
             overflow: hidden;
             border-radius: 8px;
             transition-duration: 200ms;
@@ -30,6 +29,7 @@
             @media (hover: hover) {
                 &:hover {
                     background-color: _.$white;
+                    box-shadow: 0 0 8px 8px _.$transparent-black;
                 }
             }
             & > img {
@@ -49,7 +49,7 @@
 
 @media screen and (max-width: _.$hide-function-bar-boundry) {
     .main {
-        min-height: calc(
+        height: calc(
             100% - _.$header-height - _.$footer-height -
                 _.$show-header-border-boundry
         );

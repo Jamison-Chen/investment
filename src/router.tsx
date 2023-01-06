@@ -31,6 +31,7 @@ import Avatar from "./pages/Main/Account/Avatar/Avatar";
 import Username from "./pages/Main/Account/Username/Username";
 import Email from "./pages/Main/Account/Email/Email";
 import Password from "./pages/Main/Account/Password/Password";
+import DeleteAccount from "./pages/Main/Account/DeleteAccount/DeleteAccount";
 
 export default function MyRouter() {
     return (
@@ -48,6 +49,10 @@ export default function MyRouter() {
                     <Route
                         path="account/password"
                         element={<Password />}
+                    ></Route>
+                    <Route
+                        path="account/delete-account"
+                        element={<DeleteAccount />}
                     ></Route>
                     <Route path="overview" element={<Overview />}></Route>
                     <Route path="records" element={<Records />}></Route>

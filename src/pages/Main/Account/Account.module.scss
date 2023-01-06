@@ -4,22 +4,26 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 20px;
     min-height: 100%;
     width: 100%;
-    & > .header {
-        display: flex;
-        align-items: center;
-        gap: 10px;
+    padding-bottom: 30px;
+    & > .section {
         width: min(93%, 720px);
-        margin: 20px 0 10px 0;
-        & > h1 {
-            font-size: 1.25 * _.$base-font-size;
-            font-weight: normal;
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 0 10px 0;
+            & > h2 {
+                font-size: 1.25 * _.$base-font-size;
+                font-weight: normal;
+            }
         }
-    }
-    .avatar {
-        width: 40px;
-        border-radius: 100px;
+        .avatar {
+            width: 40px;
+            border-radius: 100px;
+        }
     }
 }
 

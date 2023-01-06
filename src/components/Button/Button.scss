@@ -48,7 +48,6 @@
     }
     &.primary {
         background-color: _.$white;
-        border: 1px solid _.$light-gray;
         color: _.$blue;
         &:hover:not(:disabled) {
             background-color: _.$noisy-white;
@@ -60,7 +59,6 @@
     }
     &.success {
         background-color: _.$white;
-        border: 1px solid _.$light-gray;
         color: _.$green;
         &:hover:not(:disabled) {
             background-color: _.$noisy-white;
@@ -72,7 +70,6 @@
     }
     &.dangerous {
         background-color: _.$white;
-        border: 1px solid _.$light-gray;
         color: _.$red;
         &:hover:not(:disabled) {
             background-color: _.$noisy-white;

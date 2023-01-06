@@ -9,7 +9,7 @@ import type { RootState, AppDispatch } from "../../redux/store";
 import { update_or_create_memo } from "../../redux/slices/MemoSlice";
 
 function mapStateToProps(root_state: RootState) {
-    let is_waiting = root_state.trade_plan.is_waiting;
+    let is_waiting = root_state.memo.is_waiting;
     return { is_waiting };
 }
 
