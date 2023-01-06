@@ -1,3 +1,4 @@
+import { MouseEventHandler } from "react";
 import logo from "../assets/logo.png";
 
 export default class Util {
@@ -54,9 +55,13 @@ export default class Util {
             date.setDate(date.getDate() + 1)
         ) {
             // Do not drop weekend because sometimes the market would open on weekend
-            // e.g. 2022-01-01
             result.push(date.toLocaleDateString("af"));
         }
         return result;
     }
+    public static hide_modal =
+        (component: React.Component): MouseEventHandler =>
+        (): void => {
+            component.setState({ active_modal_name: null });
+        };
 }

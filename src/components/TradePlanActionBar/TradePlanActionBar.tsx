@@ -9,6 +9,7 @@ import { Modal, RoundButton, Button, TradePlanModal } from "../../components";
 import type { TradePlan } from "../../types";
 import type { RootState, AppDispatch } from "../../redux/store";
 import { delete_plan } from "../../redux/slices/TradePlanSlice";
+import Util from "../../utils/util";
 
 function mapStateToProps(root_state: RootState) {
     let is_waiting = root_state.trade_plan.is_waiting;
@@ -59,20 +60,20 @@ class TradePlanActionBar extends React.Component<Props, State> {
             return (
                 <TradePlanModal
                     plan={this.props.plan}
-                    hide_modal={this.hide_modal}
+                    hide_modal={Util.hide_modal(this)}
                 />
             );
         } else if (this.state.active_modal_name === "check_delete") {
             return (
                 <Modal
-                    hide_modal={this.hide_modal}
+                    hide_modal={Util.hide_modal(this)}
                     header_title="刪除"
                     no_x
                     footer={
                         <>
                             <Button
                                 className="light l"
-                                onClick={this.hide_modal}
+                                onClick={Util.hide_modal(this)}
                             >
                                 取消
                             </Button>
@@ -129,9 +130,6 @@ class TradePlanActionBar extends React.Component<Props, State> {
             (plan_type === "buy" ? styles.buy : styles.sell)
         );
     }
-    private hide_modal = (): void => {
-        this.setState({ active_modal_name: null });
-    };
     private handle_click_pencil = (e: MouseEvent): void => {
         e.stopPropagation();
         this.setState({ active_modal_name: "edit" });

@@ -10,6 +10,7 @@ import {
     CashDividendRecordModal,
     TradePlanModal,
 } from "../../components";
+import Util from "../../utils/util";
 
 interface Props {}
 
@@ -85,19 +86,18 @@ export default class StretchableButton extends React.Component<Props, State> {
     }
     private get active_modal(): React.ReactElement<Modal> | null {
         if (this.state.active_modal_name === "create_trade_record") {
-            return <TradeRecordModal hide_modal={this.hide_modal} />;
+            return <TradeRecordModal hide_modal={Util.hide_modal(this)} />;
         } else if (
             this.state.active_modal_name === "create_cash_dividend_record"
         ) {
-            return <CashDividendRecordModal hide_modal={this.hide_modal} />;
+            return (
+                <CashDividendRecordModal hide_modal={Util.hide_modal(this)} />
+            );
         } else if (this.state.active_modal_name === "create_trade_plan") {
-            return <TradePlanModal hide_modal={this.hide_modal} />;
+            return <TradePlanModal hide_modal={Util.hide_modal(this)} />;
         }
         return null;
     }
-    private hide_modal = (): void => {
-        this.setState({ active_modal_name: null });
-    };
     private toggle = (e: MouseEvent): void => {
         e.stopPropagation();
         this.setState((state, props) => {

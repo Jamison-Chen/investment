@@ -3,10 +3,10 @@ import styles from "./MainFunctionBar.module.scss";
 import React, { ReactElement } from "react";
 import { NavLink } from "react-router-dom";
 
-import { IconGearFill } from "../../icons";
 import { Modal, Button, FullLogo } from "../../components";
 import Nav from "../../utils/nav";
 import Api from "../../utils/api";
+import Util from "../../utils/util";
 
 interface Props {
     user_avatar_url: string;
@@ -89,13 +89,13 @@ export default class MainFunctionBar extends React.Component<Props, State> {
             return (
                 <Modal
                     header_title="登出"
-                    hide_modal={this.hide_modal}
+                    hide_modal={Util.hide_modal(this)}
                     no_x
                     footer={
                         <>
                             <Button
                                 className="light l"
-                                onClick={this.hide_modal}
+                                onClick={Util.hide_modal(this)}
                             >
                                 取消
                             </Button>
@@ -116,9 +116,6 @@ export default class MainFunctionBar extends React.Component<Props, State> {
         }
         return null;
     }
-    private hide_modal = (): void => {
-        this.setState({ active_modal_name: null });
-    };
     private handle_click_logout_button = (): void => {
         this.props.hide();
         this.setState({ active_modal_name: "check_logout" });

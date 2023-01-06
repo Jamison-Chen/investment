@@ -20,18 +20,11 @@ export type UpdateCashDividendRecordRequestBody = {
     cash_dividend: string;
 };
 
-export type CreateMemoRequestBody = {
+export type UpdateOrCreateMemoRequestBody = {
     sid: string;
-    business: string;
-    strategy: string;
-    note: string;
-};
-
-export type UpdateMemoRequestBody = {
-    id: string;
-    business: string;
-    strategy: string;
-    note: string;
+    business?: string;
+    strategy?: string;
+    note?: string;
 };
 
 export type CreateTradePlanRequestBody = {

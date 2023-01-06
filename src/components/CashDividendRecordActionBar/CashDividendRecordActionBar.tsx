@@ -10,6 +10,7 @@ import type { CashDividendRecord } from "../../types";
 import type { RootState, AppDispatch } from "../../redux/store";
 import { delete_record } from "../../redux/slices/CashDividendRecordSlice";
 import CashDividendRecordModal from "../CashDividendRecordModal/CashDividendRecordModal";
+import Util from "../../utils/util";
 
 function mapStateToProps(root_state: RootState) {
     let is_waiting = root_state.cash_dividend.is_waiting;
@@ -60,20 +61,20 @@ class CashDividendRecordActionBar extends React.Component<Props, State> {
             return (
                 <CashDividendRecordModal
                     record={this.props.record}
-                    hide_modal={this.hide_modal}
+                    hide_modal={Util.hide_modal(this)}
                 />
             );
         } else if (this.state.active_modal_name === "check_delete") {
             return (
                 <Modal
-                    hide_modal={this.hide_modal}
+                    hide_modal={Util.hide_modal(this)}
                     header_title="刪除"
                     no_x
                     footer={
                         <>
                             <Button
                                 className="light l"
-                                onClick={this.hide_modal}
+                                onClick={Util.hide_modal(this)}
                             >
                                 取消
                             </Button>
@@ -115,9 +116,6 @@ class CashDividendRecordActionBar extends React.Component<Props, State> {
         }
         return null;
     }
-    private hide_modal = (): void => {
-        this.setState({ active_modal_name: null });
-    };
     private handle_click_pencil = (e: MouseEvent): void => {
         e.stopPropagation();
         this.setState({ active_modal_name: "edit" });

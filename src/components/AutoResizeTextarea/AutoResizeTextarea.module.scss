@@ -1,0 +1,16 @@
+@use "../../global_variables" as _;
+
+.main {
+    flex-grow: 1;
+    width: 100%;
+    padding: 8px 15px;
+    border-radius: 15px;
+    border: none;
+    resize: none;
+    background-color: _.$noisy-white;
+    outline: none;
+    font-family: inherit;
+    letter-spacing: inherit;
+    height: 32px;
+    max-height: 250px;
+}

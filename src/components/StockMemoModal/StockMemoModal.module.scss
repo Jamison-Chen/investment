@@ -1,0 +1,10 @@
+@use "../../global_variables" as _;
+
+.modal_inner {
+    width: min(90vw, 300px);
+}
+
+.waiting {
+    height: 22.5px;
+    width: 36px;
+}

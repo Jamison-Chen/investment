@@ -21,6 +21,7 @@ import {
     CashDividendRecordModal,
     TradePlanModal,
     BeautifulRow,
+    StockMemoModal,
 } from "../../../components";
 import {
     get_inventory_map,
@@ -31,6 +32,7 @@ import {
 } from "../../../redux/slices/TradeRecordSlice";
 import { IconPencilSquare, IconWatch, IconPiggyBank } from "../../../icons";
 import { get_sid_total_cash_dividend_map } from "../../../redux/slices/CashDividendRecordSlice";
+import Util from "../../../utils/util";
 
 function mapStateToProps(root_state: RootState) {
     let stock_info_list: StockInfo[] = root_state.stock_info.info_list;
@@ -72,9 +74,9 @@ interface State {
         | "create_trade_record"
         | "create_cash_dividend_record"
         | "create_trade_plan"
-        | "create_or_update_business"
-        | "create_or_update_strategy"
-        | "create_or_update_note"
+        | "update_or_create_business"
+        | "update_or_create_strategy"
+        | "update_or_create_note"
         | null;
 }
 
@@ -225,34 +227,51 @@ class Details extends React.Component<Props, State> {
                             <BeautifulRow
                                 label="主要業務"
                                 value={
-                                    this.props.sid_memo_map[this.sid]?.business
+                                    <div className={styles.memo}>
+                                        {
+                                            this.props.sid_memo_map[this.sid]
+                                                ?.business
+                                        }
+                                    </div>
                                 }
                                 onClick={() => {
                                     this.setState({
                                         active_modal_name:
-                                            "create_or_update_business",
+                                            "update_or_create_business",
                                     });
                                 }}
                             />
                             <BeautifulRow
                                 label="投資策略"
                                 value={
-                                    this.props.sid_memo_map[this.sid]?.strategy
+                                    <div className={styles.memo}>
+                                        {
+                                            this.props.sid_memo_map[this.sid]
+                                                ?.strategy
+                                        }
+                                    </div>
                                 }
                                 onClick={() => {
                                     this.setState({
                                         active_modal_name:
-                                            "create_or_update_strategy",
+                                            "update_or_create_strategy",
                                     });
                                 }}
                             />
                             <BeautifulRow
                                 label="備註"
-                                value={this.props.sid_memo_map[this.sid]?.note}
+                                value={
+                                    <div className={styles.memo}>
+                                        {
+                                            this.props.sid_memo_map[this.sid]
+                                                ?.note
+                                        }
+                                    </div>
+                                }
                                 onClick={() => {
                                     this.setState({
                                         active_modal_name:
-                                            "create_or_update_note",
+                                            "update_or_create_note",
                                     });
                                 }}
                             />
@@ -267,7 +286,7 @@ class Details extends React.Component<Props, State> {
             return (
                 <TradeRecordModal
                     default_sid={this.sid!}
-                    hide_modal={this.hide_modal}
+                    hide_modal={Util.hide_modal(this)}
                 />
             );
         }
@@ -275,7 +294,7 @@ class Details extends React.Component<Props, State> {
             return (
                 <CashDividendRecordModal
                     default_sid={this.sid!}
-                    hide_modal={this.hide_modal}
+                    hide_modal={Util.hide_modal(this)}
                 />
             );
         }
@@ -283,24 +302,48 @@ class Details extends React.Component<Props, State> {
             return (
                 <TradePlanModal
                     default_sid={this.sid!}
-                    hide_modal={this.hide_modal}
+                    hide_modal={Util.hide_modal(this)}
                 />
             );
         }
-        if (this.state.active_modal_name === "create_or_update_business") {
-            return null;
+        if (this.state.active_modal_name === "update_or_create_business") {
+            return (
+                <StockMemoModal
+                    sid={this.sid}
+                    field_name="business"
+                    field_default_value={
+                        this.props.sid_memo_map[this.sid]?.business || ""
+                    }
+                    hide_modal={Util.hide_modal(this)}
+                />
+            );
         }
-        if (this.state.active_modal_name === "create_or_update_strategy") {
-            return null;
+        if (this.state.active_modal_name === "update_or_create_strategy") {
+            return (
+                <StockMemoModal
+                    sid={this.sid}
+                    field_name="strategy"
+                    field_default_value={
+                        this.props.sid_memo_map[this.sid]?.strategy || ""
+                    }
+                    hide_modal={Util.hide_modal(this)}
+                />
+            );
         }
-        if (this.state.active_modal_name === "create_or_update_note") {
-            return null;
+        if (this.state.active_modal_name === "update_or_create_note") {
+            return (
+                <StockMemoModal
+                    sid={this.sid}
+                    field_name="note"
+                    field_default_value={
+                        this.props.sid_memo_map[this.sid]?.note || ""
+                    }
+                    hide_modal={Util.hide_modal(this)}
+                />
+            );
         }
         return null;
     }
-    private hide_modal = (): void => {
-        this.setState({ active_modal_name: null });
-    };
     private get sid(): string {
         return this.props.router.params.sid!;
     }

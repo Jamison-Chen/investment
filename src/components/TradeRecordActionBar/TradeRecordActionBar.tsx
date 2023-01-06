@@ -9,6 +9,7 @@ import { Modal, RoundButton, Button, TradeRecordModal } from "../../components";
 import type { RootState, AppDispatch } from "../../redux/store";
 import { delete_record } from "../../redux/slices/TradeRecordSlice";
 import type { TradeRecord } from "../../types";
+import Util from "../../utils/util";
 
 function mapStateToProps(root_state: RootState) {
     let is_waiting = root_state.trade_record.is_waiting;
@@ -59,20 +60,20 @@ class TradeRecordActionBar extends React.Component<Props, State> {
             return (
                 <TradeRecordModal
                     record={this.props.record}
-                    hide_modal={this.hide_modal}
+                    hide_modal={Util.hide_modal(this)}
                 />
             );
         } else if (this.state.active_modal_name === "check_delete") {
             return (
                 <Modal
-                    hide_modal={this.hide_modal}
+                    hide_modal={Util.hide_modal(this)}
                     header_title="刪除"
                     no_x
                     footer={
                         <>
                             <Button
                                 className="light l"
-                                onClick={this.hide_modal}
+                                onClick={Util.hide_modal(this)}
                             >
                                 取消
                             </Button>
@@ -130,9 +131,6 @@ class TradeRecordActionBar extends React.Component<Props, State> {
             styles.trade_type + " " + (quantity > 0 ? styles.buy : styles.sell)
         );
     }
-    private hide_modal = (): void => {
-        this.setState({ active_modal_name: null });
-    };
     private handle_click_pencil = (e: MouseEvent): void => {
         e.stopPropagation();
         this.setState({ active_modal_name: "edit" });
