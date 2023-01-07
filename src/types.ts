@@ -59,6 +59,14 @@ export type UpdateTradeRecordRequestBody = {
     handling_fee: string;
 };
 
+export type StockWarehouse = {
+    [sid: string]: {
+        [date: string]: {
+            [price: string]: number;
+        };
+    };
+};
+
 export type CashDividendRecord = {
     id: number;
     deal_time: string;

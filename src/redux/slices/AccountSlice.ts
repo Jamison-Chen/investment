@@ -1,8 +1,7 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import type { UpdateAccountInfoRequestBody } from "../../types";
 import Api from "../../utils/api";
-import { RootState } from "../store";
 
 export interface AccountState {
     user_id: string;

@@ -11,15 +11,14 @@ import {
     get_inventory_map,
     get_stock_warehouse,
     update_stock_warehouse,
-    StockWarehouse,
     get_sid_gain_map,
 } from "../../../redux/slices/TradeRecordSlice";
 import {
     get_sid_market_value_map,
     get_total_market_value,
 } from "../../../redux/slices/StockInfoSlice";
-import { StretchableButton } from "../../../components";
-import type { TradeRecord } from "../../../types";
+import { Button, StretchableButton } from "../../../components";
+import type { TradeRecord, StockWarehouse } from "../../../types";
 import Util from "../../../utils/util";
 
 function mapStateToProps(root_state: RootState) {
@@ -32,7 +31,6 @@ function mapStateToProps(root_state: RootState) {
         stock_info_list,
         inventory_map
     );
-    let sid_gain_map = get_sid_gain_map(sid_trade_records_map);
     let total_market_value = get_total_market_value(
         stock_info_list,
         inventory_map
@@ -47,7 +45,6 @@ function mapStateToProps(root_state: RootState) {
         cash_dividend_record_list,
         sid_trade_records_map,
         sid_market_value_map,
-        sid_gain_map,
         total_market_value,
         stock_warehouse,
     };
@@ -55,13 +52,17 @@ function mapStateToProps(root_state: RootState) {
 
 interface Props extends RouterInterface, ReturnType<typeof mapStateToProps> {}
 
-interface State {}
+interface State {
+    time_span: number;
+}
 
 class Overview extends React.Component<Props, State> {
     public state: State;
     public constructor(props: Props) {
         super(props);
-        this.state = {};
+        this.state = {
+            time_span: Infinity,
+        };
     }
     public async componentDidMount(): Promise<void> {}
     public render(): React.ReactNode {
@@ -133,6 +134,43 @@ class Overview extends React.Component<Props, State> {
                                 ${this.total_handling_fee.toLocaleString()}
                             </span>
                         </div>
+                    </div>
+                    <div className={styles.time_span_option_list}>
+                        <Button
+                            className={this.get_time_span_option_class_name(
+                                Infinity
+                            )}
+                            onClick={() =>
+                                this.setState({ time_span: Infinity })
+                            }
+                        >
+                            全部
+                        </Button>
+                        <Button
+                            className={this.get_time_span_option_class_name(
+                                365
+                            )}
+                            disabled={this.should_time_span_option_disabled(
+                                365
+                            )}
+                            onClick={() => this.setState({ time_span: 365 })}
+                        >
+                            最近一年
+                        </Button>
+                        <Button
+                            className={this.get_time_span_option_class_name(30)}
+                            disabled={this.should_time_span_option_disabled(30)}
+                            onClick={() => this.setState({ time_span: 30 })}
+                        >
+                            最近一月
+                        </Button>
+                        <Button
+                            className={this.get_time_span_option_class_name(7)}
+                            disabled={this.should_time_span_option_disabled(7)}
+                            onClick={() => this.setState({ time_span: 7 })}
+                        >
+                            最近一週
+                        </Button>
                     </div>
                 </div>
                 <div className={styles.block}>
@@ -238,6 +276,17 @@ class Overview extends React.Component<Props, State> {
             </div>
         );
     }
+    private get_time_span_option_class_name(button_value: number): string {
+        if (this.state.time_span === button_value) return "primary_fill";
+        return "transparent border";
+    }
+    private should_time_span_option_disabled(button_value: number): boolean {
+        let num_of_days = Util.get_date_string_list(
+            this.first_invest_date,
+            new Date()
+        ).length;
+        return num_of_days < button_value;
+    }
     private get market_value_pie_chart_data(): (string | number)[][] {
         let result: (string | number)[][] = [];
         for (const [sid, market_value] of Object.entries(
@@ -273,13 +322,22 @@ class Overview extends React.Component<Props, State> {
     private get total_cash_dividend(): number {
         let result = 0;
         for (let record of this.props.cash_dividend_record_list) {
-            result += record.cash_dividend;
+            if (
+                Date.parse(record.deal_time) >=
+                this.start_calculate_date.getTime()
+            ) {
+                result += record.cash_dividend;
+            }
         }
         return result;
     }
     private get total_gain(): number {
         let result = 0;
-        for (const gain of Object.values(this.props.sid_gain_map)) {
+        let sid_gain_map = get_sid_gain_map(
+            this.props.sid_trade_records_map,
+            this.start_calculate_date
+        );
+        for (const gain of Object.values(sid_gain_map)) {
             result += gain;
         }
         return result + this.total_cash_dividend;
@@ -287,28 +345,56 @@ class Overview extends React.Component<Props, State> {
     private get total_handling_fee(): number {
         let result = 0;
         for (let record of this.props.trade_record_list) {
-            result += record.handling_fee;
+            if (
+                Date.parse(record.deal_time) >=
+                this.start_calculate_date.getTime()
+            ) {
+                result += record.handling_fee;
+            }
         }
         return result;
     }
-    private get_average_cash_invested(end_date?: Date): number {
-        let min_date = new Date(
+    private get first_invest_date(): Date {
+        return new Date(
             Math.min(
                 ...this.props.trade_record_list.map((record) =>
                     Date.parse(record.deal_time)
                 )
             )
         );
+    }
+    private get start_calculate_date(): Date {
+        if (this.state.time_span === Infinity) return this.first_invest_date;
+
+        let start_calculate_date = new Date();
+        start_calculate_date.setDate(
+            start_calculate_date.getDate() - this.state.time_span + 1
+        );
+        start_calculate_date.setHours(0, 0, 0, 0);
+        if (this.first_invest_date.getTime() > start_calculate_date.getTime()) {
+            return this.first_invest_date;
+        }
+        return start_calculate_date;
+    }
+    private get_average_cash_invested(): number {
+        let start_calculate_date = this.start_calculate_date;
         let date_string_list = Util.get_date_string_list(
-            min_date,
-            end_date || new Date()
+            start_calculate_date,
+            new Date()
         );
         let num_of_days = date_string_list.length;
 
         let cumulative_cash_invested = 0;
-        this.cash_invested_chart_data.slice(1).forEach((row) => {
-            cumulative_cash_invested += row[1] as number;
-        });
+        this.cash_invested_chart_data
+            .slice(1)
+            .filter(
+                (row) =>
+                    Date.parse(row[0] as string) >=
+                    start_calculate_date.getTime()
+            )
+            .forEach((row) => {
+                cumulative_cash_invested += row[1] as number;
+            });
 
         return cumulative_cash_invested / num_of_days;
     }

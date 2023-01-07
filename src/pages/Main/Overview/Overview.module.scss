@@ -85,6 +85,11 @@
                 }
             }
         }
+        & > .time_span_option_list {
+            display: flex;
+            justify-content: space-evenly;
+            padding-top: 20px;
+        }
     }
 }
 
