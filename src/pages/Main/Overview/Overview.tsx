@@ -17,7 +17,7 @@ import {
     get_sid_market_value_map,
     get_total_market_value,
 } from "../../../redux/slices/StockInfoSlice";
-import { Button, StretchableButton } from "../../../components";
+import { StretchableButton } from "../../../components";
 import type { TradeRecord, StockWarehouse } from "../../../types";
 import Util from "../../../utils/util";
 
@@ -52,17 +52,13 @@ function mapStateToProps(root_state: RootState) {
 
 interface Props extends RouterInterface, ReturnType<typeof mapStateToProps> {}
 
-interface State {
-    time_span: number;
-}
+interface State {}
 
 class Overview extends React.Component<Props, State> {
     public state: State;
     public constructor(props: Props) {
         super(props);
-        this.state = {
-            time_span: Infinity,
-        };
+        this.state = {};
     }
     public async componentDidMount(): Promise<void> {}
     public render(): React.ReactNode {
@@ -134,43 +130,6 @@ class Overview extends React.Component<Props, State> {
                                 ${this.total_handling_fee.toLocaleString()}
                             </span>
                         </div>
-                    </div>
-                    <div className={styles.time_span_option_list}>
-                        <Button
-                            className={this.get_time_span_option_class_name(
-                                Infinity
-                            )}
-                            onClick={() =>
-                                this.setState({ time_span: Infinity })
-                            }
-                        >
-                            全部
-                        </Button>
-                        <Button
-                            className={this.get_time_span_option_class_name(
-                                365
-                            )}
-                            disabled={this.should_time_span_option_disabled(
-                                365
-                            )}
-                            onClick={() => this.setState({ time_span: 365 })}
-                        >
-                            最近一年
-                        </Button>
-                        <Button
-                            className={this.get_time_span_option_class_name(30)}
-                            disabled={this.should_time_span_option_disabled(30)}
-                            onClick={() => this.setState({ time_span: 30 })}
-                        >
-                            最近一月
-                        </Button>
-                        <Button
-                            className={this.get_time_span_option_class_name(7)}
-                            disabled={this.should_time_span_option_disabled(7)}
-                            onClick={() => this.setState({ time_span: 7 })}
-                        >
-                            最近一週
-                        </Button>
                     </div>
                 </div>
                 <div className={styles.block}>
@@ -276,17 +235,6 @@ class Overview extends React.Component<Props, State> {
             </div>
         );
     }
-    private get_time_span_option_class_name(button_value: number): string {
-        if (this.state.time_span === button_value) return "primary_fill";
-        return "transparent border";
-    }
-    private should_time_span_option_disabled(button_value: number): boolean {
-        let num_of_days = Util.get_date_string_list(
-            this.first_invest_date,
-            new Date()
-        ).length;
-        return num_of_days < button_value;
-    }
     private get market_value_pie_chart_data(): (string | number)[][] {
         let result: (string | number)[][] = [];
         for (const [sid, market_value] of Object.entries(
@@ -364,21 +312,21 @@ class Overview extends React.Component<Props, State> {
         );
     }
     private get start_calculate_date(): Date {
-        if (this.state.time_span === Infinity) {
-            let start_calculate_date = this.first_invest_date;
-            start_calculate_date.setHours(0, 0, 0, 0);
-            return start_calculate_date;
-        }
-
-        let start_calculate_date = new Date();
-        start_calculate_date.setDate(
-            start_calculate_date.getDate() - this.state.time_span + 1
-        );
+        // if (this.state.time_span === Infinity) {
+        let start_calculate_date = this.first_invest_date;
         start_calculate_date.setHours(0, 0, 0, 0);
-        if (this.first_invest_date.getTime() > start_calculate_date.getTime()) {
-            return this.first_invest_date;
-        }
         return start_calculate_date;
+        // }
+
+        // let start_calculate_date = new Date();
+        // start_calculate_date.setDate(
+        //     start_calculate_date.getDate() - this.state.time_span + 1
+        // );
+        // start_calculate_date.setHours(0, 0, 0, 0);
+        // if (this.first_invest_date.getTime() > start_calculate_date.getTime()) {
+        //     return this.first_invest_date;
+        // }
+        // return start_calculate_date;
     }
     private get_average_cash_invested(): number {
         let start_calculate_date = this.start_calculate_date;
@@ -472,19 +420,19 @@ class Overview extends React.Component<Props, State> {
                 (a, b) => Date.parse(a.deal_time) - Date.parse(b.deal_time)
             )
         );
-        result.forEach((row, idx) => {
-            if (idx === 0) row.push("平均投入");
-            else {
-                row.push(
-                    Math.round(
-                        result
-                            .slice(1, idx + 1)
-                            .map((row) => row[1] as number)
-                            .reduce((a, b) => a + b) / idx
-                    )
-                );
-            }
-        });
+        // result.forEach((row, idx) => {
+        //     if (idx === 0) row.push("平均投入");
+        //     else {
+        //         row.push(
+        //             Math.round(
+        //                 result
+        //                     .slice(1, idx + 1)
+        //                     .map((row) => row[1] as number)
+        //                     .reduce((a, b) => a + b) / idx
+        //             )
+        //         );
+        //     }
+        // });
         return result;
     }
 }

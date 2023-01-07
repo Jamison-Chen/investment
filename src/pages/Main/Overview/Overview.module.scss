@@ -28,6 +28,8 @@
     & > .block {
         width: fit-content;
         & > .title {
+            display: flex;
+            justify-content: space-between;
             font-weight: normal;
             font-size: _.$base-font-size;
         }
