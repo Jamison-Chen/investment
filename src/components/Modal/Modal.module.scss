@@ -17,6 +17,7 @@
         background-color: _.$white;
         border-radius: 8px;
         transform: translate(-50%, -50%);
+        animation: flyin 0.3s ease;
         & > .header {
             display: flex;
             justify-content: flex-end;
@@ -54,5 +55,16 @@
         & > .fake_footer {
             height: 25px;
         }
+    }
+}
+
+@keyframes flyin {
+    from {
+        top: 100%;
+        opacity: 0;
+    }
+    to {
+        top: 50%;
+        opacity: 1;
     }
 }
