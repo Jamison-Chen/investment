@@ -13,6 +13,7 @@ import { IconArrowLeft } from "../../../../icons";
 import { RouterInterface, withRouter } from "../../../../router";
 import type { RootState, AppDispatch } from "../../../../redux/store";
 import { update_account_info } from "../../../../redux/slices/AccountSlice";
+import { push_error } from "../../../../redux/slices/ErrorSlice";
 
 function mapStateToProps(root_state: RootState) {
     let user_id = root_state.account.user_id;
@@ -69,6 +70,7 @@ class Password extends React.Component<Props, State> {
                             <Button
                                 onClick={this.handle_click_save_button}
                                 className="primary_fill l"
+                                disabled={!this.can_submit}
                             >
                                 更新密碼
                             </Button>
@@ -93,6 +95,11 @@ class Password extends React.Component<Props, State> {
             </div>
         );
     }
+    private get can_submit(): boolean {
+        return this.state.new_password && this.state.old_password
+            ? true
+            : false;
+    }
     private hadle_input_change = (name: string, value: string): void => {
         if (name in this.state) this.setState({ [name]: value } as any);
     };
@@ -109,7 +116,13 @@ class Password extends React.Component<Props, State> {
                 .unwrap();
             this.props.router.navigate("/investment/account");
         } catch (rejectedValueOrSerializedError) {
-            console.log(rejectedValueOrSerializedError);
+            this.props.dispatch(
+                push_error({
+                    message:
+                        (rejectedValueOrSerializedError as any).message ||
+                        "Failed to update password.",
+                })
+            );
         }
     };
 }

@@ -13,8 +13,10 @@
     letter-spacing: 1.2 * _.$base-letter-spacing;
     gap: 5px;
     cursor: pointer;
-    &:hover:not(:disabled) {
-        opacity: 1;
+    @media (hover: hover) {
+        &:hover:not(:disabled) {
+            opacity: 1;
+        }
     }
     &:disabled {
         cursor: not-allowed;
@@ -38,8 +40,10 @@
     &.light {
         background-color: _.$noisy-white;
         color: _.$deep-gray;
-        &:hover:not(:disabled) {
-            background-color: _.$light-gray;
+        @media (hover: hover) {
+            &:hover:not(:disabled) {
+                background-color: _.$light-gray;
+            }
         }
     }
     &.primary_fill {
@@ -49,8 +53,10 @@
     &.primary {
         background-color: _.$white;
         color: _.$blue;
-        &:hover:not(:disabled) {
-            background-color: _.$noisy-white;
+        @media (hover: hover) {
+            &:hover:not(:disabled) {
+                background-color: _.$noisy-white;
+            }
         }
     }
     &.success_fill {
@@ -60,8 +66,10 @@
     &.success {
         background-color: _.$white;
         color: _.$green;
-        &:hover:not(:disabled) {
-            background-color: _.$noisy-white;
+        @media (hover: hover) {
+            &:hover:not(:disabled) {
+                background-color: _.$noisy-white;
+            }
         }
     }
     &.dangerous_fill {
@@ -71,8 +79,10 @@
     &.dangerous {
         background-color: _.$white;
         color: _.$red;
-        &:hover:not(:disabled) {
-            background-color: _.$noisy-white;
+        @media (hover: hover) {
+            &:hover:not(:disabled) {
+                background-color: _.$noisy-white;
+            }
         }
     }
     &.p8-15 {

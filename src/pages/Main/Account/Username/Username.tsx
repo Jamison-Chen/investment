@@ -16,6 +16,7 @@ import {
     update_account_info,
     fetch_account_info,
 } from "../../../../redux/slices/AccountSlice";
+import { push_error } from "../../../../redux/slices/ErrorSlice";
 
 function mapStateToProps(root_state: RootState) {
     let user_id = root_state.account.user_id;
@@ -38,10 +39,10 @@ class Username extends React.Component<Props, State> {
         this.state = { username: "" };
     }
     public async componentDidMount(): Promise<void> {
-        try {
+        if (!this.props.username) {
             await this.props.dispatch(fetch_account_info());
-            this.setState({ username: this.props.username });
-        } catch {}
+        }
+        this.setState({ username: this.props.username });
     }
     public render(): React.ReactNode {
         return (
@@ -109,7 +110,13 @@ class Username extends React.Component<Props, State> {
                 .unwrap();
             this.props.router.navigate("/investment/account");
         } catch (rejectedValueOrSerializedError) {
-            console.log(rejectedValueOrSerializedError);
+            this.props.dispatch(
+                push_error({
+                    message:
+                        (rejectedValueOrSerializedError as any).message ||
+                        "Failed to update username.",
+                })
+            );
         }
     };
 }

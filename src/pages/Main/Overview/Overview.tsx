@@ -313,14 +313,17 @@ class Overview extends React.Component<Props, State> {
         return cumulative_cash_invested / num_of_days;
     }
     private get rate_of_return(): number {
-        return (
+        let result: number =
             ((this.props.total_market_value -
                 this.get_total_cash_invested() +
                 this.total_gain -
                 this.total_handling_fee) /
                 this.get_average_cash_invested()) *
-            100
-        );
+            100;
+        // setTimeout(() =>
+        //     this.props.dispatch(update_local_rate_of_return(result))
+        // );
+        return result;
     }
     private get_cash_invested_chart_data = (
         ascending_trade_record_list: TradeRecord[],

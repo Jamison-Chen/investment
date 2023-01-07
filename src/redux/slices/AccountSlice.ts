@@ -1,7 +1,8 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import type { UpdateAccountInfoRequestBody } from "../../types";
 import Api from "../../utils/api";
+import { RootState } from "../store";
 
 export interface AccountState {
     user_id: string;
@@ -47,7 +48,7 @@ export const update_account_info = createAsyncThunk(
             JSON.stringify(request_body)
         );
         if (response?.success) return response.data;
-        else throw Error("Failed to update info");
+        else throw Error(response?.error || "Failed to update account info.");
     }
 );
 
@@ -60,15 +61,34 @@ export const delete_account = createAsyncThunk(
             JSON.stringify(request_body)
         );
         if (!response?.success) {
-            throw Error(response?.error || "Failed to update info");
+            throw Error(response?.error || "Failed to delete account.");
         }
     }
 );
 
+// export const update_rate_of_return = createAsyncThunk(
+//     "account/update_rate_of_return",
+//     async (arg, { getState }): Promise<void> => {
+//         const state: RootState = getState() as RootState;
+//         let response = await Api.send_request(
+//             "account/delete",
+//             "post",
+//             JSON.stringify(request_body)
+//         );
+//         if (!response?.success) {
+//             throw Error(response?.error || "Failed to update info");
+//         }
+//     }
+// );
+
 export const account_slice = createSlice({
     name: "account",
     initialState,
-    reducers: {},
+    reducers: {
+        // update_local_rate_of_return(state, action: PayloadAction<number>) {
+        //     state.rate_of_return = action.payload;
+        // },
+    },
     extraReducers: (builder) => {
         builder
             .addCase(fetch_account_info.pending, (state) => {})
@@ -95,4 +115,5 @@ export const account_slice = createSlice({
     },
 });
 
+// export const { update_local_rate_of_return } = account_slice.actions;
 export default account_slice.reducer;

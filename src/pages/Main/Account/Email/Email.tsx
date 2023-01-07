@@ -16,6 +16,7 @@ import {
     update_account_info,
     fetch_account_info,
 } from "../../../../redux/slices/AccountSlice";
+import { push_error } from "../../../../redux/slices/ErrorSlice";
 
 function mapStateToProps(root_state: RootState) {
     let user_id = root_state.account.user_id;
@@ -38,10 +39,10 @@ class Email extends React.Component<Props, State> {
         this.state = { email: "" };
     }
     public async componentDidMount(): Promise<void> {
-        try {
+        if (!this.props.email) {
             await this.props.dispatch(fetch_account_info());
-            this.setState({ email: this.props.email });
-        } catch {}
+        }
+        this.setState({ email: this.props.email });
     }
     public render(): React.ReactNode {
         return (
@@ -77,6 +78,7 @@ class Email extends React.Component<Props, State> {
                             <Button
                                 onClick={this.handle_click_save_button}
                                 className="primary_fill l"
+                                disabled={!this.is_email_valid}
                             >
                                 儲存
                             </Button>
@@ -84,7 +86,7 @@ class Email extends React.Component<Props, State> {
                     }
                 >
                     <LabeledInput
-                        title="姓名"
+                        title="email"
                         name="email"
                         type="email"
                         value={this.state.email}
@@ -92,6 +94,11 @@ class Email extends React.Component<Props, State> {
                     />
                 </Form>
             </div>
+        );
+    }
+    private get is_email_valid(): boolean {
+        return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/gs.test(
+            this.state.email
         );
     }
     private hadle_input_change = (name: string, value: string): void => {
@@ -109,7 +116,13 @@ class Email extends React.Component<Props, State> {
                 .unwrap();
             this.props.router.navigate("/investment/account");
         } catch (rejectedValueOrSerializedError) {
-            console.log(rejectedValueOrSerializedError);
+            this.props.dispatch(
+                push_error({
+                    message:
+                        (rejectedValueOrSerializedError as any).message ||
+                        "Failed to update email.",
+                })
+            );
         }
     };
 }

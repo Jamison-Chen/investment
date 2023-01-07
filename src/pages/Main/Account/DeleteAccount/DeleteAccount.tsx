@@ -13,6 +13,7 @@ import { IconArrowLeft } from "../../../../icons";
 import { RouterInterface, withRouter } from "../../../../router";
 import type { RootState, AppDispatch } from "../../../../redux/store";
 import { delete_account } from "../../../../redux/slices/AccountSlice";
+import { push_error } from "../../../../redux/slices/ErrorSlice";
 
 function mapStateToProps(root_state: RootState) {
     let user_id = root_state.account.user_id;
@@ -103,7 +104,13 @@ class DeleteAccount extends React.Component<Props, State> {
                 .unwrap();
             this.props.router.navigate("/investment/login");
         } catch (rejectedValueOrSerializedError) {
-            console.log(rejectedValueOrSerializedError);
+            this.props.dispatch(
+                push_error({
+                    message:
+                        (rejectedValueOrSerializedError as any).message ||
+                        "Failed to delete account.",
+                })
+            );
         }
     };
 }

@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import type { Error } from "../../types";
 
@@ -14,10 +14,10 @@ export const error_slice = createSlice({
     name: "error",
     initialState,
     reducers: {
-        push_error: (state, action) => {
+        push_error: (state, action: PayloadAction<Error>) => {
             state.error_list.push(action.payload);
         },
-        remove_error: (state, action) => {
+        remove_error: (state, action: PayloadAction<number>) => {
             state.error_list.splice(action.payload, 1);
         },
     },
