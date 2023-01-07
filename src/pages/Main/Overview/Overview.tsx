@@ -364,7 +364,11 @@ class Overview extends React.Component<Props, State> {
         );
     }
     private get start_calculate_date(): Date {
-        if (this.state.time_span === Infinity) return this.first_invest_date;
+        if (this.state.time_span === Infinity) {
+            let start_calculate_date = this.first_invest_date;
+            start_calculate_date.setHours(0, 0, 0, 0);
+            return start_calculate_date;
+        }
 
         let start_calculate_date = new Date();
         start_calculate_date.setDate(
@@ -383,7 +387,6 @@ class Overview extends React.Component<Props, State> {
             new Date()
         );
         let num_of_days = date_string_list.length;
-
         let cumulative_cash_invested = 0;
         this.cash_invested_chart_data
             .slice(1)
@@ -399,6 +402,8 @@ class Overview extends React.Component<Props, State> {
         return cumulative_cash_invested / num_of_days;
     }
     private get rate_of_return(): number {
+        console.log(this.get_average_cash_invested());
+
         let result: number =
             ((this.props.total_market_value -
                 this.get_total_cash_invested() +
