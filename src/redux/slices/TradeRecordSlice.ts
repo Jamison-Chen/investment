@@ -263,8 +263,7 @@ export const get_sid_handling_fee_map = (
 };
 
 export const get_sid_gain_map = (
-    sid_trade_records_map: ReturnType<typeof get_sid_trade_records_map>,
-    start_date?: Date
+    sid_trade_records_map: ReturnType<typeof get_sid_trade_records_map>
 ): { [sid: string]: number } => {
     let sid_gain_map: { [sid: string]: number } = {};
 
@@ -287,24 +286,11 @@ export const get_sid_gain_map = (
                         // element in `queue` with the incoming q
                         if ((queue[0].q + q) * queue[0].q > 0) {
                             queue[0].q += q;
-                            if (
-                                !start_date ||
-                                Date.parse(record.deal_time) >=
-                                    start_date.getTime()
-                            ) {
-                                sid_gain_map[sid] += (p - queue[0].p) * -q;
-                            }
+                            sid_gain_map[sid] += (p - queue[0].p) * -q;
                             q = 0;
                         } else {
                             q += queue[0].q;
-                            if (
-                                !start_date ||
-                                Date.parse(record.deal_time) >=
-                                    start_date.getTime()
-                            ) {
-                                sid_gain_map[sid] +=
-                                    (p - queue[0].p) * queue[0].q;
-                            }
+                            sid_gain_map[sid] += (p - queue[0].p) * queue[0].q;
                             queue.shift();
                         }
                     }

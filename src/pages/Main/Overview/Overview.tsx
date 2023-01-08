@@ -270,35 +270,21 @@ class Overview extends React.Component<Props, State> {
     private get total_cash_dividend(): number {
         let result = 0;
         for (let record of this.props.cash_dividend_record_list) {
-            if (
-                Date.parse(record.deal_time) >=
-                this.start_calculate_date.getTime()
-            ) {
-                result += record.cash_dividend;
-            }
+            result += record.cash_dividend;
         }
         return result;
     }
     private get total_gain(): number {
-        let result = 0;
-        let sid_gain_map = get_sid_gain_map(
-            this.props.sid_trade_records_map,
-            this.start_calculate_date
+        let sid_gain_map = get_sid_gain_map(this.props.sid_trade_records_map);
+        return (
+            Object.values(sid_gain_map).reduce((a, b) => a + b, 0) +
+            this.total_cash_dividend
         );
-        for (const gain of Object.values(sid_gain_map)) {
-            result += gain;
-        }
-        return result + this.total_cash_dividend;
     }
     private get total_handling_fee(): number {
         let result = 0;
         for (let record of this.props.trade_record_list) {
-            if (
-                Date.parse(record.deal_time) >=
-                this.start_calculate_date.getTime()
-            ) {
-                result += record.handling_fee;
-            }
+            result += record.handling_fee;
         }
         return result;
     }
@@ -338,14 +324,7 @@ class Overview extends React.Component<Props, State> {
         let cumulative_cash_invested = 0;
         this.cash_invested_chart_data
             .slice(1)
-            .filter(
-                (row) =>
-                    Date.parse(row[0] as string) >=
-                    start_calculate_date.getTime()
-            )
-            .forEach((row) => {
-                cumulative_cash_invested += row[1] as number;
-            });
+            .forEach((row) => (cumulative_cash_invested += row[1] as number));
 
         return cumulative_cash_invested / num_of_days;
     }
