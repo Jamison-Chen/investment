@@ -60,11 +60,7 @@ export type UpdateTradeRecordRequestBody = {
 };
 
 export type StockWarehouse = {
-    [sid: string]: {
-        [date: string]: {
-            [price: string]: number;
-        };
-    };
+    [sid: string]: number[];
 };
 
 export type CashDividendRecord = {

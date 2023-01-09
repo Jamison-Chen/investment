@@ -154,9 +154,9 @@ export const trade_record_slice = createSlice({
 
 export const get_sid_trade_records_map = (
     record_list: TradeRecord[]
-): { [idx: string]: TradeRecord[] } => {
+): { [sid: string]: TradeRecord[] } => {
     let reversed_records = [...record_list].reverse();
-    let result: { [idx: string]: TradeRecord[] } = {};
+    let result: { [sid: string]: TradeRecord[] } = {};
     for (let record of reversed_records) {
         let s = record.sid;
         if (result[s] === undefined) result[s] = [record];
@@ -167,8 +167,8 @@ export const get_sid_trade_records_map = (
 
 export const get_inventory_map = (
     sid_trade_records_map: ReturnType<typeof get_sid_trade_records_map>
-): { [idx: string]: number } => {
-    let result: { [idx: string]: number } = {};
+): { [sid: string]: number } => {
+    let result: { [sid: string]: number } = {};
     for (const [sid, trade_record_list] of Object.entries(
         sid_trade_records_map
     )) {
@@ -193,66 +193,29 @@ export const update_stock_warehouse = (
 ): StockWarehouse => {
     for (let record of ascending_trade_record_list) {
         let s = record.sid;
-        let t = record.deal_time;
-        let p = record.deal_price.toFixed(2);
+        let p = record.deal_price;
         let q = record.deal_quantity;
-        if (!(s in before)) before[s] = {};
-        if (!(t in before[s])) before[s][t] = {};
-        if (q >= 0) {
-            if (!(p in before[s][t])) before[s][t][p] = q;
-            else before[s][t][p] += q;
-        } else {
-            for (let old_t in before[s]) {
-                if (Object.keys(before[s][old_t]).length === 0) {
-                    delete before[s][old_t];
-                    continue;
-                }
-                if (q === 0) break;
-                for (let old_p in before[s][old_t]) {
-                    let old_q = before[s][old_t][old_p];
-                    let unresolved_q = q + old_q;
-                    if (unresolved_q < 0) {
-                        q = unresolved_q;
-                        delete before[s][old_t][old_p];
-                    } else {
-                        if (unresolved_q === 0) delete before[s][old_t][old_p];
-                        else before[s][old_t][old_p] = unresolved_q;
-                        q = 0;
-                        break;
-                    }
-                }
-                if (
-                    old_t in before[s] &&
-                    Object.keys(before[s][old_t]).length === 0
-                ) {
-                    delete before[s][old_t];
-                }
-            }
-            if (Object.keys(before[s]).length === 0) delete before[s];
-        }
+        if (!(s in before)) before[s] = [];
+        if (q >= 0) for (let i = 0; i < q; i++) before[s].push(p);
+        else for (let i = 0; i > q; i--) before[s].shift();
     }
     return before;
 };
 
 export const get_sid_cash_invested_map = (
     stock_warehouse: StockWarehouse
-): { [idx: string]: number } => {
-    let result: { [idx: string]: number } = {};
-    for (let sid in stock_warehouse) {
-        result[sid] = 0;
-        for (let t in stock_warehouse[sid]) {
-            for (let p in stock_warehouse[sid][t]) {
-                result[sid] += stock_warehouse[sid][t][p] * parseFloat(p);
-            }
-        }
+): { [sid: string]: number } => {
+    let result: { [sid: string]: number } = {};
+    for (const [sid, warehouse] of Object.entries(stock_warehouse)) {
+        result[sid] = warehouse.reduce((a, b) => a + b, 0);
     }
     return result;
 };
 
 export const get_sid_handling_fee_map = (
     sid_trade_records_map: ReturnType<typeof get_sid_trade_records_map>
-): { [idx: string]: number } => {
-    let result: { [idx: string]: number } = {};
+): { [sid: string]: number } => {
+    let result: { [sid: string]: number } = {};
     for (let sid in sid_trade_records_map) {
         for (let record of sid_trade_records_map[sid]) {
             if (result[sid] === undefined) result[sid] = record.handling_fee;

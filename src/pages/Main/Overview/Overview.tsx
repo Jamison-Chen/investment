@@ -249,21 +249,11 @@ class Overview extends React.Component<Props, State> {
         return result;
     }
     private get_total_cash_invested = (
-        stock_warehouse: StockWarehouse = this.props.stock_warehouse,
-        target_day?: Date
+        stock_warehouse: StockWarehouse = this.props.stock_warehouse
     ): number => {
-        target_day?.setHours(0, 0, 0, 0);
         let result = 0;
-        for (const t_map of Object.values(stock_warehouse)) {
-            for (const [t, p_map] of Object.entries(t_map)) {
-                let each_date = new Date(t);
-                each_date.setHours(0, 0, 0, 0);
-                if (each_date <= (target_day || new Date())) {
-                    for (const [p, q] of Object.entries(p_map)) {
-                        result += q * parseFloat(p);
-                    }
-                }
-            }
+        for (const warehouse of Object.values(stock_warehouse)) {
+            result += warehouse.reduce((a, b) => a + b, 0);
         }
         return result;
     };
@@ -341,7 +331,7 @@ class Overview extends React.Component<Props, State> {
         // );
         return result;
     }
-    private get_cash_invested_chart_data = (
+    private cash_invested_chart_data_helper = (
         ascending_trade_record_list: TradeRecord[],
         date_string_list: string[] = [],
         stock_warehouse: StockWarehouse = {},
@@ -381,12 +371,10 @@ class Overview extends React.Component<Props, State> {
 
         result.push([
             solving_date,
-            Math.round(
-                this.get_total_cash_invested(stock_warehouse, solving_date)
-            ),
+            Math.round(this.get_total_cash_invested(stock_warehouse)),
         ]);
 
-        return this.get_cash_invested_chart_data(
+        return this.cash_invested_chart_data_helper(
             ascending_trade_record_list,
             date_string_list,
             stock_warehouse,
@@ -394,24 +382,24 @@ class Overview extends React.Component<Props, State> {
         );
     };
     private get cash_invested_chart_data(): (Date | string | number)[][] {
-        let result = this.get_cash_invested_chart_data(
+        let result = this.cash_invested_chart_data_helper(
             [...this.props.trade_record_list].sort(
                 (a, b) => Date.parse(a.deal_time) - Date.parse(b.deal_time)
             )
         );
-        // result.forEach((row, idx) => {
-        //     if (idx === 0) row.push("平均投入");
-        //     else {
-        //         row.push(
-        //             Math.round(
-        //                 result
-        //                     .slice(1, idx + 1)
-        //                     .map((row) => row[1] as number)
-        //                     .reduce((a, b) => a + b) / idx
-        //             )
-        //         );
-        //     }
-        // });
+        result.forEach((row, idx) => {
+            if (idx === 0) row.push("平均投入");
+            else {
+                row.push(
+                    Math.round(
+                        result
+                            .slice(1, idx + 1)
+                            .map((row) => row[1] as number)
+                            .reduce((a, b) => a + b) / idx
+                    )
+                );
+            }
+        });
         return result;
     }
 }
