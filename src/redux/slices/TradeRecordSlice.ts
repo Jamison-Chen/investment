@@ -189,49 +189,49 @@ export const get_stock_warehouse = (
 
 export const update_stock_warehouse = (
     ascending_trade_record_list: TradeRecord[],
-    result: StockWarehouse = {}
+    before: StockWarehouse = {}
 ): StockWarehouse => {
     for (let record of ascending_trade_record_list) {
         let s = record.sid;
         let t = record.deal_time;
         let p = record.deal_price.toFixed(2);
         let q = record.deal_quantity;
-        if (!(s in result)) result[s] = {};
-        if (!(t in result[s])) result[s][t] = {};
+        if (!(s in before)) before[s] = {};
+        if (!(t in before[s])) before[s][t] = {};
         if (q >= 0) {
-            if (!(p in result[s][t])) result[s][t][p] = q;
-            else result[s][t][p] += q;
+            if (!(p in before[s][t])) before[s][t][p] = q;
+            else before[s][t][p] += q;
         } else {
-            for (let old_t in result[s]) {
-                if (Object.keys(result[s][old_t]).length === 0) {
-                    delete result[s][old_t];
+            for (let old_t in before[s]) {
+                if (Object.keys(before[s][old_t]).length === 0) {
+                    delete before[s][old_t];
                     continue;
                 }
                 if (q === 0) break;
-                for (let old_p in result[s][old_t]) {
-                    let old_q = result[s][old_t][old_p];
+                for (let old_p in before[s][old_t]) {
+                    let old_q = before[s][old_t][old_p];
                     let unresolved_q = q + old_q;
                     if (unresolved_q < 0) {
                         q = unresolved_q;
-                        delete result[s][old_t][old_p];
+                        delete before[s][old_t][old_p];
                     } else {
-                        if (unresolved_q === 0) delete result[s][old_t][old_p];
-                        else result[s][old_t][old_p] = unresolved_q;
+                        if (unresolved_q === 0) delete before[s][old_t][old_p];
+                        else before[s][old_t][old_p] = unresolved_q;
                         q = 0;
                         break;
                     }
                 }
                 if (
-                    old_t in result[s] &&
-                    Object.keys(result[s][old_t]).length === 0
+                    old_t in before[s] &&
+                    Object.keys(before[s][old_t]).length === 0
                 ) {
-                    delete result[s][old_t];
+                    delete before[s][old_t];
                 }
             }
-            if (Object.keys(result[s]).length === 0) delete result[s];
+            if (Object.keys(before[s]).length === 0) delete before[s];
         }
     }
-    return result;
+    return before;
 };
 
 export const get_sid_cash_invested_map = (

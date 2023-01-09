@@ -250,15 +250,15 @@ class Overview extends React.Component<Props, State> {
     }
     private get_total_cash_invested = (
         stock_warehouse: StockWarehouse = this.props.stock_warehouse,
-        end_date?: Date
+        target_day?: Date
     ): number => {
-        end_date?.setHours(0, 0, 0, 0);
+        target_day?.setHours(0, 0, 0, 0);
         let result = 0;
         for (const t_map of Object.values(stock_warehouse)) {
             for (const [t, p_map] of Object.entries(t_map)) {
                 let each_date = new Date(t);
                 each_date.setHours(0, 0, 0, 0);
-                if (each_date <= (end_date || new Date())) {
+                if (each_date <= (target_day || new Date())) {
                     for (const [p, q] of Object.entries(p_map)) {
                         result += q * parseFloat(p);
                     }
