@@ -16,7 +16,7 @@ import { update_account_info } from "../../../../redux/slices/AccountSlice";
 import { push_error } from "../../../../redux/slices/ErrorSlice";
 
 function mapStateToProps(root_state: RootState) {
-    let user_id = root_state.account.user_id;
+    let user_id = root_state.account.id;
     return { user_id };
 }
 

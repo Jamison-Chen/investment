@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { UpdateOrCreateMemoRequestBody, Memo } from "../../types";
 import Api from "../../utils/api";
 
-export interface MemoState {
+interface MemoState {
     sid_memo_map: { [sid: string]: Memo };
     is_waiting: boolean;
 }

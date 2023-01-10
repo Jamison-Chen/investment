@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import type { Error } from "../../types";
 
-export interface ErrorState {
+interface ErrorState {
     error_list: Error[];
 }
 

@@ -7,12 +7,6 @@ export type UpdateAccountInfoRequestBody = {
     new_password?: string;
 };
 
-export type CreateCashDividendRecordRequestBody = {
-    sid: string;
-    deal_time: string;
-    cash_dividend: string;
-};
-
 export type UpdateCashDividendRecordRequestBody = {
     id: string;
     sid: string;
@@ -20,18 +14,16 @@ export type UpdateCashDividendRecordRequestBody = {
     cash_dividend: string;
 };
 
+export type CreateCashDividendRecordRequestBody = Omit<
+    UpdateCashDividendRecordRequestBody,
+    "id"
+>;
+
 export type UpdateOrCreateMemoRequestBody = {
     sid: string;
     business?: string;
     strategy?: string;
     note?: string;
-};
-
-export type CreateTradePlanRequestBody = {
-    sid: string;
-    plan_type: "buy" | "sell";
-    target_price: string;
-    target_quantity: string;
 };
 
 export type UpdateTradePlanRequestBody = {
@@ -42,13 +34,7 @@ export type UpdateTradePlanRequestBody = {
     target_quantity: string;
 };
 
-export type CreateTradeRecordRequestBody = {
-    sid: string;
-    deal_time: string;
-    deal_price: string;
-    deal_quantity: string;
-    handling_fee: string;
-};
+export type CreateTradePlanRequestBody = Omit<UpdateTradePlanRequestBody, "id">;
 
 export type UpdateTradeRecordRequestBody = {
     id: string;
@@ -57,6 +43,18 @@ export type UpdateTradeRecordRequestBody = {
     deal_price: string;
     deal_quantity: string;
     handling_fee: string;
+};
+
+export type CreateTradeRecordRequestBody = Omit<
+    UpdateTradeRecordRequestBody,
+    "id"
+>;
+
+export type Account = {
+    id: string;
+    email: string;
+    username: string;
+    avatar_url: string | null;
 };
 
 export type StockWarehouse = {
@@ -117,7 +115,7 @@ export type TradeRecord = {
     handling_fee: number;
 };
 
-export type GQLInterface = {
+export type GraphQL = {
     query: string;
     variables?: { [key: string]: any };
 };

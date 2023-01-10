@@ -19,7 +19,7 @@ import {
 import { push_error } from "../../../../redux/slices/ErrorSlice";
 
 function mapStateToProps(root_state: RootState) {
-    let user_id = root_state.account.user_id;
+    let user_id = root_state.account.id;
     let username = root_state.account.username;
     return { user_id, username };
 }

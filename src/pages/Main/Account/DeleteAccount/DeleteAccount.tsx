@@ -16,9 +16,7 @@ import { delete_account } from "../../../../redux/slices/AccountSlice";
 import { push_error } from "../../../../redux/slices/ErrorSlice";
 
 function mapStateToProps(root_state: RootState) {
-    let user_id = root_state.account.user_id;
-    let username = root_state.account.username;
-    return { user_id, username };
+    return {};
 }
 
 interface Props extends IRouter, ReturnType<typeof mapStateToProps> {

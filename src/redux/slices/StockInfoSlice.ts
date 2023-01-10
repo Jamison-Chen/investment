@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { StockInfo } from "../../types";
 import Api from "../../utils/api";
 
-export interface StockInfoState {
+interface StockInfoState {
     info_list: StockInfo[];
 }
 

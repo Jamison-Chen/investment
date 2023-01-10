@@ -7,12 +7,12 @@ import type {
 } from "../../types";
 import Api from "../../utils/api";
 
-export interface TradeRecordState {
+interface CashDividendRecordState {
     record_list: CashDividendRecord[];
     is_waiting: boolean;
 }
 
-const initialState: TradeRecordState = {
+const initialState: CashDividendRecordState = {
     record_list: [],
     is_waiting: false,
 };

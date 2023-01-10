@@ -8,7 +8,7 @@ import type {
 } from "../../types";
 import Api from "../../utils/api";
 
-export interface TradeRecordState {
+interface TradeRecordState {
     record_list: TradeRecord[];
     is_waiting: boolean;
 }

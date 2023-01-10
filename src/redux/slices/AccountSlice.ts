@@ -1,17 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import type { UpdateAccountInfoRequestBody } from "../../types";
+import type { Account, UpdateAccountInfoRequestBody } from "../../types";
 import Api from "../../utils/api";
 
-export interface AccountState {
-    user_id: string;
-    email: string;
-    username: string;
-    avatar_url: string | null;
-}
+interface AccountState extends Account {}
 
 const initialState: AccountState = {
-    user_id: "",
+    id: "",
     email: "",
     username: "",
     avatar_url: "",
@@ -19,12 +14,7 @@ const initialState: AccountState = {
 
 export const fetch_account_info = createAsyncThunk(
     "account/fetch_account_info",
-    async (): Promise<{
-        id: string;
-        email: string;
-        username: string;
-        avatar_url: string | null;
-    }> => {
+    async (): Promise<Account> => {
         let response = await Api.check_login();
         if (response?.success) return response.data;
         else throw Error("Failed to fetch info");
@@ -33,14 +23,7 @@ export const fetch_account_info = createAsyncThunk(
 
 export const update_account_info = createAsyncThunk(
     "account/update_account_info",
-    async (
-        request_body: UpdateAccountInfoRequestBody
-    ): Promise<{
-        id: string;
-        email: string;
-        username: string;
-        avatar_url: string | null;
-    }> => {
+    async (request_body: UpdateAccountInfoRequestBody): Promise<Account> => {
         let response = await Api.send_request(
             "account/update",
             "post",
@@ -92,7 +75,7 @@ export const account_slice = createSlice({
         builder
             .addCase(fetch_account_info.pending, (state) => {})
             .addCase(fetch_account_info.fulfilled, (state, action) => {
-                state.user_id = action.payload.id;
+                state.id = action.payload.id;
                 state.email = action.payload.email;
                 state.username = action.payload.username;
                 state.avatar_url = action.payload.avatar_url;
@@ -101,7 +84,7 @@ export const account_slice = createSlice({
 
             .addCase(update_account_info.pending, (state) => {})
             .addCase(update_account_info.fulfilled, (state, action) => {
-                state.user_id = action.payload.id;
+                state.id = action.payload.id;
                 state.email = action.payload.email;
                 state.username = action.payload.username;
                 state.avatar_url = action.payload.avatar_url;

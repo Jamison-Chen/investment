@@ -7,7 +7,7 @@ import type {
 } from "../../types";
 import Api from "../../utils/api";
 
-export interface TradePlanState {
+interface TradePlanState {
     trade_plan_list: TradePlan[];
     is_waiting: boolean;
 }
