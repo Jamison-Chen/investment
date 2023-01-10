@@ -17,7 +17,7 @@ import {
     get_sid_market_value_map,
     get_total_market_value,
 } from "../../../redux/slices/StockInfoSlice";
-import { StretchableButton } from "../../../components";
+import { StretchableButton, ColorBackground } from "../../../components";
 import type { TradeRecord, StockWarehouse } from "../../../types";
 import Util from "../../../utils/util";
 
@@ -64,7 +64,7 @@ class Overview extends React.Component<Props, State> {
     public render(): React.ReactNode {
         return (
             <div className={styles.main}>
-                <div className={styles.background}></div>
+                <ColorBackground />
                 <div className={styles.block}>
                     <h2 className={styles.title}>投資組合</h2>
                     <div className={styles.body + " " + styles.portfolio}>

@@ -22,6 +22,7 @@ import {
     TradePlanModal,
     BeautifulRow,
     StockMemoModal,
+    ColorBackground,
 } from "../../../components";
 import {
     get_inventory_map,
@@ -93,7 +94,7 @@ class Details extends React.Component<Props, State> {
         return (
             <div className={styles.main}>
                 {this.active_modal}
-                <div className={styles.background} />
+                <ColorBackground />
                 <div className={styles.upper}>
                     <select
                         className={styles.menu}

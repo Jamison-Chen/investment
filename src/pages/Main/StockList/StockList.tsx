@@ -9,7 +9,7 @@ import {
     get_inventory_map,
     get_sid_trade_records_map,
 } from "../../../redux/slices/TradeRecordSlice";
-import { DetailCard } from "../../../components";
+import { ColorBackground, DetailCard } from "../../../components";
 
 function mapStateToProps(root_state: RootState) {
     let trade_record_list = root_state.trade_record.record_list;
@@ -34,7 +34,7 @@ class StockList extends React.Component<Props, State> {
     public render(): React.ReactNode {
         return (
             <div className={styles.main}>
-                <div className={styles.background} />
+                <ColorBackground />
                 <div className={styles.stock_list}>
                     {Object.keys(this.props.inventory_map).map((sid, idx) => {
                         return (

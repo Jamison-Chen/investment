@@ -10,6 +10,7 @@ import {
     SearchKeywordInput,
     TradePlanActionBar,
     StretchableButton,
+    ColorBackground,
 } from "../../../components";
 import type { TradePlan, StockInfo } from "../../../types";
 import { get_sid_stock_info_map } from "../../../redux/slices/StockInfoSlice";
@@ -45,7 +46,7 @@ class Plans extends React.Component<Props, State> {
     public render(): React.ReactNode {
         return (
             <div className={styles.main}>
-                <div className={styles.background} />
+                <ColorBackground />
                 <SearchKeywordInput
                     placeholder="輸入證券代號或名稱"
                     name="search_keyword"

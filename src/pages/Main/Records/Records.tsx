@@ -9,6 +9,7 @@ import {
     SearchKeywordInput,
     TradeRecordActionBar,
     CashDividendRecordActionBar,
+    ColorBackground,
 } from "../../../components";
 import { IRouter, withRouter } from "../../../router";
 import type { RootState } from "../../../redux/store";
@@ -44,7 +45,7 @@ class Records extends React.Component<Props, State> {
     public render(): React.ReactNode {
         return (
             <div className={styles.main}>
-                <div className={styles.background} />
+                <ColorBackground />
                 <div className={styles.switch_button_container}>
                     <Button
                         className={this.get_switch_button_class("trade")}

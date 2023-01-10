@@ -2,6 +2,7 @@ export { default as AutoResizeTextarea } from "./AutoResizeTextarea/AutoResizeTe
 export { default as BeautifulBlock } from "./BeautifulBlock/BeautifulBlock";
 export { default as BeautifulRow } from "./BeautifulRow/BeautifulRow";
 export { default as Button } from "./Button/Button";
+export { default as ColorBackground } from "./ColorBackground/ColorBackground";
 export { default as CashDividendRecordActionBar } from "./CashDividendRecordActionBar/CashDividendRecordActionBar";
 export { default as CashDividendRecordModal } from "./CashDividendRecordModal/CashDividendRecordModal";
 export { default as DetailCard } from "./DetailCard/DetailCard";

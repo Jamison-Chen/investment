@@ -6,6 +6,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import { IRouter, withRouter } from "../../../router";
+import { ColorBackground } from "../../../components";
 
 interface Props extends IRouter {}
 
@@ -21,6 +22,7 @@ class ExternalApps extends React.Component<Props, State> {
     public render(): React.ReactNode {
         return (
             <div className={styles.main}>
+                <ColorBackground />
                 <h2>外部應用程式</h2>
                 <div className={styles.app_list}>
                     <Link className={styles.app} to={`/investment/simulator`}>
