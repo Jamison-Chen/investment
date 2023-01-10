@@ -24,7 +24,7 @@ import {
     IconWatch,
     IconViewList,
 } from "../../icons";
-import { RouterInterface, withRouter } from "../../router";
+import { IRouter, withRouter } from "../../router";
 import { fetch_all_trade_plans } from "../../redux/slices/TradePlanSlice";
 import { fetch_all_memo } from "../../redux/slices/MemoSlice";
 import Util from "../../utils/util";
@@ -35,7 +35,7 @@ function mapStateToProps(root_state: RootState) {
     return { username, avatar_url };
 }
 
-interface Props extends RouterInterface, ReturnType<typeof mapStateToProps> {
+interface Props extends IRouter, ReturnType<typeof mapStateToProps> {
     dispatch: AppDispatch;
 }
 

@@ -1,13 +1,11 @@
 import React from "react";
 
 interface Props {
-    side_length: string;
+    side_length?: string;
     color?: string;
 }
 
-interface State {
-    [key: string]: any;
-}
+interface State {}
 
 export default class IconList extends React.Component<Props, State> {
     public state: State;
@@ -21,8 +19,8 @@ export default class IconList extends React.Component<Props, State> {
         return (
             <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width={this.props.side_length}
-                height={this.props.side_length}
+                width={this.props.side_length || "16"}
+                height={this.props.side_length || "16"}
                 fill={this.props.color || "currentColor"}
                 className="bi bi-list"
                 viewBox="0 0 16 16"

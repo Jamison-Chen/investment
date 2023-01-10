@@ -3,7 +3,7 @@ import styles from "./StockList.module.scss";
 import React from "react";
 import { connect } from "react-redux";
 
-import { RouterInterface, withRouter } from "../../../router";
+import { IRouter, withRouter } from "../../../router";
 import type { RootState } from "../../../redux/store";
 import {
     get_inventory_map,
@@ -20,7 +20,7 @@ function mapStateToProps(root_state: RootState) {
     };
 }
 
-interface Props extends RouterInterface, ReturnType<typeof mapStateToProps> {}
+interface Props extends IRouter, ReturnType<typeof mapStateToProps> {}
 
 interface State {}
 

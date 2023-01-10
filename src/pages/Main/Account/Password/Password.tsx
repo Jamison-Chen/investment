@@ -10,7 +10,7 @@ import {
     LabeledInput,
 } from "../../../../components";
 import { IconArrowLeft } from "../../../../icons";
-import { RouterInterface, withRouter } from "../../../../router";
+import { IRouter, withRouter } from "../../../../router";
 import type { RootState, AppDispatch } from "../../../../redux/store";
 import { update_account_info } from "../../../../redux/slices/AccountSlice";
 import { push_error } from "../../../../redux/slices/ErrorSlice";
@@ -20,7 +20,7 @@ function mapStateToProps(root_state: RootState) {
     return { user_id };
 }
 
-interface Props extends RouterInterface, ReturnType<typeof mapStateToProps> {
+interface Props extends IRouter, ReturnType<typeof mapStateToProps> {
     dispatch: AppDispatch;
 }
 

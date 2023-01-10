@@ -5,9 +5,9 @@ import simulator_pro_icon from "../../../assets/simulator_pro_icon.png";
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { RouterInterface, withRouter } from "../../../router";
+import { IRouter, withRouter } from "../../../router";
 
-interface Props extends RouterInterface {}
+interface Props extends IRouter {}
 
 interface State {}
 

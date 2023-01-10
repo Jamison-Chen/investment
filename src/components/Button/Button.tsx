@@ -9,9 +9,7 @@ interface Props {
     disabled?: boolean;
 }
 
-interface State {
-    [key: string]: any;
-}
+interface State {}
 
 export default class Button extends React.Component<Props, State> {
     public state: State;

@@ -3,7 +3,7 @@ import styles from "./Plans.module.scss";
 import React from "react";
 import { connect } from "react-redux";
 
-import { RouterInterface, withRouter } from "../../../router";
+import { IRouter, withRouter } from "../../../router";
 import type { RootState, AppDispatch } from "../../../redux/store";
 import {
     Button,
@@ -21,7 +21,7 @@ function mapStateToProps(root_state: RootState) {
     return { trade_plan_list, sid_stock_info_map };
 }
 
-interface Props extends RouterInterface, ReturnType<typeof mapStateToProps> {
+interface Props extends IRouter, ReturnType<typeof mapStateToProps> {
     dispatch: AppDispatch;
 }
 

@@ -32,6 +32,7 @@ import Username from "./pages/Main/Account/Username/Username";
 import Email from "./pages/Main/Account/Email/Email";
 import Password from "./pages/Main/Account/Password/Password";
 import DeleteAccount from "./pages/Main/Account/DeleteAccount/DeleteAccount";
+import React from "react";
 
 export default function MyRouter() {
     return (
@@ -72,7 +73,7 @@ export default function MyRouter() {
     );
 }
 
-export interface RouterInterface {
+export interface IRouter {
     router: {
         location: Location;
         navigate: NavigateFunction;
@@ -82,15 +83,17 @@ export interface RouterInterface {
     };
 }
 
-export function withRouter(Component: any) {
-    return (props: any = {}) => {
+export function withRouter<T extends IRouter>(
+    Component: React.ComponentType<T>
+) {
+    return (props: Omit<T, keyof IRouter>) => {
         let location = useLocation();
         let navigate = useNavigate();
         let params = useParams();
         let [search_params, set_search_params] = useSearchParams();
         return (
             <Component
-                {...props}
+                {...(props as T)}
                 router={{
                     location,
                     navigate,

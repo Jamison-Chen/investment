@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { Chart } from "react-google-charts";
 import { Link } from "react-router-dom";
 
-import { RouterInterface, withRouter } from "../../../router";
+import { IRouter, withRouter } from "../../../router";
 import type { RootState } from "../../../redux/store";
 import type { StockInfo, TradeRecord } from "../../../types";
 import {
@@ -67,7 +67,7 @@ function mapStateToProps(root_state: RootState) {
     };
 }
 
-interface Props extends RouterInterface, ReturnType<typeof mapStateToProps> {}
+interface Props extends IRouter, ReturnType<typeof mapStateToProps> {}
 
 interface State {
     active_modal_name:

@@ -4,7 +4,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Chart } from "react-google-charts";
 
-import { RouterInterface, withRouter } from "../../../router";
+import { IRouter, withRouter } from "../../../router";
 import type { RootState } from "../../../redux/store";
 import {
     get_sid_trade_records_map,
@@ -50,7 +50,7 @@ function mapStateToProps(root_state: RootState) {
     };
 }
 
-interface Props extends RouterInterface, ReturnType<typeof mapStateToProps> {}
+interface Props extends IRouter, ReturnType<typeof mapStateToProps> {}
 
 interface State {}
 

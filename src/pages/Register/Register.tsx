@@ -11,12 +11,12 @@ import {
     FullLogo,
     ErrorList,
 } from "../../components";
-import { RouterInterface, withRouter } from "../../router";
+import { IRouter, withRouter } from "../../router";
 import { AppDispatch } from "../../redux/store";
 import { push_error } from "../../redux/slices/ErrorSlice";
 import Api from "../../utils/api";
 
-interface Props extends RouterInterface {
+interface Props extends IRouter {
     dispatch: AppDispatch;
 }
 

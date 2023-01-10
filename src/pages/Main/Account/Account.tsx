@@ -11,7 +11,7 @@ import {
     RoundButton,
 } from "../../../components";
 import { IconArrowLeft, IconChevronDown } from "../../../icons";
-import { RouterInterface, withRouter } from "../../../router";
+import { IRouter, withRouter } from "../../../router";
 import IconChevronUp from "../../../icons/IconChevronUp";
 
 function mapStateToProps(root_state: RootState) {
@@ -21,7 +21,7 @@ function mapStateToProps(root_state: RootState) {
     return { email, username, avatar_url };
 }
 
-interface Props extends RouterInterface, ReturnType<typeof mapStateToProps> {}
+interface Props extends IRouter, ReturnType<typeof mapStateToProps> {}
 
 interface State {
     is_advanced_section_expanded: boolean;

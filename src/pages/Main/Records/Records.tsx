@@ -10,7 +10,7 @@ import {
     TradeRecordActionBar,
     CashDividendRecordActionBar,
 } from "../../../components";
-import { RouterInterface, withRouter } from "../../../router";
+import { IRouter, withRouter } from "../../../router";
 import type { RootState } from "../../../redux/store";
 import type { CashDividendRecord, TradeRecord } from "../../../types";
 
@@ -20,7 +20,7 @@ function mapStateToProps(root_state: RootState) {
     return { trade_record_list, cash_dividend_record_list };
 }
 
-interface Props extends RouterInterface, ReturnType<typeof mapStateToProps> {}
+interface Props extends IRouter, ReturnType<typeof mapStateToProps> {}
 
 interface State {
     active_subpage_name: "trade" | "cash_dividend";

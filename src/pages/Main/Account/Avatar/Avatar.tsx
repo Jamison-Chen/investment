@@ -3,7 +3,7 @@ import styles from "./Avatar.module.scss";
 import React from "react";
 import { connect } from "react-redux";
 
-import { RouterInterface, withRouter } from "../../../../router";
+import { IRouter, withRouter } from "../../../../router";
 import {
     Form,
     RoundButton,
@@ -24,7 +24,7 @@ function mapStateToProps(root_state: RootState) {
     return { user_id, avatar_url };
 }
 
-interface Props extends RouterInterface, ReturnType<typeof mapStateToProps> {
+interface Props extends IRouter, ReturnType<typeof mapStateToProps> {
     dispatch: AppDispatch;
 }
 
