@@ -238,7 +238,7 @@ class Details extends React.Component<Props, State> {
                                 </Button>
                             </Link>
                         </h2>
-                        <div className={styles.body}>
+                        <div className={styles.body + " " + styles.memo_outer}>
                             <BeautifulRow
                                 label="主要業務"
                                 value={

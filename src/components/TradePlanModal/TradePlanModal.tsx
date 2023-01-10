@@ -19,6 +19,7 @@ interface Props extends ReturnType<typeof mapStateToProps> {
     default_sid?: string;
     plan?: TradePlan;
     hide_modal: Function;
+    on_save?: () => void;
     dispatch: AppDispatch;
 }
 
@@ -190,7 +191,10 @@ class TradePlanModal extends React.Component<Props, State> {
                     )
                     .unwrap()
                     .then((response) => {
-                        if (response) this.props.hide_modal();
+                        if (response) {
+                            this.props.hide_modal();
+                            if (this.props.on_save) this.props.on_save();
+                        }
                     });
             } else {
                 // Create
@@ -206,7 +210,10 @@ class TradePlanModal extends React.Component<Props, State> {
                     )
                     .unwrap()
                     .then((response) => {
-                        if (response) this.props.hide_modal();
+                        if (response) {
+                            this.props.hide_modal();
+                            if (this.props.on_save) this.props.on_save();
+                        }
                     });
             }
         }

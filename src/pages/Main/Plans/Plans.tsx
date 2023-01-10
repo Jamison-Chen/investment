@@ -11,6 +11,7 @@ import {
     TradePlanActionBar,
     StretchableButton,
     ColorBackground,
+    ActionMenu,
 } from "../../../components";
 import type { TradePlan, StockInfo } from "../../../types";
 import { get_sid_stock_info_map } from "../../../redux/slices/StockInfoSlice";
@@ -28,18 +29,19 @@ interface Props extends IRouter, ReturnType<typeof mapStateToProps> {
 
 interface State {
     search_keyword: string | null;
-    active_row_index: number | null;
-    shown_record_number: number;
+    number_to_show: number;
+    active_plan: TradePlan | null;
 }
 
 class Plans extends React.Component<Props, State> {
     public state: State;
+    private timer?: ReturnType<typeof setTimeout>;
     public constructor(props: Props) {
         super(props);
         this.state = {
             search_keyword: this.props.router.search_params.get("sid"),
-            active_row_index: null,
-            shown_record_number: 15,
+            number_to_show: 15,
+            active_plan: null,
         };
     }
     public async componentDidMount(): Promise<void> {}
@@ -47,6 +49,7 @@ class Plans extends React.Component<Props, State> {
         return (
             <div className={styles.main}>
                 <ColorBackground />
+                {this.action_menu}
                 <SearchKeywordInput
                     placeholder="輸入證券代號或名稱"
                     name="search_keyword"
@@ -69,6 +72,27 @@ class Plans extends React.Component<Props, State> {
             </div>
         );
     }
+    private get action_menu(): React.ReactNode {
+        if (this.state.active_plan) {
+            return (
+                <ActionMenu hide_modal={this.deactivate_plan}>
+                    <TradePlanActionBar
+                        plan={this.state.active_plan}
+                        is_mobile
+                        on_delete={this.deactivate_plan}
+                        on_save={this.deactivate_plan}
+                    />
+                </ActionMenu>
+            );
+        }
+        return null;
+    }
+    private activate_plan = (plan: TradePlan): void => {
+        this.setState({ active_plan: plan });
+    };
+    private deactivate_plan = (): void => {
+        this.setState({ active_plan: null });
+    };
     private handle_input_change = (name: string, value: string): void => {
         if (name in this.state) this.setState({ [name]: value } as any);
     };
@@ -107,14 +131,21 @@ class Plans extends React.Component<Props, State> {
             });
     }
     private get plan_divs(): React.ReactNode {
-        return (this.filtered_and_sorted_plan_list as TradePlan[])
-            .slice(0, this.state.shown_record_number)
+        return this.filtered_and_sorted_plan_list
+            .slice(0, this.state.number_to_show)
             .map((plan: TradePlan, idx) => {
                 return (
                     <div
                         key={idx}
                         className={styles.row}
-                        onClick={() => this.handle_click_row(idx)}
+                        onTouchStart={() =>
+                            (this.timer = setTimeout(
+                                () => this.activate_plan(plan),
+                                500
+                            ))
+                        }
+                        onTouchEnd={() => clearTimeout(this.timer)}
+                        onTouchMove={() => clearTimeout(this.timer)}
                     >
                         <span
                             className={styles.company}
@@ -130,7 +161,7 @@ class Plans extends React.Component<Props, State> {
                         <span className={styles.quantity}>
                             {plan.target_quantity} 股
                         </span>
-                        <span className={this.get_action_bar_outer_class(idx)}>
+                        <span className={styles.action_bar_outer}>
                             <TradePlanActionBar plan={plan} />
                         </span>
                     </div>
@@ -144,27 +175,15 @@ class Plans extends React.Component<Props, State> {
             (plan_type === "buy" ? styles.buy : styles.sell)
         );
     }
-    private get_action_bar_outer_class(idx: number): string {
-        if (this.state.active_row_index === idx) {
-            return styles.action_bar_outer + " " + styles.active;
-        } else return styles.action_bar_outer;
-    }
-    private handle_click_row = (idx: number): void => {
-        this.setState((state, props) => {
-            if (state.active_row_index !== null) {
-                return { active_row_index: null };
-            } else return { active_row_index: idx };
-        });
-    };
     private handle_click_show_more = (): void => {
         this.setState((state, props) => {
-            return { shown_record_number: state.shown_record_number * 2 };
+            return { number_to_show: state.number_to_show * 2 };
         });
     };
     private get has_more_to_show(): boolean {
         return (
             this.filtered_and_sorted_plan_list.length >
-            this.state.shown_record_number
+            this.state.number_to_show
         );
     }
 }

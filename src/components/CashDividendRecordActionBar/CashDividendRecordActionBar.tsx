@@ -19,6 +19,9 @@ function mapStateToProps(root_state: RootState) {
 
 interface Props extends ReturnType<typeof mapStateToProps> {
     record: CashDividendRecord;
+    is_mobile?: boolean;
+    on_save?: () => void;
+    on_delete?: () => void;
     dispatch: AppDispatch;
 }
 
@@ -36,7 +39,25 @@ class CashDividendRecordActionBar extends React.Component<Props, State> {
     }
     public componentDidMount(): void {}
     public render(): React.ReactNode {
-        return (
+        return this.props.is_mobile ? (
+            <>
+                {this.active_modal}
+                <div
+                    className={styles.action_menu_tab}
+                    onClick={this.handle_click_pencil}
+                >
+                    <IconPencilSquare side_length="18" />
+                    編輯
+                </div>
+                <div
+                    className={styles.action_menu_tab + " " + styles.dangerous}
+                    onClick={this.handle_click_trash_can}
+                >
+                    <IconTrash side_length="18" />
+                    刪除
+                </div>
+            </>
+        ) : (
             <span className={styles.main}>
                 {this.active_modal}
                 <RoundButton
@@ -56,12 +77,13 @@ class CashDividendRecordActionBar extends React.Component<Props, State> {
             </span>
         );
     }
-    private get active_modal(): React.ReactElement<Modal> | null {
+    private get active_modal(): React.ReactNode {
         if (this.state.active_modal_name === "edit") {
             return (
                 <CashDividendRecordModal
                     record={this.props.record}
                     hide_modal={Util.hide_modal(this)}
+                    on_save={this.props.on_save}
                 />
             );
         } else if (this.state.active_modal_name === "check_delete") {
@@ -129,7 +151,10 @@ class CashDividendRecordActionBar extends React.Component<Props, State> {
             .dispatch(delete_record(this.props.record.id))
             .unwrap()
             .then((response) => {
-                if (response) this.setState({ active_modal_name: null });
+                if (response) {
+                    this.setState({ active_modal_name: null });
+                    if (this.props.on_delete) this.props.on_delete();
+                }
             });
     };
 }

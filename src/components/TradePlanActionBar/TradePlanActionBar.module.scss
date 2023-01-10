@@ -54,3 +54,13 @@
     height: 22.5px;
     width: 36px;
 }
+
+.action_menu_tab {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    &.dangerous {
+        color: _.$red;
+    }
+}

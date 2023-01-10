@@ -1,4 +1,5 @@
 export { default as AutoResizeTextarea } from "./AutoResizeTextarea/AutoResizeTextarea";
+export { default as ActionMenu } from "./ActionMenu/ActionMenu";
 export { default as BeautifulBlock } from "./BeautifulBlock/BeautifulBlock";
 export { default as BeautifulRow } from "./BeautifulRow/BeautifulRow";
 export { default as Button } from "./Button/Button";
