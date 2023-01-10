@@ -16,8 +16,7 @@ import { update_account_info } from "../../../../redux/slices/AccountSlice";
 import { push_error } from "../../../../redux/slices/ErrorSlice";
 
 function mapStateToProps(root_state: RootState) {
-    let user_id = root_state.account.id;
-    return { user_id };
+    return {};
 }
 
 interface Props extends IRouter, ReturnType<typeof mapStateToProps> {
@@ -108,7 +107,6 @@ class Password extends React.Component<Props, State> {
             await this.props
                 .dispatch(
                     update_account_info({
-                        id: this.props.user_id,
                         old_password: this.state.old_password,
                         new_password: this.state.new_password,
                     })

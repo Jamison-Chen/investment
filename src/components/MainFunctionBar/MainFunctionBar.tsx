@@ -108,9 +108,7 @@ export default class MainFunctionBar extends React.Component<Props, State> {
                         </>
                     }
                 >
-                    <div className={styles.modal_inner}>
-                        您確定要登出此帳號嗎？
-                    </div>
+                    <div className={styles.modal_inner}>您確定要登出嗎？</div>
                 </Modal>
             );
         }

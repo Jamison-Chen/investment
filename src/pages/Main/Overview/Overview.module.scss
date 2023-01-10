@@ -3,87 +3,94 @@
 .main {
     $block-body-width: min(420px, 87vw);
     position: relative;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, $block-body-width);
-    justify-content: center;
-    gap: 20px;
-    min-height: 100%;
-    width: 100%;
-    padding: 10px 20px 85px 20px;
-    & > .block {
-        width: fit-content;
-        & > .title {
-            display: flex;
-            justify-content: space-between;
-            font-weight: normal;
-            font-size: _.$base-font-size;
-        }
-        & > .body {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            width: $block-body-width;
-            border-radius: 15px;
-            overflow: hidden;
-            background-color: _.$transparent-white;
-            box-shadow: 0 0 5px 0 _.$noisy-white;
-            &.portfolio {
-                height: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    & > .main_inner {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, $block-body-width);
+        justify-content: center;
+        gap: 20px;
+        height: 100%;
+        width: 100%;
+        padding: 10px 20px 85px 20px;
+        overflow: auto;
+        & > .block {
+            width: fit-content;
+            & > .title {
+                display: flex;
+                justify-content: space-between;
+                font-weight: normal;
+                font-size: _.$base-font-size;
             }
-            &.performance {
-                padding: 2px 0;
-                .row {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    padding: 18px 15px;
-                    font-size: 0.85 * _.$base-font-size;
-                    color: _.$gray;
-                    &:not(:last-child) {
-                        border-bottom: 2px solid _.$noisy-white;
-                    }
-                    & > .number {
-                        font-family: monospace;
-                        font-size: 1.05 * _.$base-font-size;
-                        color: _.$black;
-                    }
-                }
-            }
-            &.cash_invested {
-                height: 275px;
-                padding: 15px;
-            }
-            .chart_center {
-                position: absolute;
-                top: 50%;
-                left: calc(1px + 38%);
-                transform: translate(-50%, -50%);
+            & > .body {
+                position: relative;
                 display: flex;
                 flex-direction: column;
-                align-items: center;
-                font-size: 0.85 * _.$base-font-size;
-                color: _.$gray;
-                font-weight: bold;
-                hr {
-                    border: none;
-                    border-top: 1px solid;
-                    border-radius: 10px;
-                    width: 100%;
-                    color: _.$light-gray;
+                width: $block-body-width;
+                border-radius: 15px;
+                overflow: hidden;
+                background-color: _.$transparent-white;
+                box-shadow: 0 0 5px 0 _.$noisy-white;
+                &.portfolio {
+                    height: 280px;
+                }
+                &.performance {
+                    padding: 2px 0;
+                    .row {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        padding: 18px 15px;
+                        font-size: 0.85 * _.$base-font-size;
+                        color: _.$gray;
+                        &:not(:last-child) {
+                            border-bottom: 2px solid _.$noisy-white;
+                        }
+                        & > .number {
+                            font-family: monospace;
+                            font-size: 1.05 * _.$base-font-size;
+                            color: _.$black;
+                        }
+                    }
+                }
+                &.cash_invested {
+                    height: 275px;
+                    padding: 15px;
+                }
+                .chart_center {
+                    position: absolute;
+                    top: 50%;
+                    left: calc(1px + 38%);
+                    transform: translate(-50%, -50%);
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    font-size: 0.85 * _.$base-font-size;
+                    color: _.$gray;
+                    font-weight: bold;
+                    hr {
+                        border: none;
+                        border-top: 1px solid;
+                        border-radius: 10px;
+                        width: 100%;
+                        color: _.$light-gray;
+                    }
                 }
             }
-        }
-        & > .time_span_option_list {
-            display: flex;
-            justify-content: space-evenly;
-            padding-top: 20px;
+            & > .time_span_option_list {
+                display: flex;
+                justify-content: space-evenly;
+                padding-top: 20px;
+            }
         }
     }
 }
 
 @media screen and (max-width: _.$hide-function-bar-boundry) {
     .main {
-        min-height: calc(
+        height: calc(
             100% - _.$header-height - _.$footer-height -
                 _.$show-header-border-boundry
         );

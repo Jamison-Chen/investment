@@ -65,172 +65,185 @@ class Overview extends React.Component<Props, State> {
         return (
             <div className={styles.main}>
                 <ColorBackground />
-                <div className={styles.block}>
-                    <h2 className={styles.title}>投資組合</h2>
-                    <div className={styles.body + " " + styles.portfolio}>
-                        <Chart
-                            chartType="PieChart"
-                            data={this.market_value_pie_chart_data}
-                            options={{
-                                sliceVisibilityThreshold: 0.05,
-                                backgroundColor: "transparent",
-                                pieHole: 0.7,
-                                pieSliceText: "none",
-                                chartArea: {
-                                    left: "10%",
-                                    top: "20%",
-                                    width: "90%",
-                                    height: "60%",
-                                },
-                            }}
-                            width={"100%"}
-                            height={"100%"}
-                        />
-                        {this.market_value_pie_chart_data.length > 1 ? (
-                            <div className={styles.chart_center}>
-                                <div className={styles.upper}>今日市值</div>
-                                <hr />
-                                <div className={styles.lower}>
-                                    $
-                                    {Math.round(
-                                        this.props.total_market_value
-                                    ).toLocaleString()}
-                                </div>
-                            </div>
-                        ) : null}
-                    </div>
-                </div>
-                <div className={styles.block}>
-                    <h2 className={styles.title}>投資績效</h2>
-                    <div className={styles.body + " " + styles.performance}>
-                        <div className={styles.row}>
-                            <span>報酬率</span>
-                            <span className={styles.number}>
-                                {this.rate_of_return.toFixed(2)}%
-                            </span>
-                        </div>
-                        <div className={styles.row}>
-                            <span>現金投入</span>
-                            <span className={styles.number}>
-                                $
-                                {Math.round(
-                                    this.get_total_cash_invested()
-                                ).toLocaleString()}
-                            </span>
-                        </div>
-                        <div className={styles.row}>
-                            <span>實現損益</span>
-                            <span className={styles.number}>
-                                ${Math.round(this.total_gain).toLocaleString()}
-                            </span>
-                        </div>
-                        <div className={styles.row}>
-                            <span>手續費用</span>
-                            <span className={styles.number}>
-                                ${this.total_handling_fee.toLocaleString()}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div className={styles.block}>
-                    <h2 className={styles.title}>投資金額</h2>
-                    <div className={styles.body + " " + styles.cash_invested}>
-                        {this.props.trade_record_list.length > 0 ? (
+                <div className={styles.main_inner}>
+                    <div className={styles.block}>
+                        <h2 className={styles.title}>投資組合</h2>
+                        <div className={styles.body + " " + styles.portfolio}>
                             <Chart
-                                chartType="LineChart"
-                                data={this.cash_invested_chart_data}
+                                chartType="PieChart"
+                                data={this.market_value_pie_chart_data}
                                 options={{
-                                    legend: { position: "none" },
+                                    sliceVisibilityThreshold: 0.05,
                                     backgroundColor: "transparent",
-                                    hAxis: {
-                                        textPosition: "none",
-                                        gridlines: {
-                                            color: "none",
-                                        },
-                                    },
-                                    vAxis: {
-                                        textPosition: "none",
-                                        gridlines: {
-                                            color: "none",
-                                        },
-                                    },
-                                    series: {
-                                        1: {
-                                            lineWidth: "0.5",
-                                            color: "#888",
-                                        },
-                                    },
+                                    pieHole: 0.7,
+                                    pieSliceText: "none",
                                     chartArea: {
-                                        left: "0%",
-                                        top: "0%",
-                                        width: "100%",
-                                        height: "90%",
+                                        left: "10%",
+                                        top: "20%",
+                                        width: "90%",
+                                        height: "60%",
                                     },
                                 }}
                                 width={"100%"}
-                                height={"220px"}
-                                chartPackages={["corechart", "controls"]}
-                                controls={[
-                                    {
-                                        controlType: "ChartRangeFilter",
-                                        options: {
-                                            filterColumnIndex: 0,
-                                            ui: {
-                                                chartType: "LineChart",
-                                                chartOptions: {
-                                                    chartArea: {
-                                                        width: "95%",
-                                                        height: "10%",
-                                                    },
-                                                    backgroundColor:
-                                                        "transparent",
-                                                    hAxis: {
-                                                        baselineColor: "none",
-                                                        textPosition: "none",
-                                                        gridlines: {
-                                                            color: "none",
-                                                        },
-                                                    },
-                                                    vAxis: {
-                                                        textPosition: "none",
-                                                        gridlines: {
-                                                            color: "none",
-                                                        },
-                                                        baselineColor: "none",
-                                                    },
-                                                    series: {
-                                                        1: {
-                                                            lineWidth: "0.5",
-                                                            color: "#888",
-                                                        },
-                                                    },
-                                                },
-                                            },
-                                        },
-                                        controlPosition: "bottom",
-                                        controlWrapperParams: {
-                                            state: {
-                                                range: {
-                                                    start: new Date(
-                                                        Math.min(
-                                                            ...this.props.trade_record_list.map(
-                                                                (record) =>
-                                                                    Date.parse(
-                                                                        record.deal_time
-                                                                    )
-                                                            )
-                                                        )
-                                                    ),
-                                                    end: new Date(),
-                                                },
-                                            },
-                                        },
-                                    },
-                                ]}
+                                height={"100%"}
                             />
-                        ) : null}
+                            {this.market_value_pie_chart_data.length > 1 ? (
+                                <div className={styles.chart_center}>
+                                    <div className={styles.upper}>今日市值</div>
+                                    <hr />
+                                    <div className={styles.lower}>
+                                        $
+                                        {Math.round(
+                                            this.props.total_market_value
+                                        ).toLocaleString()}
+                                    </div>
+                                </div>
+                            ) : null}
+                        </div>
+                    </div>
+                    <div className={styles.block}>
+                        <h2 className={styles.title}>投資績效</h2>
+                        <div className={styles.body + " " + styles.performance}>
+                            <div className={styles.row}>
+                                <span>報酬率</span>
+                                <span className={styles.number}>
+                                    {this.rate_of_return.toFixed(2)}%
+                                </span>
+                            </div>
+                            <div className={styles.row}>
+                                <span>現金投入</span>
+                                <span className={styles.number}>
+                                    $
+                                    {Math.round(
+                                        this.get_total_cash_invested()
+                                    ).toLocaleString()}
+                                </span>
+                            </div>
+                            <div className={styles.row}>
+                                <span>實現損益</span>
+                                <span className={styles.number}>
+                                    $
+                                    {Math.round(
+                                        this.total_gain
+                                    ).toLocaleString()}
+                                </span>
+                            </div>
+                            <div className={styles.row}>
+                                <span>手續費用</span>
+                                <span className={styles.number}>
+                                    ${this.total_handling_fee.toLocaleString()}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div className={styles.block}>
+                        <h2 className={styles.title}>投資金額</h2>
+                        <div
+                            className={styles.body + " " + styles.cash_invested}
+                        >
+                            {this.props.trade_record_list.length > 0 ? (
+                                <Chart
+                                    chartType="LineChart"
+                                    data={this.cash_invested_chart_data}
+                                    options={{
+                                        legend: { position: "none" },
+                                        backgroundColor: "transparent",
+                                        hAxis: {
+                                            textPosition: "none",
+                                            gridlines: {
+                                                color: "none",
+                                            },
+                                        },
+                                        vAxis: {
+                                            textPosition: "none",
+                                            gridlines: {
+                                                color: "none",
+                                            },
+                                        },
+                                        series: {
+                                            1: {
+                                                lineWidth: "0.5",
+                                                color: "#888",
+                                            },
+                                        },
+                                        chartArea: {
+                                            left: "0%",
+                                            top: "0%",
+                                            width: "100%",
+                                            height: "90%",
+                                        },
+                                    }}
+                                    width={"100%"}
+                                    height={"220px"}
+                                    chartPackages={["corechart", "controls"]}
+                                    controls={[
+                                        {
+                                            controlType: "ChartRangeFilter",
+                                            options: {
+                                                filterColumnIndex: 0,
+                                                ui: {
+                                                    chartType: "LineChart",
+                                                    chartOptions: {
+                                                        chartArea: {
+                                                            width: "95%",
+                                                            height: "10%",
+                                                        },
+                                                        backgroundColor:
+                                                            "transparent",
+                                                        hAxis: {
+                                                            baselineColor:
+                                                                "none",
+                                                            textPosition:
+                                                                "none",
+                                                            gridlines: {
+                                                                color: "none",
+                                                            },
+                                                        },
+                                                        vAxis: {
+                                                            textPosition:
+                                                                "none",
+                                                            gridlines: {
+                                                                color: "none",
+                                                            },
+                                                            baselineColor:
+                                                                "none",
+                                                        },
+                                                        series: {
+                                                            1: {
+                                                                lineWidth:
+                                                                    "0.5",
+                                                                color: "#888",
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                            controlPosition: "bottom",
+                                            controlWrapperParams: {
+                                                state: {
+                                                    range: {
+                                                        start: new Date(
+                                                            Math.min(
+                                                                ...this.props.trade_record_list.map(
+                                                                    (record) =>
+                                                                        Date.parse(
+                                                                            record.deal_time
+                                                                        )
+                                                                )
+                                                            )
+                                                        ),
+                                                        end: new Date(),
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    ]}
+                                />
+                            ) : null}
+                        </div>
                     </div>
                 </div>
+
                 <StretchableButton />
             </div>
         );

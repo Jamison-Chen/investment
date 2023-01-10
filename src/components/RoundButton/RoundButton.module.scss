@@ -12,6 +12,7 @@
     padding: 6px;
     margin: 0;
     color: _.$gray;
+    overflow: hidden;
     transition-duration: 150ms;
     cursor: pointer;
     &.disabled {
@@ -25,15 +26,15 @@
     }
     @media (hover: hover) {
         &:hover {
+            overflow: visible;
             &:not(.disabled) {
                 color: _.$deep-gray;
                 background-color: _.$transparent-black;
             }
             & > .hint_text {
-                display: block;
-                padding: 3px 10px;
-                width: max-content;
-                z-index: 1;
+                opacity: 1;
+                transition-delay: 200ms;
+                transition-duration: 200ms;
             }
         }
     }
@@ -41,14 +42,14 @@
         position: absolute;
         bottom: -2px;
         left: 50%;
-        display: none;
-        width: 0;
         transform: translate(-50%, 100%);
-        opacity: 0.7;
-        padding: 0;
-        background-color: _.$black;
+        width: max-content;
+        opacity: 0;
+        padding: 3px 10px;
+        background-color: _.$deep-gray;
         color: _.$white;
         font-size: 0.8 * _.$base-font-size;
-        border-radius: 3px;
+        border-radius: 5px;
+        z-index: 1;
     }
 }

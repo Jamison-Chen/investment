@@ -31,7 +31,12 @@ import {
     get_sid_trade_records_map,
     get_stock_warehouse,
 } from "../../../redux/slices/TradeRecordSlice";
-import { IconPencilSquare, IconWatch, IconPiggyBank } from "../../../icons";
+import {
+    IconPencilSquare,
+    IconWatch,
+    IconPiggyBank,
+    IconArrowLeft,
+} from "../../../icons";
 import { get_sid_total_cash_dividend_map } from "../../../redux/slices/CashDividendRecordSlice";
 import Util from "../../../utils/util";
 
@@ -96,6 +101,15 @@ class Details extends React.Component<Props, State> {
                 {this.active_modal}
                 <ColorBackground />
                 <div className={styles.upper}>
+                    <RoundButton
+                        className="p-8"
+                        hint_text="回列表"
+                        onClick={() => {
+                            this.props.router.navigate(-1);
+                        }}
+                    >
+                        <IconArrowLeft />
+                    </RoundButton>
                     <select
                         className={styles.menu}
                         value={this.sid}
@@ -121,7 +135,7 @@ class Details extends React.Component<Props, State> {
                             });
                         }}
                     >
-                        <IconPencilSquare side_length="16" />
+                        <IconPencilSquare />
                     </RoundButton>
                     <RoundButton
                         className="p-8"

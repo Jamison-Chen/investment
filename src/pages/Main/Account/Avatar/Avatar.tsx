@@ -19,9 +19,8 @@ import {
 import { push_error } from "../../../../redux/slices/ErrorSlice";
 
 function mapStateToProps(root_state: RootState) {
-    let user_id = root_state.account.id;
     let avatar_url = root_state.account.avatar_url;
-    return { user_id, avatar_url };
+    return { avatar_url };
 }
 
 interface Props extends IRouter, ReturnType<typeof mapStateToProps> {
@@ -110,7 +109,6 @@ class Avatar extends React.Component<Props, State> {
             await this.props
                 .dispatch(
                     update_account_info({
-                        id: this.props.user_id,
                         avatar_url: this.state.avatar_url,
                     })
                 )
