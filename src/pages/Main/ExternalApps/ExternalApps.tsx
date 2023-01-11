@@ -25,18 +25,28 @@ class ExternalApps extends React.Component<Props, State> {
                 <ColorBackground />
                 <h2>外部應用程式</h2>
                 <div className={styles.app_list}>
-                    <Link className={styles.app} to={`/stock-simulator`}>
+                    <a
+                        className={styles.app}
+                        href="https://jamison-chen.github.io/stock-simulator/basic/"
+                        target="_blank"
+                        rel="noreferrer"
+                    >
                         <div className={styles.image_container}>
                             <img src={simulator_icon} alt="" />
                         </div>
                         <span className={styles.app_name}>Simulator</span>
-                    </Link>
-                    <Link className={styles.app} to={`/stock-simulator-pro`}>
+                    </a>
+                    <a
+                        className={styles.app}
+                        href="https://jamison-chen.github.io/stock-simulator/pro/"
+                        target="_blank"
+                        rel="noreferrer"
+                    >
                         <div className={styles.image_container}>
                             <img src={simulator_pro_icon} alt="" />
                         </div>
                         <span className={styles.app_name}>SimuPro</span>
-                    </Link>
+                    </a>
                 </div>
             </div>
         );
