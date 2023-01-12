@@ -5,11 +5,11 @@ import Util from "./util";
 export default class Api {
     public static async send_request(
         endpoint: string,
-        method: "get" | "post",
+        method: string,
         request_body?: URLSearchParams | string
     ): Promise<any> {
         if (method === "post" && request_body === undefined) {
-            throw Error("POST methods need request_body");
+            throw Error("request_body is needed in POST request");
         }
 
         let header = new Headers();

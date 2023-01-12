@@ -119,12 +119,8 @@ export default class MainFunctionBar extends React.Component<Props, State> {
         this.setState({ active_modal_name: "check_logout" });
     };
     private handle_click_check_logout = async (): Promise<void> => {
-        let response: any = await Api.send_request(
-            "account/logout",
-            "post",
-            new URLSearchParams()
-        );
+        let response: any = await Api.send_request("account/logout", "get");
         if (response?.success) Nav.go_to_login_page();
-        else throw Error("Failed to sign out.");
+        else throw Error("Failed to log out.");
     };
 }
